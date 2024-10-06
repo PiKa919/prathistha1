@@ -4,7 +4,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent scrolling on the body */
+  overflow: auto; /* Allow scrolling on the body */
 }
 
 body {
@@ -24,7 +24,8 @@ body {
 }
 
 .content {
-  height: calc(100% - 60px); /* Adjust 60px to match your menu height */
+  /*height: calc(100% - 60px); /* Adjust 60px to match your menu height */
+  height: 60vh;
   display: flex;
   flex-direction: column;
 }
@@ -78,4 +79,90 @@ body {
 /* Adjust z-index of other components when menu is open */
 .menu-container.open ~ .content {
   z-index: -1;
+}
+
+.sponsor-showcase {
+  height: 100vh; /* Set height to 100vh */
+  position: relative;
+  width: 100%;
+  background: linear-gradient(to bottom right, #e9d5ff, rgb(221, 153, 153), rgb(175, 236, 175), rgb(201, 201, 245));
+  overflow: hidden;
+}
+
+.sponsor-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor-title h2 {
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: #1f2937;
+  opacity: 0.1;
+}
+
+.sponsor-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.sponsor-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor-logo-container {
+  position: relative;
+  display: inline-block;
+}
+
+.sponsor-logo {
+  border-radius: 9999px;
+  background-color: white;
+  padding: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+}
+
+.sponsor-logo:hover {
+  transform: scale(1.1);
+}
+
+.sponsor-tooltip {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 1rem;
+  width: 12rem;
+  left: -5rem;
+  top: 5rem;
+  z-index: 20;
+}
+
+.sponsor-logo-container:hover .sponsor-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.sponsor-tooltip h3 {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.sponsor-tooltip p {
+  font-size: 0.875rem;
+  color: #4b5563;
 }
