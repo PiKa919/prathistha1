@@ -46,8 +46,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Menu />
-        {children}
+        <Menu/>
+        <div className="content">
+        <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
+        {/* {children} */}
+        </div>
       </body>
     </html>
   );

@@ -1,175 +1,164 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0; /* Grey background color */
-    background-image: url('../assets/images/SAKEC-Building-scaled.jpg'); /* Add your image path here */
-    background-size: cover; /* Ensures the image covers the whole background */
-    /* background-position: center; */
-    background-repeat: no-repeat;  
-  }
-  
-  .menu-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-  }
-  
-  /* Menu bar styles */
-  .menu-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: white;
-  }
-  
-  .menu-logo a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
-  
-  .menu-open {
-    cursor: pointer;
-  }
-  
-  /* Menu overlay styles */
-  .menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(94, 28, 28);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow-y: auto;
-  }
-  
-  .menu-overlay-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-  }
-  
-  .menu-close {
-    cursor: pointer;
-  }
-  
-  .menu-close-icon {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
-  
-  /* Menu links styles */
-  .menu-copy {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-  }
-  
-  .menu-links {
-    text-align: center;
-  }
-  
-  .menu-link-item {
-    margin: 1rem 0;
-  }
-  
-  .menu-link {
-    text-decoration: none;
-    color: black;
-    font-size: 80px;
-    transition: color 0.3s ease;
-  }
-  
-  .menu-link:hover {
-    color: #666;
-  }
-  
-  /* Menu info styles */
-  .menu-info {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    padding: 2rem 0;
-  }
-  
-  .menu-link-col,
-  .menu-info-col {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .menu-link-col a,
-  .menu-info-col p {
-    margin: 0.5rem 0;
-    text-decoration: none;
-    color: black;
-  }
-  
-  /* Menu preview styles */
-  .menu-preview {
-    text-align: center;
-    padding: 1rem;
-    background-color: #636262;
-    cursor: pointer;
-  }
-  
-  /* Hide menu overlay by default */
-  .menu-overlay {
-    display: none;
-  }
-  
-  /* Show menu overlay when isMenuOpen is true */
-  .menu-container:has(.menu-overlay) {
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .menu-container:has(.menu-overlay) .menu-overlay {
-    display: flex;
-  }
-  /* Logo styles */
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.menu-container {
+  position: relative;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Menu bar styles */
+.menu-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgb(38, 112, 198);
+}
+
+.menu-logo a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.menu-open {
+  cursor: pointer;
+}
+
+/* Menu overlay styles */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(94, 28, 28);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
+.menu-overlay-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.menu-close {
+  cursor: pointer;
+}
+
+.menu-close-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Menu links styles */
+.menu-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.menu-links {
+  text-align: center;
+}
+
+.menu-link-item {
+  margin: 1rem 0;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: black;
+  font-size: 2rem;
+  transition: color 0.3s ease;
+}
+
+.menu-link:hover {
+  color: #666;
+}
+
+/* Menu info styles */
+.menu-info {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.menu-link-col,
+.menu-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-link-col a,
+.menu-info-col p {
+  margin: 0.5rem 0;
+  text-decoration: none;
+  color: black;
+}
+
+/* Menu preview styles */
+.menu-preview {
+  text-align: center;
+  padding: 1rem;
+  background-color: #636262;
+  cursor: pointer;
+}
+
+/* Hide menu overlay by default */
+.menu-overlay {
+  display: none;
+}
+
+/* Show menu overlay when isMenuOpen is true */
+.menu-container.open .menu-overlay {
+  display: flex;
+}
+
+/* Logo styles */
 .logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: black;
-  }
-  
-  .logo-icon {
-    margin-right: 0.5rem;
-    font-size: 1.5rem;
-  }
-  
-  /* Social link styles */
-  .social-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: black;
-    margin-bottom: 0.5rem;
-  }
-  
-  .social-link svg {
-    margin-right: 0.5rem;
-  }
-  
-  /* Hover effect for logo and social links */
-  .logo-link:hover,
-  .social-link:hover {
-    color: #ff0000; /* Change to your desired hover color */
-  }
-  
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+
+.logo-icon {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+/* Social link styles */
+.social-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  margin-bottom: 0.5rem;
+}
+
+.social-link svg {
+  margin-right: 0.5rem;
+}
+
+/* Hover effect for logo and social links */
+.logo-link:hover,
+.social-link:hover {
+  color: #ff0000;
+}

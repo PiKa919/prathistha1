@@ -28,11 +28,13 @@ const Menu = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
+      containerRef.current?.classList.add('open');
       // Open menu animation
       gsap.to(overlayRef.current, { yPercent: 0, duration: 0.5, ease: 'power3.inOut' });
       gsap.to('.menu-link-item', { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 0.3 });
       gsap.to('.menu-info, .menu-preview', { opacity: 1, y: 0, duration: 0.5, delay: 0.5 });
     } else {
+      containerRef.current?.classList.remove('open');
       // Close menu animation
       gsap.to(overlayRef.current, { yPercent: -100, duration: 0.5, ease: 'power3.inOut' });
       gsap.to('.menu-link-item, .menu-info, .menu-preview', { opacity: 0, y: 20, duration: 0.3 });
@@ -48,13 +50,13 @@ const Menu = () => {
   };
 
   return (
-    <div className='menu-container' ref={containerRef}>
+    <div className={`menu-container ${isMenuOpen ? 'open' : ''}`} ref={containerRef}>
       <div className='menu-bar'>
         <div className='menu-logo'>
           <Link href="/">Prathistha</Link>
         </div>
         <div className='menu-open' onClick={toggleMenu}>
-          <p>Menu</p>
+          ☰
         </div>
       </div>
       <div className='menu-overlay' ref={overlayRef}>
@@ -63,7 +65,6 @@ const Menu = () => {
             <Link href="/">Prathistha</Link>
           </div>
           <div className='menu-close' onClick={toggleMenu}>
-            <p>Close</p>
           </div>
         </div>
         <div className='menu-close-icon' onClick={toggleMenu}>
@@ -98,9 +99,6 @@ const Menu = () => {
               <p>1234567891</p>
             </div>
           </div>
-        </div>
-        <div className='menu-preview'>
-          <p>View Showreel</p>
         </div>
       </div>
     </div>

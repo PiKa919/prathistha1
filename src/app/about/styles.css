@@ -1,0 +1,81 @@
+html,
+body {
+  position: relative;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling on the body */
+}
+
+body {
+  background: #eee;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+}
+
+#__next {
+  height: 100%; /* Ensure Next.js wrapper takes full height */
+}
+
+.menu-container {
+  position: relative;
+  z-index: 1000;
+}
+
+.content {
+  height: calc(100% - 60px); /* Adjust 60px to match your menu height */
+  display: flex;
+  flex-direction: column;
+}
+
+.swiper {
+  width: 100%;
+  flex: 1;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-position: center;
+  background-size: cover;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 18px;
+}
+
+.swiper-pagination-bullet {
+  background: #000;
+  opacity: 0.1;
+}
+
+.swiper-pagination-bullet-active {
+  background: #02e6ff;
+  opacity: 0.6;
+}
+
+/* Adjust z-index of other components when menu is open */
+.menu-container.open ~ .content {
+  z-index: -1;
+}
