@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -10,40 +11,46 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import './styles.css';
 
-interface Sponsor {
-  id: number;
-  name: string;
-  logo: string;
-  description: string;
-}
-
-const sponsors: Sponsor[] = [
-  { id: 1, name: "TechCorp", logo: "/placeholder.svg?height=80&width=80", description: "Leading technology solutions provider" },
-  { id: 2, name: "EduLearn", logo: "/placeholder.svg?height=80&width=80", description: "Innovative educational platform" },
-  { id: 3, name: "GreenEnergy", logo: "/placeholder.svg?height=80&width=80", description: "Sustainable energy solutions" },
-  { id: 4, name: "HealthPlus", logo: "/placeholder.svg?height=80&width=80", description: "Advanced healthcare services" },
-  { id: 5, name: "FoodDelight", logo: "/placeholder.svg?height=80&width=80", description: "Gourmet food and catering" },
-  { id: 6, name: "SportsFit", logo: "/placeholder.svg?height=80&width=80", description: "Sports equipment and fitness gear" },
-  { id: 7, name: "MediaMax", logo: "/placeholder.svg?height=80&width=80", description: "Multimedia production services" },
-  { id: 8, name: "TravelWise", logo: "/placeholder.svg?height=80&width=80", description: "Travel and tourism experts" },
-];
-
-export default function Home() {
-  const [gridPositions, setGridPositions] = useState<{ row: number; col: number }[]>([]);
+function BroadcastButton() {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isGlowing, setIsGlowing] = useState(false);
 
   useEffect(() => {
-    const rows = 4;
-    const cols = 4;
-    const positions = sponsors.map(() => ({
-      row: Math.floor(Math.random() * rows),
-      col: Math.floor(Math.random() * cols)
-    }));
-    setGridPositions(positions);
+    const interval = setInterval(() => {
+      setIsGlowing((prev) => !prev);
+    }, 1500);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div>
-      <div className="content">
+    <div className="w-full py-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900">
+      <div className="max-w-3xl mx-auto px-4">
+        <Link href="https://whatsapp.com/channel/0029Vant5jpD38COvx6OuR3w" target='_blank' passHref>
+        <button
+          className={`w-full py-2 px-4 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ${
+            isGlowing ? 'animate-pulse' : ''
+          }`}
+          style={{
+            boxShadow: isHovered
+              ? '0 0 15px #8B5CF6, 0 0 30px #8B5CF6, 0 0 45px #8B5CF6'
+              : '0 0 5px #8B5CF6, 0 0 10px #8B5CF6',
+            textShadow: '0 0 5px rgba(255,255,255,0.7)',
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          Join the Broadcast Channel
+        </button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <div className="flex flex-col flex-grow">
+      <div className="content flex-grow">
         <Swiper
           spaceBetween={30}
           effect={'fade'}
@@ -68,38 +75,7 @@ export default function Home() {
           </SwiperSlide>
         </Swiper>
       </div>
-
-      <section className="sponsor-showcase">
-        <div className="sponsor-title">
-          <h2>Our Sponsors</h2>
-        </div>
-        <div className="sponsor-grid">
-          {sponsors.map((sponsor, index) => (
-            <div
-              key={sponsor.id}
-              className="sponsor-item"
-              style={{
-                gridRow: gridPositions[index]?.row + 1,
-                gridColumn: gridPositions[index]?.col + 1,
-              }}
-            >
-              <div className="sponsor-logo-container">
-                <Image
-                  src={sponsor.logo}
-                  alt={sponsor.name}
-                  width={80}
-                  height={80}
-                  className="sponsor-logo"
-                />
-                <div className="sponsor-tooltip">
-                  <h3>{sponsor.name}</h3>
-                  <p>{sponsor.description}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <BroadcastButton />
     </div>
   );
 }

@@ -8,6 +8,7 @@ config.autoAddCss = false
 
 import Menu from "@/components/menu";
 import Head from "next/head";
+import Footer from "@/components/footer";
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
 
@@ -51,6 +52,7 @@ export default function RootLayout({
         <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
         {/* {children} */}
         </div>
+        <Footer />
       </body>
     </html>
   );
