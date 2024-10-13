@@ -90,3 +90,219 @@ body {
 .min-h-screen {
   min-height: 100vh;
 }
+/* Festival Phases Styles */
+.festival-phases {
+  background-color: black;
+  padding: 1rem 0;
+}
+
+.festival-phase {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 2.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.festival-phase-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .festival-phase-content {
+    flex-direction: row;
+  }
+  
+  .festival-phase-content-reverse {
+    flex-direction: row-reverse;
+  }
+  /* .festival-phase:nth-child(odd) .festival-phase-content {
+    flex-direction: row;
+  }
+
+  .festival-phase:nth-child(even) .festival-phase-content {
+    flex-direction: row-reverse;
+  } */
+}
+
+.festival-phase-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+@media (min-width: 768px) {
+  .festival-phase-image-container {
+    width: 20%;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.festival-phase-image-glow {
+  position: absolute;
+  inset: -0.5rem;
+  border-radius: 0.5rem;
+  filter: blur(1rem);
+  opacity: 0.75;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.festival-phase-image {
+  border-radius: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 10;
+
+}
+
+.festival-phase-title {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+}
+
+.festival-phase-description {
+  width: 100%;
+  font-size: 1.125rem;
+  color: #374151;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .festival-phase-description {
+    width: 50%;
+  }
+  
+  .festival-phase-description-left {
+    text-align: left;
+  }
+  
+  .festival-phase-description-right {
+    text-align: right;
+  }
+}
+
+.festival-phase-connector {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2rem;
+  height: 6rem;
+  color: #F9A8D4; /* Vibrant pink color */
+  filter: drop-shadow(0 0 8px #F9A8D4); /* Adds a glow effect */
+  animation: connectorPulse 2s infinite; /* Adds a pulsing animation */
+}
+
+@keyframes connectorPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+/* Phase-specific background gradients */
+.bg-yuva {
+  background-image: linear-gradient(to bottom right, #EBF4FF, #E9D8FD);
+}
+
+.bg-olympus {
+  background-image: linear-gradient(to bottom right, #EBF4FF, #C6F6D5);
+}
+
+.bg-aurum {
+  background-image: linear-gradient(to bottom right, #EBF4FF, #FEF3C7);
+}
+
+.bg-verve {
+  background-image: linear-gradient(to bottom right, #EBF4FF, #FEE2E2);
+}
+
+/* Phase-specific glow colors */
+.glow-yuva {
+  background-color: #93C5FD;
+}
+
+.glow-olympus {
+  background-color: #6EE7B7;
+}
+
+.glow-aurum {
+  background-color: #FDE68A;
+}
+
+.glow-verve {
+  background-color: #FCA5A5;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Broadcast Button Styles */
+.broadcast-button-container {
+  width: 100%;
+  padding: 1rem 0;
+  background-image: linear-gradient(to right, #4C1D95, #312E81, #1E3A8A);
+}
+
+.broadcast-button-wrapper {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.broadcast-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-image: linear-gradient(to right, #8B5CF6, #6366F1);
+  color: white;
+  font-weight: bold;
+  border-radius: 9999px;
+  transition: all 300ms ease-in-out;
+  transform: scale(1);
+  outline: none;
+  box-shadow: 0 0 5px #8B5CF6, 0 0 10px #8B5CF6;
+  text-shadow: 0 0 5px rgba(255,255,255,0.7);
+}
+
+.broadcast-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #8B5CF6, 0 0 30px #8B5CF6, 0 0 45px #8B5CF6;
+}
+
+.broadcast-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #8B5CF6, 0 0 0 4px rgba(139, 92, 246, 0.5);
+}
+
+.broadcast-button.glowing {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
       <div className="footer-container">
         <div className="footer-grid">
           <div className="footer-section">
-            <h3 className="footer-title">College Fest 2024</h3>
+            <h3 className="footer-title">Prathistha 2024</h3>
             <p className="footer-description">Experience the future of education and entertainment at our annual college festival.</p>
             <div className="social-links">
               {['Facebook', 'Twitter', 'Instagram'].map((platform) => (
@@ -51,9 +51,9 @@ const Footer: React.FC = () => {
             <h3 className="footer-subtitle">Contact Us</h3>
             <ul className="contact-list">
               {[
-                { icon: MapPin, text: '123 University Ave, Collegetown, ST 12345' },
-                { icon: Phone, text: '(123) 456-7890' },
-                { icon: Mail, text: 'info@collegefest.edu' },
+                { icon: MapPin, text: 'Mahavir Education Trust`s Chowk, Waman Tukaram Patil Marg, Next to Dukes Co., Chembur, Mumbai - 400 088.' },
+                { icon: Phone, text: '022-25580854' },
+                { icon: Mail, text: 'prathistha@sakec.ac.in' },
               ].map(({ icon: Icon, text }, index) => (
                 <li key={index} className="contact-item">
                   <Icon className="contact-icon" />
@@ -63,23 +63,25 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           <div className="footer-section">
-            <h3 className="footer-subtitle">Festival Map</h3>
+            <h3 className="footer-subtitle">College Map</h3>
             <div className="map-container">
               <img
-                src="/placeholder.svg?height=200&width=300"
+                src="/footer/maps.jpg"
                 alt="College Fest Map"
                 className="map-image"
               />
               <div className="map-overlay">
-                <button className="map-button">
-                  View Full Map
-                </button>
+                <Link href='https://maps.app.goo.gl/KyxuvcPRUVorssZS6' target='_blank'>
+                  <button className="map-button">
+                    View Full Map
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 College Fest. All rights reserved.</p>
+          <p>&copy; 2024 Prathistha. All rights reserved.</p>
           <div className="footer-links">
             <Link href="#" className="footer-link">Privacy Policy</Link>
             <Link href="#" className="footer-link">Terms of Service</Link>
