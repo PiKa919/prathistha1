@@ -126,16 +126,16 @@ export default function Home() {
             className="mySwiper"
           >
             <SwiperSlide>
-              <img src="../../assets/banner/banner1.jpg" alt="Banner 1" />
+              <Image src="/assets/banner/banner1.jpg" alt="Banner 1" width={400} height={300} />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="../../assets/banner/banner2.jpg" alt="Banner 2" />
+              <Image src="/assets/banner/banner2.jpg" alt="Banner 2" width={400} height={300} />
             </SwiperSlide>
             <SwiperSlide>
-              <img src="../../assets/banner/banner3.jpg" alt="Banner 3" />
+              <Image src="/assets/banner/banner3.jpg" alt="Banner 3" width={400} height={300}/>
             </SwiperSlide>
             <SwiperSlide>
-              <img src="../../assets/banner/banner4.jpg" alt="Banner 4" />
+              <Image src="/assets/banner/banner4.jpg" alt="Banner 4" width={400} height={300} />
             </SwiperSlide>
           </Swiper>
         </div>

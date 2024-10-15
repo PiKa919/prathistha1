@@ -1,20 +1,11 @@
 "use client";
 
-import React, { useState, FormEvent } from 'react';
+import React from 'react';
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, MapPin, Mail, Phone } from "lucide-react";
 import './footer.css';
 
 const Footer: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle newsletter signup logic here
-    console.log('Signed up with:', email);
-    setEmail('');
-  };
-
   const quickLinks: string[] = ['Home', 'Events', 'Schedule', 'Sponsors'];
 
   return (

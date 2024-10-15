@@ -52,7 +52,6 @@ export default function RootLayout({
         <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
         {/* {children} */}
         </div>
-        <Footer />
       </body>
     </html>
   );

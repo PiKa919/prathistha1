@@ -199,7 +199,9 @@
   border-radius: 9999px 0 0 9999px; /* rounded-l-full */
   background-color: #a588eb; /* bg-purple-800 */
   color: white;
-  placeholder-color: #d1c4e9; /* placeholder-purple-300 */
+  ::placeholder {
+    color: #d1c4e9; /* placeholder-purple-300 */
+  }
   outline: none;
   border-color: #6b46c1; /* focus:ring-purple-500 approximation */
 }
