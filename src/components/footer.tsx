@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, MapPin, Mail, Phone } from "lucide-react";
+import Image from 'next/image';
 import './footer.css';
 
 const Footer: React.FC = () => {
@@ -55,11 +56,13 @@ const Footer: React.FC = () => {
           </div>
           <div className="footer-section">
             <h3 className="footer-subtitle">College Map</h3>
-            <div className="map-container">
-              <img
+            <div className="map-container">              
+              <Image
                 src="/footer/maps.jpg"
                 alt="College Fest Map"
                 className="map-image"
+                width={400} // Specify the width
+                height={300} // Specify the height
               />
               <div className="map-overlay">
                 <Link href='https://maps.app.goo.gl/KyxuvcPRUVorssZS6' target='_blank'>
