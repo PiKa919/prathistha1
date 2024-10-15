@@ -7,7 +7,7 @@ body {
 }
 
 body {
-  background: #eee;
+  background: #ffffff;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #000;
@@ -305,4 +305,63 @@ body {
   50% {
     opacity: 0.5;
   }
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 1.5rem 0;
+  display: flex;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.marquee-title {
+  font-size: 5rem; /* Adjust the font size as needed */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center the text */
+  color: rgba(255, 0, 0, 0.2); /* Adjust the text color and opacity */
+  position: absolute; /* Position the title absolutely */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center the title */
+  z-index: 1; /* Ensure the title is behind the marquee content */
+  pointer-events: none; /* Allow interactions to pass through the title */
+}
+
+.marquee-content {
+  display: flex;
+  animation: scroll 3s linear infinite;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  height: 5rem;
+  padding: 0 1rem;
+}
+
+.marquee-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Optional: Pause animation on hover */
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
 }

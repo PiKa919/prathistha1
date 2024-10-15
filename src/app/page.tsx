@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { motion } from 'framer-motion';
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
@@ -110,6 +111,87 @@ function FestivalPhases() {
   );
 }
 
+const companies = [
+  { name: 'SAKEC', logo: '/assets/sponsors/sakec.png' },
+  { name: 'Research & Development Cell', logo: '/assets/sponsors/rnd.png' },
+  { name: 'Motilal Oswald', logo: '/assets/sponsors/motilaloswal.jpg' },
+  { name: 'IPRC', logo: '/assets/sponsors/iprc.png' },
+  { name: 'Mindicator', logo: '/assets/sponsors/mindicator.png' },
+  { name: 'Vision', logo: '/assets/sponsors/vision.jpg' },
+  { name: 'FB', logo: '/assets/sponsors/fb.png' },
+  { name: 'mindi', logo: '/assets/sponsors/mindicator.png' },
+];
+
+// function Marquee() {
+//   const [duplicatedCompanies, setDuplicatedCompanies] = useState(companies);
+
+//   useEffect(() => {
+//     setDuplicatedCompanies([...companies, ...companies]);
+//   }, []);
+
+//   return (
+//     <div className="marquee-container">
+//       <motion.div
+//         className="marquee-content"
+//         animate={{ x: ['0%', '-50%'] }}
+//         transition={{
+//           x: {
+//             repeat: Infinity,
+//             repeatType: 'loop',
+//             duration: 20,
+//             ease: 'linear',
+//           },
+//         }}
+//       >
+//         {duplicatedCompanies.map((company, index) => (
+//           <div
+//             key={`${company.name}-${index}`}
+//             className="marquee-item"
+//           >
+//             <img
+//               src={company.logo}
+//               alt={`${company.name} logo`}
+//               className="marquee-logo"
+//             />
+//           </div>
+//         ))}
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+function Marquee() {
+  return (
+    <div className="marquee-container">
+      <h3 className="marquee-title">Sponsors 2023-24</h3>
+      <div className="marquee-content">
+        {companies.map((company, index) => (
+          <div key={`${company.name}-${index}`} className="marquee-item">
+            <img
+              src={company.logo}
+              alt={`${company.name} logo`}
+              className="marquee-logo"
+            />
+          </div>
+        ))}
+      </div>
+      <div className="marquee-content" aria-hidden="true">
+        {companies.map((company, index) => (
+          <div key={`${company.name}-${index}-duplicate`} className="marquee-item">
+                <Image
+                  src={company.logo}
+                  alt={`${company.name} logo`}
+                  className="marquee-logo"
+                  width={100} // Specify the width
+                  height={50} // Specify the height
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -141,6 +223,7 @@ export default function Home() {
         </div>
         <BroadcastButton />
         <FestivalPhases />
+        <Marquee />
       </div>
     </div>
   );
