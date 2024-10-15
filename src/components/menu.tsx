@@ -53,7 +53,7 @@ const Menu = () => {
     <div className={`menu-container ${isMenuOpen ? 'open' : ''}`} ref={containerRef}>
       <div className='menu-bar'>
         <div className='menu-logo'>
-          <Link href="/">Prathistha</Link>
+          <Link style={{ fontFamily: 'MAEL, sans-serif' }} href="/">Prathistha</Link>
         </div>
         <div className='menu-open' onClick={toggleMenu}>
           ☰

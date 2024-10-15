@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'MAEL';
+  src: url('/fonts/MAEL____.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+}
+
 @layer base {
   :root {
     --background: 224 71.4% 4.1%;

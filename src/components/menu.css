@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'MAEL';
+  src: url('/fonts/MAEL____.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -16,7 +23,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: rgb(38, 112, 198);
 }
 
@@ -24,7 +31,7 @@ body {
   text-decoration: none;
   color: black;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .menu-open {
