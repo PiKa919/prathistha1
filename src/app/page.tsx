@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { motion } from 'framer-motion';
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
