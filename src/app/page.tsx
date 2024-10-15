@@ -167,11 +167,13 @@ function Marquee() {
       <div className="marquee-content">
         {companies.map((company, index) => (
           <div key={`${company.name}-${index}`} className="marquee-item">
-            <img
-              src={company.logo}
-              alt={`${company.name} logo`}
-              className="marquee-logo"
-            />
+                <Image
+                  src={company.logo}
+                  alt={`${company.name} logo`}
+                  className="marquee-logo"
+                  width={100} // Specify the width
+                  height={50} // Specify the height
+                />
           </div>
         ))}
       </div>
