@@ -9,7 +9,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #000000;
 }
 
 .menu-container {
@@ -24,7 +24,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background-color: rgb(38, 112, 198);
+  background-color: transparent;
 }
 
 .menu-logo a {
@@ -36,6 +36,14 @@ body {
 
 .menu-open {
   cursor: pointer;
+  color: blanchedalmond;
+  font-size: 1.5rem; /* Increase the size */
+  padding: 0.5rem; /* Optional: add some padding */
+  transition: transform 0.3s ease; /* Add a hover effect */
+}
+
+.menu-open:hover {
+  transform: scale(1.2); /* Slightly enlarge on hover */
 }
 
 /* Menu overlay styles */

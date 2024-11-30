@@ -9,6 +9,7 @@ config.autoAddCss = false
 import Menu from "@/components/menu";
 import Head from "next/head";
 import Footer from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster"
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
 
@@ -50,6 +51,7 @@ export default function RootLayout({
         <Menu/>
         <div className="content">
         <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
+        <Toaster/>
         {/* {children} */}
         <Footer/>
         </div>

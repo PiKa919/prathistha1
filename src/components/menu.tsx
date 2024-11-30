@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import "./menu.css";
 
@@ -52,17 +53,78 @@ const Menu = () => {
   return (
     <div className={`menu-container ${isMenuOpen ? 'open' : ''}`} ref={containerRef}>
       <div className='menu-bar'>
-        <div className='menu-logo'>
-          <Link style={{ fontFamily: 'MAEL, sans-serif' }} href="/">Prathistha</Link>
+        <div className='menu-logo' style={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          {/* SAKEC Logo */}
+          <Image 
+            src="/assets/logos/sakec.svg" 
+            alt="SAKEC Logo" 
+            width={50} 
+            height={50} 
+          />
+          
+          {/* Separator */}
+          <div style={{
+            width: '1px', 
+            height: '30px', 
+            backgroundColor: 'goldenrod'
+          }} />
+          
+          {/* Prathistha Logo */}
+          <Image 
+            src="/assets/logos/Prathistha.png" 
+            alt="Prathistha Logo" 
+            width={50} 
+            height={50} 
+          />
+          
+          {/* Prathistha Text with Subscript */}
+          <Link 
+            href="/" 
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              lineHeight: '1.2'
+            }}
+          >
+            <span style={{ 
+              fontFamily: 'MAEL, sans-serif', 
+              color: 'goldenrod',
+              fontSize: '1.5rem'
+            }}>
+              Prathistha
+            </span>
+            <span style={{ 
+              fontSize: '0.6rem', 
+              color: 'goldenrod',
+              marginTop: '-3px'
+            }}>
+              SAKECFEST
+            </span>
+          </Link>
         </div>
         <div className='menu-open' onClick={toggleMenu}>
           ☰
         </div>
       </div>
+      
+      {/* Rest of the component remains the same as previous version */}
       <div className='menu-overlay' ref={overlayRef}>
         <div className='menu-overlay-bar'>
           <div className='menu-logo'>
-            <Link href="/">Prathistha</Link>
+            <Link 
+              href="/" 
+              style={{ 
+                fontFamily: 'MAEL, sans-serif', 
+                color: 'goldenrod' 
+              }}
+            >
+              Prathistha
+            </Link>
           </div>
           <div className='menu-close' onClick={toggleMenu}>
           </div>

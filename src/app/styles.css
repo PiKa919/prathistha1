@@ -7,7 +7,7 @@ body {
 }
 
 body {
-  background: #ffffff;
+  background: #000000;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #000;
@@ -364,4 +364,15 @@ body {
 /* Optional: Pause animation on hover */
 .marquee-container:hover .marquee-content {
   animation-play-state: paused;
+}
+
+/* Center and style the CountdownTimer and HyperText components */
+.centered-timer-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: gold;
+  font-size: 2rem; /* Adjust the font size as needed */
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Optional: Add a glow effect */
 }
