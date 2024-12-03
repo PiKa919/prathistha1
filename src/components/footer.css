@@ -1,9 +1,45 @@
 .footer {
-  background: linear-gradient(to right, #4b039e, #59379a, #4565f5); /* Approximation of Tailwind gradient */
+  background: linear-gradient(
+    135deg,
+    #1a1a2e 0%,
+    #16213e 25%,
+    #1b2d4d 75%,
+    #0f172a 100%
+  );
+  position: relative;
+  overflow: hidden;
   color: white;
   padding-top: 3rem; /* 12rem = 3rem */
   padding-bottom: 3rem;
   line-height: 1.6; /* Added line-height for vertical spacing */
+}
+
+/* Subtle animated gradient overlay */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .footer-container {
@@ -69,11 +105,12 @@
 }
 
 .social-link {
-  transition: color 0.3s ease;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .social-link:hover {
   color: #9f7aea; /* hover:text-purple-400 */
+  transform: scale(1.1);
 }
 
 .social-icon {

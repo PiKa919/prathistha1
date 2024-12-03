@@ -76,3 +76,46 @@
     @apply bg-background text-foreground;
   }
 }
+
+.stars-container {
+  perspective: 500px;
+  animation: rotate 100s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+.star {
+  @apply absolute w-0.5 h-0.5 bg-white rounded-full;
+  animation: twinkle 5s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.parallax-bg {
+  animation: slide 20s linear infinite;
+  background-repeat: repeat;
+  transform: translateZ(0);
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
