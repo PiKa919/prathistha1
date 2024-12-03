@@ -10,6 +10,7 @@ import Menu from "@/components/menu";
 import Head from "next/head";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster"
+import { CustomCursor } from "@/components/CustomCursor"
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
 
@@ -48,6 +49,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <CustomCursor />
         <Menu/>
         <div className="content">
         <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
