@@ -1,9 +1,40 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+// import { TECarousel, TECarouselItem } from "tw-elements-react";
+// import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
+import  CarouselComponent  from '@/components/ui/CarouselComponent'
+import SportsSchedule from '@/components/ui/SportsSchedule'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/Tabs'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Select,
   SelectContent,
@@ -11,6 +42,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { EnhancedTreeStyleBracket } from '@/components/ui/enhanced-tree-style-bracket'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, UseFormReturn } from "react-hook-form"
 import * as z from "zod"
@@ -27,6 +60,39 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 
+
+const sports = {
+  esports: [
+    { name: 'BGMI', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1000 - i * 10 })) },
+    { name: 'FIFA', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 800 - i * 8 })) },
+    { name: 'Valorant', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1200 - i * 12 })) },
+    { name: 'Rocket League', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 600 - i * 6 })) },
+    { name: 'League of Legends', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1500 - i * 15 })) },
+  ],
+  inter: [
+    { name: 'Cricket', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 500 - i * 5 })) },
+    { name: 'Football', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 300 - i * 3 })) },
+    { name: 'Basketball', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 400 - i * 4 })) },
+    { name: 'Volleyball', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 350 - i * 3.5 })) },
+    { name: 'Table Tennis', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 250 - i * 2.5 })) },
+  ],
+  intra: [
+    { name: 'Baseball', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 200 - i * 2 })) },
+    { name: 'Volleyball', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 250 - i * 2.5 })) },
+    { name: 'Tennis', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 150 - i * 1.5 })) },
+    { name: 'Badminton', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 180 - i * 1.8 })) },
+    { name: 'Chess', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 120 - i * 1.2 })) },
+  ],
+}
+const branches = [
+  { name: 'CSE', points: 1000 },
+  { name: 'ECE', points: 950 },
+  { name: 'ME', points: 900 },
+  { name: 'CE', points: 850 },
+  { name: 'EE', points: 800 },
+  { name: 'CH', points: 750 },
+  { name: 'BT', points: 700 },
+]
 // Validation schemas
 const step1Schema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters."),
@@ -342,50 +408,210 @@ export default function MultistepFormPage(): JSX.Element {
     })
     console.log(data)
   }
+  const LeaderboardCard = ({ game, category }) => {
+    const showBrackets = ['Cricket', 'Valorant', 'Football', 'Basketball', 'Volleyball', 'Table Tennis', 'Badminton', 'Chess', 'Baseball'].includes(game.name);
 
-  return (
-    <Card className="max-w-[800px] mx-auto my-4">
-      <CardContent className="pt-6">
-        <Progress value={progress} className="mb-6" />
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {step === 1 ? (
-              <Form1 form={form} />
-            ) : step === 2 ? (
-              <Form2 form={form} />
-            ) : (
-              <Form3 form={form} />
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{game.name}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Rank</TableHead>
+                <TableHead>Team</TableHead>
+                <TableHead>Points</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {game.leaderboard.slice(0, 3).map((entry) => (
+                <TableRow key={entry.rank}>
+                  <TableCell>{entry.rank}</TableCell>
+                  <TableCell>{entry.team}</TableCell>
+                  <TableCell>{entry.points}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="flex gap-2 mt-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="flex-1">View All Positions</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>{game.name} - All Team Positions</DialogTitle>
+                </DialogHeader>
+                <ScrollArea className="h-[50vh] mt-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Rank</TableHead>
+                        <TableHead>Team</TableHead>
+                        <TableHead>Points</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {game.leaderboard.map((entry) => (
+                        <TableRow key={entry.rank}>
+                          <TableCell>{entry.rank}</TableCell>
+                          <TableCell>{entry.team}</TableCell>
+                          <TableCell>{entry.points}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </DialogContent>
+            </Dialog>
+            {showBrackets && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="flex-1">View Brackets</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-7xl">
+                  <DialogHeader>
+                    <DialogTitle>{game.name} - Tournament Brackets</DialogTitle>
+                  </DialogHeader>
+                  <EnhancedTreeStyleBracket />
+                </DialogContent>
+              </Dialog>
             )}
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const SportsCategorySection = ({ category, games }) => {
+    const [showAll, setShowAll] = useState(false)
+    const displayedGames = showAll ? games : games.slice(0, 3)
+
+    return (
+      <div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {displayedGames.map((game) => (
+            <LeaderboardCard key={game.name} game={game} category={category} />
+          ))}
+        </div>
+        {games.length > 3 && (
+          <Button
+            onClick={() => setShowAll(!showAll)}
+            className="mt-6 mx-auto block"
+          >
+            {showAll ? (
+              <>
+                Show Less <ChevronUp className="ml-2 h-4 w-4" />
+              </>
+            ) : (
+              <>
+                Show More <ChevronDown className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        )}
+      </div>
+    )
+  }
+  return (
+    // deep and dilip sports componenets
+    <>
+    {/* Carousel */}
+    <CarouselComponent/>
+
+    {/* leaderboard */}
+    <Tabs defaultValue="esports" className="mt-12">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="esports">E-Sports</TabsTrigger>
+          
+          <TabsTrigger value="inter">Inter-College</TabsTrigger>
+          <TabsTrigger value="intra">Intra-College</TabsTrigger>
+        </TabsList>
+        {Object.entries(sports).map(([category, games]) => (
+          <TabsContent key={category} value={category}>
+            <SportsCategorySection category={category} games={games} />
+          </TabsContent>
+        ))}
+      </Tabs>
+
+     {/* Schedule */}
+     <SportsSchedule/>
+
+     <Card className="mt-12">
+        <CardHeader>
+          <CardTitle>Branch Rankings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Rank</TableHead>
+                <TableHead>Branch</TableHead>
+                <TableHead>Points</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {branches
+                .sort((a, b) => b.points - a.points)
+                .map((branch, index) => (
+                  <TableRow key={branch.name}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{branch.name}</TableCell>
+                    <TableCell>{branch.points}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </>
+    
+    // pika bhai form
+
+    // <Card className="max-w-[800px] mx-auto my-4">
+    //   <CardContent className="pt-6">
+    //     <Progress value={progress} className="mb-6" />
+        
+    //     <Form {...form}>
+    //       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    //         {step === 1 ? (
+    //           <Form1 form={form} />
+    //         ) : step === 2 ? (
+    //           <Form2 form={form} />
+    //         ) : (
+    //           <Form3 form={form} />
+    //         )}
             
-            <div className="flex justify-between">
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  onClick={handleBack}
-                  disabled={step === 1}
-                  variant="secondary"
-                >
-                  Back
-                </Button>
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={step === 3}
-                >
-                  Next
-                </Button>
-              </div>
+    //         <div className="flex justify-between">
+    //           <div className="flex gap-2">
+    //             <Button
+    //               type="button"
+    //               onClick={handleBack}
+    //               disabled={step === 1}
+    //               variant="secondary"
+    //             >
+    //               Back
+    //             </Button>
+    //             <Button
+    //               type="button"
+    //               onClick={handleNext}
+    //               disabled={step === 3}
+    //             >
+    //               Next
+    //             </Button>
+    //           </div>
               
-              {step === 3 && (
-                <Button type="submit" variant="destructive">
-                  Submit
-                </Button>
-              )}
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    //           {step === 3 && (
+    //             <Button type="submit" variant="destructive">
+    //               Submit
+    //             </Button>
+    //           )}
+    //         </div>
+    //       </form>
+    //     </Form>
+    //   </CardContent>
+    // </Card>
   )
 }
