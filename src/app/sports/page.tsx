@@ -1,9 +1,41 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+// import { TECarousel, TECarouselItem } from "tw-elements-react";
+// import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
+import  CarouselComponent  from '@/components/ui/CarouselComponent'
+import SportsSchedule from '@/components/ui/SportsSchedule'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/Tabs'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Select,
   SelectContent,
@@ -11,6 +43,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { EnhancedTreeStyleBracket } from '@/components/ui/enhanced-tree-style-bracket'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, UseFormReturn } from "react-hook-form"
 import * as z from "zod"
@@ -27,6 +61,70 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 
+
+type BracketGameType = typeof BRACKET_GAMES[number];
+
+const BRACKET_GAMES = [
+  'BGMI',
+  'Cricket',
+  'Valorant',
+  'FIFA',
+  'Football',
+  'Basketball',
+  'Volleyball',
+  'Table Tennis',
+  'Badminton',
+  'Chess',
+  'Baseball',
+  'Rocket League',
+  'League of Legends',
+  'Tennis'
+] as const;
+
+interface Game {
+  name: BracketGameType;  // Update this type
+  description: string;
+  image: string;
+  status: string;
+  leaderboard: { rank: number; team: string; points: number }[];
+  registrationLink?: string;
+  rulesLink?: string;
+  bracketLink?: string;
+}
+
+const sports: Record<string, Array<Game>> = {
+  esports: [
+    { name: 'BGMI', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1000 - i * 10 })) },
+    { name: 'FIFA', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 800 - i * 8 })) },
+    { name: 'Valorant', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1200 - i * 12 })) },
+    { name: 'Rocket League', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 600 - i * 6 })) },
+    { name: 'League of Legends', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1500 - i * 15 })) },
+  ],
+  inter: [
+    { name: 'Cricket', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 500 - i * 5 })) },
+    { name: 'Football', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 300 - i * 3 })) },
+    { name: 'Basketball', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 400 - i * 4 })) },
+    { name: 'Volleyball', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 350 - i * 3.5 })) },
+    { name: 'Table Tennis', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 250 - i * 2.5 })) },
+  ],
+  intra: [
+    { name: 'Baseball', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 200 - i * 2 })) },
+    { name: 'Volleyball', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 250 - i * 2.5 })) },
+    { name: 'Tennis', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 150 - i * 1.5 })) },
+    { name: 'Badminton', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 180 - i * 1.8 })) },
+    { name: 'Chess', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 120 - i * 1.2 })) },
+  ],
+} as const;
+
+const branches = [
+  { name: 'CSE', points: 1000 },
+  { name: 'ECE', points: 950 },
+  { name: 'ME', points: 900 },
+  { name: 'CE', points: 850 },
+  { name: 'EE', points: 800 },
+  { name: 'CH', points: 750 },
+  { name: 'BT', points: 700 },
+]
 // Validation schemas
 const step1Schema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters."),
@@ -342,50 +440,215 @@ export default function MultistepFormPage(): JSX.Element {
     })
     console.log(data)
   }
-
-  return (
-    <Card className="max-w-[800px] mx-auto my-4">
-      <CardContent className="pt-6">
-        <Progress value={progress} className="mb-6" />
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {step === 1 ? (
-              <Form1 form={form} />
-            ) : step === 2 ? (
-              <Form2 form={form} />
-            ) : (
-              <Form3 form={form} />
+  interface Game {
+    name: string;
+    description: string;
+    image: string;
+    status: string;
+    leaderboard: { rank: number; team: string; points: number }[];
+    registrationLink?: string;
+    rulesLink?: string;
+    bracketLink?: string;
+  }
+  
+  interface LeaderboardCardProps {
+    game: Game;
+    category: string;
+  }
+  
+  const BRACKET_GAMES = [
+    'BGMI',
+    'Cricket',
+    'Valorant',
+    'FIFA',
+    'Football',
+    'Basketball',
+    'Volleyball',
+    'Table Tennis',
+    'Badminton',
+    'Chess',
+    'Baseball',
+    'Rocket League',
+    'League of Legends',
+    'Tennis'
+  ] as const;
+  
+  const LeaderboardCard = ({ game, category }: LeaderboardCardProps) => {
+    const showBrackets = BRACKET_GAMES.includes(game.name as BracketGameType);
+  
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{game.name}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Rank</TableHead>
+                <TableHead>Team</TableHead>
+                <TableHead>Points</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {game.leaderboard.slice(0, 3).map((entry) => (
+                <TableRow key={entry.rank}>
+                  <TableCell>{entry.rank}</TableCell>
+                  <TableCell>{entry.team}</TableCell>
+                  <TableCell>{entry.points}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="flex gap-2 mt-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="flex-1">View All Positions</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>{game.name} - All Team Positions</DialogTitle>
+                </DialogHeader>
+                <ScrollArea className="h-[50vh] mt-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Rank</TableHead>
+                        <TableHead>Team</TableHead>
+                        <TableHead>Points</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {game.leaderboard.map((entry) => (
+                        <TableRow key={entry.rank}>
+                          <TableCell>{entry.rank}</TableCell>
+                          <TableCell>{entry.team}</TableCell>
+                          <TableCell>{entry.points}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </DialogContent>
+            </Dialog>
+            {showBrackets && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="flex-1">View Brackets</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-7xl">
+                  <DialogHeader>
+                    <DialogTitle>{game.name} - Tournament Brackets</DialogTitle>
+                  </DialogHeader>
+                  <EnhancedTreeStyleBracket />
+                </DialogContent>
+              </Dialog>
             )}
-            
-            <div className="flex justify-between">
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  onClick={handleBack}
-                  disabled={step === 1}
-                  variant="secondary"
-                >
-                  Back
-                </Button>
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={step === 3}
-                >
-                  Next
-                </Button>
-              </div>
-              
-              {step === 3 && (
-                <Button type="submit" variant="destructive">
-                  Submit
-                </Button>
-              )}
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+  
+  const SportsCategorySection: React.FC<{ category: string; games: Game[] }> = ({ category, games }) => {
+    const [showAll, setShowAll] = useState(false)
+    const displayedGames = showAll ? games : games.slice(0, 3)
+  
+    return (
+      <div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {displayedGames.map((game) => (
+            <LeaderboardCard key={game.name} game={game} category={category} />
+          ))}
+        </div>
+        {games.length > 3 && (
+          <Button
+            onClick={() => setShowAll(!showAll)}
+            className="mt-6 mx-auto block"
+          >
+            {showAll ? (
+              <>
+                Show Less <ChevronUp className="ml-2 h-4 w-4" />
+              </>
+            ) : (
+              <>
+                Show More <ChevronDown className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        )}
+      </div>
+    )
+  }
+  return (
+    <div className="mt-24">
+      <CarouselComponent/>
+      
+      {/* Jersey Registration Section */}
+      <div className="max-w-7xl mx-auto my-8 p-6 bg-gray-900 rounded-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold mb-4">Jersey Registration</h2>
+            <p className="mb-6 text-gray-300">Register now to get your custom jersey for the upcoming sports events!</p>
+            <Link href="/sports/jersey">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                Register for Jersey
+              </Button>
+            </Link>
+          </div>
+          <div className="flex-1 flex justify-end">
+            <img 
+              src="/olympus/jersey/orange.jpeg" 
+              alt="Jersey Preview" 
+              className="w-64 h-auto object-contain"
+            />
+          </div>
+        </div>
+      </div>
+
+      <Tabs defaultValue="esports" className="mt-12">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="esports">E-Sports</TabsTrigger>
+          
+          <TabsTrigger value="inter">Inter-College</TabsTrigger>
+          <TabsTrigger value="intra">Intra-College</TabsTrigger>
+        </TabsList>
+        {Object.entries(sports).map(([category, games]) => (
+          <TabsContent key={category} value={category}>
+            <SportsCategorySection category={category} games={games} />
+          </TabsContent>
+        ))}
+      </Tabs>
+
+     <SportsSchedule/>
+
+     <Card className="mt-12">
+        <CardHeader>
+          <CardTitle>Branch Rankings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Rank</TableHead>
+                <TableHead>Branch</TableHead>
+                <TableHead>Points</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {branches
+                .sort((a, b) => b.points - a.points)
+                .map((branch, index) => (
+                  <TableRow key={branch.name}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{branch.name}</TableCell>
+                    <TableCell>{branch.points}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

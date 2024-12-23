@@ -7,10 +7,11 @@ body {
 }
 
 body {
-  background: #000000;
+  /* background: linear-gradient(to bottom right, #172554, #1e3a8a, #172554); */
+  background: #000;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 14px;
-  color: #000;
+  color: #fff;
 }
 
 #__next {
@@ -97,10 +98,9 @@ body {
 }
 
 .festival-phase {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  border-radius: 2.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 1.5rem;
   width: 80%;
   margin-left: auto;
   margin-right: auto;
@@ -108,9 +108,9 @@ body {
 
 .festival-phase-content {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  padding: 1rem;
 }
 
 @media (min-width: 768px) {
@@ -131,16 +131,23 @@ body {
 }
 
 .festival-phase-image-container {
+  flex: 0 0 30%;
   position: relative;
-  width: 100%;
   aspect-ratio: 1/1;
+  max-height: 200px;
+  max-width: 200px;
 }
 
 @media (min-width: 768px) {
   .festival-phase-image-container {
     width: 20%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1/1;
+    max-height: 250px;
+    max-width: 250px;
   }
+}
+.festival-phase-text {
+  flex: 0 0 70%;
 }
 
 .festival-phase-image-glow {
@@ -153,8 +160,11 @@ body {
 }
 
 .festival-phase-image {
-  border-radius: 2.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1.5rem;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
   position: relative;
   z-index: 10;
 
@@ -162,9 +172,9 @@ body {
 
 .festival-phase-title {
   position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  font-size: 1.875rem;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -172,23 +182,33 @@ body {
 }
 
 .festival-phase-description {
-  width: 100%;
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: #374151;
-  padding: 1rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+  .festival-phase-content {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .festival-phase-image-container,
+  .festival-phase-text {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .festival-phase-image-container {
+    max-height: 150px;
+    max-width: 150px;
+    margin: 0 auto;
+  }
+
   .festival-phase-description {
-    width: 50%;
-  }
-  
-  .festival-phase-description-left {
-    text-align: left;
-  }
-  
-  .festival-phase-description-right {
-    text-align: right;
+    padding: 0 !important;
+    text-align: center;
   }
 }
 
@@ -197,7 +217,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 2rem;
-  height: 6rem;
+  height: 4rem;
   color: #F9A8D4; /* Vibrant pink color */
   filter: drop-shadow(0 0 8px #F9A8D4); /* Adds a glow effect */
   animation: connectorPulse 2s infinite; /* Adds a pulsing animation */
@@ -375,4 +395,13 @@ body {
   font-size: 2rem; /* Adjust the font size as needed */
   font-weight: bold;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Optional: Add a glow effect */
+  background-color: black; /* Added black background */
+}
+
+/* Glassy look styles */
+.glassy-look {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }

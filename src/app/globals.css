@@ -178,3 +178,41 @@ html, body {
     display: none;
   }
 }
+
+@keyframes text-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-text-shine {
+  animation: text-shine 3s linear infinite;
+  background-size: 200% auto;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+               0 0 40px rgba(255, 255, 255, 0.3),
+               0 0 60px rgba(255, 255, 255, 0.2);
+}
+
+/* Use CSS containment for better performance */
+.scroll-container {
+  contain: layout style paint;
+}
+
+/* Use hardware acceleration for animations */
+.animated-element {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

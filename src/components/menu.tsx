@@ -1,169 +1,326 @@
-"use client";
-import React, { useState, useRef, useEffect } from 'react';
+"use client"
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { gsap } from 'gsap';
-import "./menu.css";
 
-const menuLinks = [
-  { path: '/', label: 'Home' },
-  { path: '/about', label: 'About' },
-  { path: '/contact', label: 'Contact' },
-  { path: '/sports', label: 'Sports' },
-  { path: '/gallery', label: 'Gallery' }
+const menuItems = [
+  { 
+    label: 'Yuva',
+    path: '/yuva'
+  },
+  { 
+    label: 'Aurum',
+    path: '/aurum'
+  },
+  { 
+    label: 'Olympus',
+    path: '/sports/'
+  },
+  { 
+    label: 'Verve',
+    path: '/verve'
+  },
+  {
+    label: 'Teams',
+    path: '/team',
+    submenu: [
+      { label: 'Student Council', path: '/team' },
+      { label: 'Extended Teams', path: '/team/extended' },
+      { label: 'Faculty', path: '/team/faculty' }
+    ]
+  },
+  { 
+    label: 'Sponsors',
+    path: '/sponsors'
+  },
+  { 
+    label: 'Contact Us',
+    path: '/contact'
+  }
 ];
 
-const Menu = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+interface MenuItem {
+  label: string;
+  path: string;
+  submenu?: MenuItem[];
+}
 
-  useEffect(() => {
-    // Set up GSAP animations
-    if (overlayRef.current) {
-      gsap.set(overlayRef.current, { yPercent: -100 });
-      gsap.set('.menu-link-item, .menu-info, .menu-preview', { opacity: 0, y: 20 });
-    }
-  }, []);
+const NavItem = ({ item }: { item: MenuItem }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    if (!isMenuOpen) {
-      containerRef.current?.classList.add('open');
-      // Open menu animation
-      gsap.to(overlayRef.current, { yPercent: 0, duration: 0.5, ease: 'power3.inOut' });
-      gsap.to('.menu-link-item', { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 0.3 });
-      gsap.to('.menu-info, .menu-preview', { opacity: 1, y: 0, duration: 0.5, delay: 0.5 });
-    } else {
-      containerRef.current?.classList.remove('open');
-      // Close menu animation
-      gsap.to(overlayRef.current, { yPercent: -100, duration: 0.5, ease: 'power3.inOut' });
-      gsap.to('.menu-link-item, .menu-info, .menu-preview', { opacity: 0, y: 20, duration: 0.3 });
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+    setIsHovered(true);
   };
 
-  // GSAP animation for link hover
-  const handleLinkHover = (e: React.MouseEvent<HTMLAnchorElement>, isEnter: boolean) => {
-    gsap.to(e.currentTarget, {
-      color: isEnter ? '#ff0000' : '#000000', // Change to your desired hover color
-      duration: 0.3
-    });
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsHovered(false);
+    }, 300); // 300ms delay before hiding
   };
 
   return (
-    <div className={`menu-container ${isMenuOpen ? 'open' : ''}`} ref={containerRef}>
-      <div className='menu-bar'>
-        <div className='menu-logo' style={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          {/* SAKEC Logo */}
-          <Image 
-            src="/assets/logos/sakec.svg" 
-            alt="SAKEC Logo" 
-            width={50} 
-            height={50} 
-          />
-          
-          {/* Separator */}
-          <div style={{
-            width: '1px', 
-            height: '30px', 
-            backgroundColor: 'goldenrod'
-          }} />
-          
-          {/* Prathistha Logo */}
-          <Image 
-            src="/assets/logos/Prathistha.png" 
-            alt="Prathistha Logo" 
-            width={50} 
-            height={50} 
-          />
-          
-          {/* Prathistha Text with Subscript */}
-          <Link 
-            href="/" 
-            style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              lineHeight: '1.2'
-            }}
-          >
-            <span style={{ 
-              fontFamily: 'MAEL, sans-serif', 
-              color: 'goldenrod',
-              fontSize: '1.5rem'
-            }}>
-              Prathistha
-            </span>
-            <span style={{ 
-              fontSize: '0.6rem', 
-              color: 'goldenrod',
-              marginTop: '-3px'
-            }}>
-              SAKECFEST
-            </span>
-          </Link>
-        </div>
-        <div className='menu-open' onClick={toggleMenu}>
-          ☰
-        </div>
-      </div>
+    <div 
+      className="nav-item"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Link href={item.path} className="nav-link">
+        {item.label}
+      </Link>
       
-      {/* Rest of the component remains the same as previous version */}
-      <div className='menu-overlay' ref={overlayRef}>
-        <div className='menu-overlay-bar'>
-          <div className='menu-logo'>
-            <Link 
-              href="/" 
-              style={{ 
-                fontFamily: 'MAEL, sans-serif', 
-                color: 'goldenrod' 
-              }}
+      {item.submenu && isHovered && (
+        <div className="dropdown-menu">
+          {item.submenu.map((subItem, index) => (
+            <Link
+              key={index}
+              href={subItem.path}
+              className="dropdown-item"
             >
-              Prathistha
+              {subItem.label}
             </Link>
-          </div>
-          <div className='menu-close' onClick={toggleMenu}>
-          </div>
+          ))}
         </div>
-        <div className='menu-close-icon' onClick={toggleMenu}>
-          <p>&#x2715;</p>
-        </div>
-        <div className='menu-copy'>
-          <div className="menu-links">
-            {menuLinks.map((link, index) => (
-              <div className="menu-link-item" key={index}>
-                <div className="menu-link-item-holder" onClick={toggleMenu}>
-                  <Link 
-                    href={link.path} 
-                    className='menu-link'
-                    onMouseEnter={(e) => handleLinkHover(e, true)}
-                    onMouseLeave={(e) => handleLinkHover(e, false)}
-                  >
-                    {link.label}
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="menu-info">
-            <div className="menu-link-col">
-              <a href="https://www.sakec.ac.in/" target="_blank" rel="noopener noreferrer">X &#8599;</a>
-              <a href="https://www.instagram.com/pratishtha_sakecfest/" target="_blank" rel="noopener noreferrer">Instagram &#8599;</a>
-              <a href="#" target="_blank" rel="noopener noreferrer">Linkedin &#8599;</a>
-              <a href="https://www.youtube.com/@PRATISHTHATheSAKECFest" target="_blank" rel="noopener noreferrer">Youtube &#8599;</a>
-            </div>
-            <div className="menu-info-col">
-              <p>info@prathistha@sakec.ac.in</p>
-              <p>1234567891</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
+  );
+};
+
+const Menu = () => {
+  return (
+    <>
+      <nav className="nav-container">
+        <div className="nav-content">
+          <div className="nav-wrapper">
+            {/* Logo Section */}
+            <div className="logo-section">
+              <Link href="/">
+                <Image
+                  src="/assets/logos/sakec_white.png"
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  className="logo-image"
+                />
+              </Link>
+              <div className="logo-placeholder">
+                <Image
+                  src="/assets/logos/sc_logo.png"
+                  alt="Student council Logo"
+                  width={60}
+                  height={60}
+                  className="logo-image"
+                />
+              </div>
+              <div className="logo-text-container">
+                <h1 className="logo-text">Prathistha</h1>
+                <span className="logo-subtext">sakecfest</span>
+              </div>
+            </div>
+
+            {/* Navigation Items */}
+            <div className="nav-items">
+              {menuItems.map((item, index) => (
+                <NavItem key={index} item={item} />
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="mobile-menu">
+              <button className="mobile-menu-button">
+                <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <style jsx>{`
+        @font-face {
+          font-family: 'MAEL';
+          src: url('/fonts/MAEL____.TTF') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500&family=Righteous&display=swap');
+
+        .nav-container {
+          background-color: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 50;
+        }
+
+        .nav-content {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1rem;
+        }
+
+        .nav-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 4rem;
+        }
+
+        .logo-section {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem; /* Increased gap between items */
+        }
+
+        .logo-image {
+          height: 2.5rem;
+          width: auto;
+        }
+
+        .logo-placeholder {
+          display: flex;
+          align-items: center;
+        }
+
+        .logo-text-container {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin-left: 0.5rem;
+          position: relative;
+          min-width: 120px; /* Ensure enough width for the subtext */
+        }
+
+        .logo-text {
+          font-family: 'MAEL', sans-serif;
+          color: goldenrod;
+          font-size: 1.75rem;
+          line-height: 1;
+          margin: 0;
+        }
+
+        .logo-subtext {
+          font-family: 'MAEL', sans-serif;
+          color: goldenrod;
+          font-size: 0.8rem;
+          letter-spacing: 1px;
+          position: absolute;
+          right: 0;
+          bottom: -0.8rem;
+        }
+
+        .nav-items {
+          display: none;
+        }
+
+        @media (min-width: 768px) {
+          .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+          }
+
+          .mobile-menu {
+            display: none;
+          }
+        }
+
+        :global(.nav-item) {
+          position: relative;
+        }
+
+        :global(.nav-link) {
+          padding: 0.5rem 1rem;
+          color: white;
+          text-decoration: none;
+          transition: color 0.3s ease;
+          position: relative;
+          font-family: Arial, sans-serif;
+          font-size: 1.1rem;
+          letter-spacing: 0.5px;
+        }
+
+        :global(.nav-link::after) {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 2px;
+          bottom: 0;
+          left: 50%;
+          background-color: goldenrod;
+          transition: all 0.3s ease;
+          transform: translateX(-50%);
+        }
+
+        :global(.nav-link:hover::after) {
+          width: calc(100% - 2rem); /* Subtracting padding from both sides */
+        }
+
+        :global(.nav-link:hover) {
+          color: goldenrod;
+        }
+
+        :global(.dropdown-menu) {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background-color: rgba(0, 0, 0, 0.9);
+          min-width: 200px;
+          padding: 0.75rem 0;
+          box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.2);
+          animation: dropdownAnimation 0.2s ease-out forwards;
+          border-radius: 12px;
+          backdrop-filter: blur(8px);
+          margin-top: 0.5rem;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        :global(.dropdown-item) {
+          display: block;
+          padding: 0.75rem 1.25rem;
+          color: white;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          font-family: Arial, sans-serif;
+          font-size: 1rem;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+        }
+
+        :global(.dropdown-item:first-child) {
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
+        }
+
+        :global(.dropdown-item:last-child) {
+          border-bottom-left-radius: 12px;
+          border-bottom-right-radius: 12px;
+        }
+
+        .mobile-menu-button {
+          color: white;
+          padding: 0.5rem;
+        }
+
+        @keyframes dropdownAnimation {
+          from {
+            opacity: 0;
+            transform: scaleY(0);
+          }
+          to {
+            opacity: 1;
+            transform: scaleY(1);
+          }
+        }
+      `}</style>
+    </>
   );
 };
 

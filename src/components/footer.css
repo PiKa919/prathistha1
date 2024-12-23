@@ -102,10 +102,18 @@
 .social-links {
   display: flex;
   gap: 1rem; /* space-x-4 */
+  position: relative;
+  z-index: 1;  /* Add this to ensure links are clickable */
 }
 
 .social-link {
   transition: transform 0.3s ease, color 0.3s ease;
+  cursor: pointer;  /* Add this to show pointer cursor */
+  position: relative;  /* Add this */
+  z-index: 2;  /* Add this */
+  display: flex;  /* Add this */
+  align-items: center;  /* Add this */
+  padding: 0.5rem;  /* Add this to increase clickable area */
 }
 
 .social-link:hover {
@@ -127,6 +135,8 @@
 
 .quick-links {
   margin-bottom: 0.5rem; /* space-y-2 approximation */
+  position: relative;
+  z-index: 1;
 }
 
 .quick-link {
@@ -135,6 +145,10 @@
   align-items: center;
   transition: color 0.3s ease;
   margin-bottom: 0.5rem; /* Added margin-bottom for spacing */
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  padding: 0.25rem 0;
 }
 
 .quick-link:hover {
@@ -154,6 +168,8 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem; /* Added margin-bottom for spacing */
+  position: relative;
+  z-index: 1;
 }
 
 .contact-icon {
@@ -161,6 +177,21 @@
   width: 1.25rem;
   margin-right: 0.5rem;
   color: #9f7aea; /* text-purple-400 */
+}
+
+.contact-link {
+  color: #d1d5db;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  z-index: 2;
+  padding: 0.25rem 0;
+  pointer-events: auto;
+}
+
+.contact-link:hover {
+  color: #9f7aea;
 }
 
 .map-container {

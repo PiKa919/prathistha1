@@ -1,0 +1,43 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "jerseys": {
+      ".read": true,
+      ".write": true,
+      "$jersey_id": {
+        ".validate": "newData.hasChildren(['name', 'email', 'prn', 'number', 'size', 'jerseyText', 'transactionId', 'paymentScreenshot'])",
+        "name": { 
+          ".validate": "newData.isString() && newData.val().length > 0" 
+        },
+        "email": { 
+          ".validate": "newData.isString() && newData.val().endsWith('@sakec.ac.in')" 
+        },
+        "prn": { 
+          ".validate": "newData.isString() && newData.val().matches(/^[a-zA-Z0-9]{14}$/)" 
+        },
+        "number": { 
+          ".validate": "newData.isString() && newData.val().length <= 3 && newData.val().matches(/^[0-9]{1,3}$/)" 
+        },
+        "size": { 
+          ".validate": "newData.isString() && newData.val().matches(/^(small|medium|large|xl|xxl)$/)" 
+        },
+        "jerseyText": { 
+          ".validate": "newData.isString() && newData.val().length > 0" 
+        },
+        "transactionId": { 
+          ".validate": "newData.isString() && newData.val().length > 0" 
+        },
+        "paymentScreenshot": { 
+          ".validate": "newData.isString()" 
+        },
+        "timestamp": { 
+          ".validate": "newData.isNumber()" 
+        },
+        "$other": { 
+          ".validate": false 
+        }
+      }
+    }
+  }
+}
