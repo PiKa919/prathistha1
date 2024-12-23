@@ -19,28 +19,44 @@ const CarouselComponent: React.FC = () => {
       <div>
         <img
           style={imageStyle}
+<<<<<<< HEAD
           src="/assets/banner/olympus/slide1.jpg"
+=======
+          src="https://via.placeholder.com/800x400?text=Slide+1"
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 1"
         />
       </div>
       <div>
         <img
           style={imageStyle}
+<<<<<<< HEAD
           src="/assets/banner/olympus/slide1.jpg"
+=======
+          src="https://via.placeholder.com/800x400?text=Slide+2"
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 2"
         />
       </div>
       <div>
         <img
           style={imageStyle}
+<<<<<<< HEAD
           src="/assets/banner/olympus/slide1.jpg"
+=======
+          src="https://via.placeholder.com/800x400?text=Slide+3"
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 3"
         />
       </div>
       <div>
         <img
           style={imageStyle}
+<<<<<<< HEAD
           src="/assets/banner/olympus/slide1.jpg"
+=======
+          src="https://via.placeholder.com/800x400?text=Slide+4"
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 4"
         />
       </div>
@@ -48,4 +64,8 @@ const CarouselComponent: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default CarouselComponent;
+=======
+export default CarouselComponent;
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa

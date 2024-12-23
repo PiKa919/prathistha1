@@ -1,5 +1,8 @@
 const SportsSchedule = () => {
+<<<<<<< HEAD
     // Static schedule data
+=======
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
     const schedule = [
       {
         date: '2024-11-01',
@@ -27,6 +30,7 @@ const SportsSchedule = () => {
     return (
       <div className="mt-12">
         <h2 className="text-2xl font-semibold mb-6">Sports Schedule</h2>
+<<<<<<< HEAD
         {/* Container with fixed height and overflow hidden */}
         <div className="relative h-80 overflow-hidden">
           {/* Scrolling content */}
@@ -39,25 +43,41 @@ const SportsSchedule = () => {
                     {new Date(day.date).toDateString()}
                   </h3>
                   {/* Events list with green bullets */}
+=======
+        <div className="relative h-80 overflow-hidden">
+          <div className="vertical-scroll">
+            {schedule.map((day, index) => (
+              <div key={index} className="mb-6">
+                <div className="bg-black p-4 rounded-lg shadow">
+                  <h3 className="text-xl font-medium mb-4">{new Date(day.date).toDateString()}</h3>
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
                   <ul className="space-y-4">
                     {day.events.map((event, idx) => (
                       <li key={idx} className="flex items-start">
                         <div className="w-3 h-3 bg-green-500 rounded-full mt-1 mr-4"></div>
                         <div>
+<<<<<<< HEAD
                           <span className="font-semibold">{event.time}</span> - 
                           {event.sport}: {event.description}
+=======
+                          <span className="font-semibold">{event.time}</span> - {event.sport}: {event.description}
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
                         </div>
                       </li>
                     ))}
                   </ul>
                 </div>
+<<<<<<< HEAD
                 {/* Divider between days */}
+=======
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
                 {index < schedule.length - 1 && (
                   <div className="h-2 bg-white rounded-full my-4"></div>
                 )}
               </div>
             ))}
           </div>
+<<<<<<< HEAD
           {/* CSS Animation */}
           <style jsx>{`
             @keyframes verticalScroll {
@@ -66,6 +86,19 @@ const SportsSchedule = () => {
             }
             .vertical-scroll {
               animation: verticalScroll 1s linear infinite;
+=======
+          <style jsx>{`
+            @keyframes verticalScroll {
+              0% {
+                transform: translateY(0);
+              }
+              100% {
+                transform: translateY(-100%);
+              }
+            }
+            .vertical-scroll {
+              animation: verticalScroll 15s linear infinite;
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
               display: flex;
               flex-direction: column;
             }
@@ -76,6 +109,13 @@ const SportsSchedule = () => {
         </div>
       </div>
     );
+<<<<<<< HEAD
 };
   
 export default SportsSchedule;
+=======
+  };
+  
+  export default SportsSchedule;
+  
+>>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
