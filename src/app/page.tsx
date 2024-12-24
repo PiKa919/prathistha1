@@ -151,7 +151,7 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const targetDate = new Date('2025-02-21T00:00:00'); // 21st February 2025
+  const targetDate = new Date('2025-12-30T00:00:00'); // 21st February 2025
 
   return (
     <div className="min-h-screen">
@@ -172,16 +172,16 @@ export default function Home() {
                 className="mySwiper"
               >
                 <SwiperSlide>
-                  <Image src="/assets/banner/banner8.jpg" alt="Banner 1" width={400} height={300} />
+                  <Image src="/assets/banner/homepage.jpg" alt="Banner 1" width={400} height={300} />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Image src="/assets/banner/banner5.jpg" alt="Banner 2" width={400} height={300} />
+                  <Image src="/assets/banner/homepage.jpg" alt="Banner 2" width={400} height={300} />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Image src="/assets/banner/banner6.jpg" alt="Banner 3" width={400} height={300}/>
+                  <Image src="/assets/banner/homepage.jpg" alt="Banner 3" width={400} height={300}/>
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Image src="/assets/banner/banner7.jpg" alt="Banner 4" width={400} height={300} />
+                  <Image src="/assets/banner/homepage.jpg" alt="Banner 4" width={400} height={300} />
                 </SwiperSlide>
               </Swiper>
             </div>

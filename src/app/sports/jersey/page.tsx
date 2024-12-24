@@ -13,6 +13,8 @@ import { ref, set, onValue } from "firebase/database";
 import Image from 'next/image';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import JerseyGalleryModal from '@/components/jerseymodalgallery';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+
 
 interface FormData {
   name: string;
@@ -523,7 +525,7 @@ export default function JerseyRegistration() {
                     >
                       <Input
                         id="paymentScreenshot"
-                        type="file"
+                        type="file"   
                         accept="image/*"
                         className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all"
                         onChange={handleFileChange}
@@ -544,7 +546,7 @@ export default function JerseyRegistration() {
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-200 text-xl py-6 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02]"
+              className="w-full bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-200 text-lg md:text-xl py-4 md:py-6 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02]"
             >
               Register Jersey
             </Button>

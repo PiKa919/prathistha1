@@ -12,12 +12,12 @@ const JerseyGalleryModal = () => {
     { 
       id: 1, 
       image: "/olympus/jersey/babypink.jpeg",
-      description: "Classic Red Jersey" 
+      description: "Baby Pink - AIDS" 
     },
     { 
       id: 2, 
       image: "/olympus/jersey/bisleri.jpeg",
-      description: "Blue Away Jersey" 
+      description: "Bisleri" 
     },
     { 
       id: 3, 
@@ -27,22 +27,22 @@ const JerseyGalleryModal = () => {
     { 
       id: 4, 
       image: "/olympus/jersey/blue.jpeg",
-      description: "Commemorative White" 
+      description: "Dark Firozi" 
     },
     { 
       id: 5, 
       image: "/olympus/jersey/lemonyellow.jpeg",
-      description: "Limited Edition Gold" 
+      description: "Lemon Yellow - IT" 
     },
     { 
       id: 6, 
       image: "/olympus/jersey/red.jpeg",
-      description: "Anniversary Edition" 
+      description: "Red - COMPS" 
     },
     { 
       id: 7, 
       image: "/olympus/jersey/orange.jpeg",
-      description: "Team Captain Jersey" 
+      description: "Orange" 
     },
   ];
 

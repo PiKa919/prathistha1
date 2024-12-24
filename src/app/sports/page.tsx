@@ -222,6 +222,7 @@ const SportsCategorySection: React.FC<{ games: Game[] }> = ({ games }) => {
 export default function MultistepFormPage(): JSX.Element {
   return (
     <div className="mt-24">
+      {/* Ensure CarouselComponent is correctly rendered */}
       <CarouselComponent/>
       
       {/* Jersey Registration Section */}
