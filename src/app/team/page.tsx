@@ -512,9 +512,15 @@ const Section = ({ title, data }: { title: string; data: any[] }) => (
 
 const Example = () => {
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-indigo-500 to-violet-500 px-4 py-24">
-      <div className="max-w-6xl mx-auto pt-8">
-        <HeadsSection data={teamsData.heads} />
+    <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden px-4 py-24">
+      {/* Sparks effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute w-[200px] h-[200px] bg-white opacity-10 rounded-full blur-3xl top-10 left-10 animate-pulse" />
+        <div className="absolute w-[300px] h-[300px] bg-purple-700 opacity-20 rounded-full blur-3xl bottom-10 right-20 animate-pulse" />
+        <div className="absolute w-[150px] h-[150px] bg-blue-500 opacity-20 rounded-full blur-3xl bottom-20 left-20 animate-pulse" />
+      </div>
+      <div className="max-w-6xl mx-auto pt-8 relative z-10">
+       <HeadsSection data={teamsData.heads} />
         <Section title="Cultural Team" data={teamsData.culturals} />
         <Section title="Off Stage Team" data={teamsData.offstage} />
         <Section title="On Stage Team" data={teamsData.onstage} />
@@ -550,18 +556,18 @@ interface TiltCardProps {
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
-
 const TiltCard = ({ title, subheading, image, about, instagram, linkedin, location }: TiltCardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // State to control loading animation
+  const [isFlipped, setIsFlipped] = useState(false); // Flip state
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const xSpring = useSpring(x);
-  const ySpring = useSpring(y);
+  const xSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const ySpring = useSpring(y, { stiffness: 300, damping: 30 });
 
-  const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${y}deg)`;
+  const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
   const mouseTransform = useMotionTemplate`perspective(1000px) rotateX(${xSpring}deg) rotateY(${ySpring}deg) scale(1.05)`;
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -596,15 +602,15 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
   };
 
   return (
-    <div 
-      className="relative h-96 w-72 group" 
+    <div
+      className="relative h-[24rem] w-[20rem] group"
       style={{ perspective: "1000px" }}
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onClick={toggleFlip} // Toggle flip on click
     >
       <motion.div
-        onClick={toggleFlip}
         style={{
           width: "100%",
           height: "100%",
@@ -617,105 +623,121 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
         }}
         transition={{
           type: "spring",
-          stiffness: 500,
-          damping: 40,
-          mass: 1,
+          stiffness: 400,
+          damping: 50,
+          duration: 0.8,
         }}
         className="w-full h-full"
       >
         {/* Front of card */}
         <motion.div
-          className="absolute w-full h-full rounded-3xl bg-gradient-to-br from-indigo-300 to-violet-300 shadow-xl"
+          className="absolute w-full h-full rounded-md bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800 shadow-lg overflow-hidden"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
+            border: "8px solid",
+            borderImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1%, transparent 1%) 1",
+            borderImageSlice: "1",
+            backgroundClip: "border-box",
+            boxShadow: "0 0 8px rgba(255,255,255,0.5)",
           }}
         >
-          <div className="absolute inset-4 rounded-3xl overflow-hidden">
-            <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url('${image}')` }}
-            />
-            <div 
-              className="absolute bottom-0 left-0 right-0 flex flex-col items-start justify-end p-6 text-white"
-              style={{
-                background: "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2))",
+          {/* Small Dots Animation */}
+          {isLoading && (
+            <motion.div
+              className="absolute inset-0"
+              initial={{ opacity: 1, scale: 1 }}
+              animate={{
+                opacity: [1, 0.5, 0],
+                scale: [1, 1.1, 1],
               }}
-            >
-              <h2 className="text-3xl font-bold mb-1">{title}</h2>
-              <p className="text-sm opacity-90">{subheading}</p>
-            </div>
+              transition={{
+                duration: 2, // Duration of dots animation
+                ease: "easeInOut",
+              }}
+              onAnimationComplete={() => setIsLoading(false)} // End loading after dots animation
+              style={{
+                background: `radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.3) 1px, transparent 0)`,
+                backgroundSize: "16px 16px",
+              }}
+            />
+          )}
+          {/* Image */}
+          <motion.div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url('${image}')` }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isLoading ? 0 : 1 }} // Image fades in after dots animation
+            transition={{ duration: 0.5 }} // Quick fade-in for the image
+          />
+          <div
+            className="absolute bottom-0 left-0 right-0 flex flex-col items-start justify-end p-4 text-white"
+            style={{
+              background: "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2))",
+            }}
+          >
+            <h2 className="text-2xl font-bold truncate">{title}</h2>
+            <p className="text-xs opacity-90 truncate">{subheading}</p>
           </div>
-          <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-5 transition-opacity rounded-3xl" />
         </motion.div>
 
-{/* Back of card */}
-<motion.div
-          className="absolute w-full h-full rounded-xl overflow-hidden shadow-xl"
+        {/* Back of card */}
+        <motion.div
+          className="absolute w-full h-full rounded-md bg-gradient-to-br from-purple-700 via-purple-800 to-purple-900 shadow-lg"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             rotateY: "180deg",
+            border: "8px solid",
+            borderImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1%, transparent 1%) 1",
+            borderImageSlice: "1",
+            backgroundClip: "border-box",
+            boxShadow: "0 0 8px rgba(255,255,255,0.5)",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-red-200 via-red-300 to-red-400">
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:16px_16px]" />
-          </div>
-
-          <div className="relative h-full p-6 flex flex-col">
-            <div className="flex-1 rounded-xl bg-white/20 backdrop-blur-sm p-5 shadow-lg border border-white/30">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-red-900 drop-shadow-md">About</h3>
-                <p className="text-red-900/90 text-xs leading-relaxed backdrop-blur-sm bg-white/10 rounded-lg p-3 shadow-inner">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:16px_16px]" />
+          <div className="relative h-full p-4 flex flex-col">
+            <div className="flex-1 rounded-md bg-white/10 backdrop-blur-md p-4 shadow-lg border border-white/20">
+              <div className="space-y-3">
+                <h3 className="text-xl font-bold text-white drop-shadow-md">About</h3>
+                <p className="text-white/90 text-sm leading-relaxed backdrop-blur-sm bg-white/10 rounded-lg p-2 shadow-inner overflow-hidden">
                   {about}
                 </p>
                 <div className="mt-4">
-                  <h3 className="text-xl font-bold text-red-900 drop-shadow-md">♥ 🗺 in Mumbai</h3>
-                  <p className="text-red-900/90 text-xs leading-relaxed backdrop-blur-sm bg-white/10 rounded-lg p-3 shadow-inner mt-2">
+                  <h3 className="text-lg font-bold text-white drop-shadow-md">♥ 🗺 in Mumbai</h3>
+                  <p className="text-white/90 text-sm leading-relaxed backdrop-blur-sm bg-white/10 rounded-lg p-2 shadow-inner mt-2 overflow-hidden">
                     {location}
                   </p>
                 </div>
               </div>
             </div>
-            
+
+            {/* Buttons */}
             <div className="space-y-3 mt-4">
               <div className="grid grid-cols-2 gap-3">
-                <motion.a 
+                <motion.a
                   href={`https://instagram.com/${instagram}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white py-2.5 rounded-lg hover:opacity-90 transition-opacity shadow-lg"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-purple-700 text-white py-2 rounded-lg hover:opacity-90 transition-opacity shadow-lg"
                 >
                   <FiInstagram className="text-lg" />
                   Instagram
                 </motion.a>
-                <motion.a 
+                <motion.a
                   href={`https://linkedin.com/in/${linkedin}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white py-2.5 rounded-lg hover:opacity-90 transition-opacity shadow-lg"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-purple-700 text-white py-2 rounded-lg hover:opacity-90 transition-opacity shadow-lg"
                 >
                   <FiLinkedin className="text-lg" />
                   LinkedIn
                 </motion.a>
               </div>
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsFlipped(false);
-                }}
-                className="w-full bg-red-300/20 backdrop-blur-sm text-red-900 border border-red-300/30 py-2.5 rounded-lg hover:bg-red-300/30 transition-colors shadow-lg font-medium"
-              >
-                Flip Back
-              </motion.button>
             </div>
           </div>
         </motion.div>
@@ -724,4 +746,6 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
   );
 };
 
+
 export default Example;
+
