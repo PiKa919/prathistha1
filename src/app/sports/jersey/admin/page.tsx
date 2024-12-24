@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import ImageModal from '@/components/ImageModal';
 
 interface JerseyRegistration {
   name: string;
@@ -25,20 +26,29 @@ interface JerseyRegistration {
   timestamp: number;
   jerseyReceived?: boolean;
   paymentVerified?: boolean;
+  paymentScreenshot: string;
+  transactionId: string;
 }
 
 export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null);
   const [registrations, setRegistrations] = useState<Record<string, JerseyRegistration>>({});
   const [filter, setFilter] = useState({ department: '', year: '', search: '' });
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const departments = [
-    { value: 'COMPS', label: 'Computer Engineering' },
-    { value: 'IT', label: 'Information Technology' },
-    { value: 'ECS', label: 'Electronics & Computer Science' },
-    { value: 'CYSE', label: 'Cyber Security' },
+    "Computer Engineering",
+    "Information Technology",
+    "Electronics & Computer Science",
+    "Cyber Security",
+    "Electronics and Telecommunication",
+    "Artificial Intelligence and Data Science",
+    "Advance Communication and Technology",
+    "Very Large Scale Integration"
   ];
 
   const years = [
@@ -62,21 +72,46 @@ export default function AdminPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
+    const now = Date.now();
+
+    if (lockoutUntil && now < lockoutUntil) {
+      alert(`Too many failed attempts. Please try again later.`);
+      return;
+    }
     
     if (password === adminPassword) {
       setIsAuthenticated(true);
-      localStorage.setItem('adminAuth', 'true');
+      setLoginAttempts(0);
       fetchData();
     } else {
-      alert('Invalid password');
+      const newAttempts = loginAttempts + 1;
+      setLoginAttempts(newAttempts);
+      
+      if (newAttempts >= 5) {
+        const lockoutTime = now + (15 * 60 * 1000); // 15 minutes lockout
+        setLockoutUntil(lockoutTime);
+        alert('Too many failed attempts. Please try again in 15 minutes.');
+      } else {
+        alert(`Invalid password. ${5 - newAttempts} attempts remaining.`);
+      }
     }
   };
 
   const fetchData = () => {
     const jerseysRef = ref(database, 'jerseys');
     onValue(jerseysRef, (snapshot) => {
-      const data = snapshot.val();
-      setRegistrations(data || {});
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const sortedData = Object.entries(data)
+          .sort(([, a], [, b]) => (b as JerseyRegistration).timestamp - (a as JerseyRegistration).timestamp)
+          .reduce((acc, [key, value]) => ({
+            ...acc,
+            [key]: value
+          }), {});
+        setRegistrations(sortedData);
+      } else {
+        setRegistrations({});
+      }
       setIsLoading(false);
     }, (error) => {
       console.error("Error fetching data:", error);
@@ -86,17 +121,11 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    const isAuth = localStorage.getItem('adminAuth') === 'true';
-    if (isAuth) {
-      setIsAuthenticated(true);
-      fetchData();
-    } else {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   }, []);
 
   const filteredRegistrations = useMemo(() => {
-    return Object.entries(registrations || {})
+    return Object.entries(registrations)
       .map(([key, registration]) => ({
         key,
         ...registration,
@@ -108,8 +137,7 @@ export default function AdminPage() {
         (!filter.search || 
           registration.name?.toLowerCase().includes(filter.search.toLowerCase()) ||
           registration.prn?.toLowerCase().includes(filter.search.toLowerCase()))
-      ))
-      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      ));
   }, [registrations, filter]);
 
   const updateStatus = async (key: string, field: 'jerseyReceived' | 'paymentVerified', value: boolean) => {
@@ -136,16 +164,29 @@ export default function AdminPage() {
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md p-8 bg-gray-900 rounded-lg">
           <h1 className="text-2xl font-bold text-center mb-6">Admin Access</h1>
-          <div className="space-y-2">
-            <Input
-              type="password"
-              placeholder="Enter admin password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-gray-800 border-gray-700"
-            />
-          </div>
-          <Button type="submit" className="w-full">Login</Button>
+          {lockoutUntil && Date.now() < lockoutUntil ? (
+            <div className="text-red-500 text-center mb-4">
+              Account locked. Try again in {Math.ceil((lockoutUntil - Date.now()) / 60000)} minutes.
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Input
+                type="password"
+                placeholder="Enter admin password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-gray-800 border-gray-700"
+                disabled={lockoutUntil !== null && Date.now() < lockoutUntil}
+              />
+            </div>
+          )}
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={lockoutUntil !== null && Date.now() < lockoutUntil}
+          >
+            Login
+          </Button>
         </form>
       </div>
     );
@@ -153,18 +194,31 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-black text-white p-8">
+      {selectedImage && (
+        <ImageModal
+          imageUrl={selectedImage}
+          isOpen={!!selectedImage}
+          onClose={() => setSelectedImage(null)}
+          transactionId={registrations[Object.keys(registrations).find(key => 
+            registrations[key].paymentScreenshot === selectedImage
+          ) || '']?.transactionId}
+        />
+      )}
+      
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">Jersey Registrations</h1>
-          <Button 
-            onClick={() => {
-              localStorage.removeItem('adminAuth');
-              setIsAuthenticated(false);
-            }}
-            className="bg-red-600 hover:bg-red-700"
-          >
-            Logout
-          </Button>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-400">
+              Total Registrations: {filteredRegistrations.length}
+            </div>
+            <Button 
+              onClick={() => setIsAuthenticated(false)}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Logout
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -181,7 +235,7 @@ export default function AdminPage() {
           >
             <option value="">All Departments</option>
             {departments.map(dept => (
-              <option key={dept.value} value={dept.value}>{dept.label}</option>
+              <option key={dept} value={dept}>{dept}</option>
             ))}
           </select>
           <select
@@ -191,7 +245,7 @@ export default function AdminPage() {
           >
             <option value="">All Years</option>
             {years.map(year => (
-              <option key={year.value} value={year.value}>{year.label}</option>
+              <option key={year.value} value={year.label}>{year.label}</option>
             ))}
           </select>
         </div>
@@ -210,12 +264,16 @@ export default function AdminPage() {
                 <TableHead>Size</TableHead>
                 <TableHead>Department</TableHead>
                 <TableHead>Year</TableHead>
+                <TableHead>Payment Screenshot</TableHead>
                 <TableHead>Registration Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredRegistrations.map((registration, index) => (
-                <TableRow key={registration.key}>
+                <TableRow 
+                  key={`${registration.key}-${registration.timestamp}`}
+                  className={index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}
+                >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{registration.prn}</TableCell>
                   <TableCell>{registration.name}</TableCell>
@@ -257,16 +315,25 @@ export default function AdminPage() {
                   <TableCell>{registration.department}</TableCell>
                   <TableCell>{registration.actualYear}</TableCell>
                   <TableCell>
-                    {new Date(registration.timestamp).toLocaleDateString()}
+                    {registration.paymentScreenshot ? (
+                      <Button
+                        onClick={() => setSelectedImage(registration.paymentScreenshot)}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        View Screenshot
+                      </Button>
+                    ) : (
+                      <span className="text-gray-500">No screenshot</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(registration.timestamp).toLocaleDateString()} 
+                    {new Date(registration.timestamp).toLocaleTimeString()}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </div>
-
-        <div className="mt-4 text-center text-gray-400">
-          Total Registrations: {filteredRegistrations.length}
         </div>
       </div>
     </div>

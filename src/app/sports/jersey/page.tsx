@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { database } from '@/firebaseConfig';
 import { getStorage } from 'firebase/storage';
 const storage = getStorage();
@@ -41,14 +41,13 @@ interface FirebaseError extends Error {
 
 export default function JerseyRegistration() {
   const [isClient, setIsClient] = useState(false);
-  // const [selectedSize, setSelectedSize] = useState<string>('medium');
   const [selectedSize] = useState<string>('medium');
-  // const [jerseyNumber, setJerseyNumber] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errors, setErrors] = useState({
     email: '',
     prn: ''
   });
+  const [prnWarning, setPrnWarning] = useState('');
   const [formData, setFormData] = useState<FormData>({
     name: '',
     jerseyText: '',
@@ -69,7 +68,7 @@ export default function JerseyRegistration() {
   }, []);
 
   useEffect(() => {
-    // Fetch existing jersey numbers
+    // Fetch existing jersey numbers and PRNs
     const jerseysRef = ref(database, 'jerseys');
     onValue(jerseysRef, (snapshot) => {
       const data = snapshot.val();
@@ -80,28 +79,29 @@ export default function JerseyRegistration() {
     });
   }, []);
 
-  const validateEmail = (email: string) => {
-    return email.endsWith('@sakec.ac.in');
-  };
-
-  const validatePRN = (prn: string) => {
-    return /^[a-zA-Z0-9]{14}$/.test(prn);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     
     if (id === 'number') {
       // Check if number already exists
       if (existingNumbers.includes(value)) {
-        setNumberError('This jersey number is already taken');
+        setNumberError('This jersey number is already taken. Please choose a different number.');
         return;
       }
       setNumberError('');
     }
 
-    // If changing PRN, automatically set the year based on first two digits
     if (id === 'prn') {
+      // Check if PRN exists
+      const jerseysRef = ref(database, `jerseys/${value}`);
+      onValue(jerseysRef, (snapshot) => {
+        if (snapshot.exists()) {
+          setPrnWarning('A registration with this PRN already exists. Submitting will update the existing registration.');
+        } else {
+          setPrnWarning('');
+        }
+      });
+
       const firstTwoDigits = value.substring(0, 2);
       let year = '';
       switch (firstTwoDigits) {
@@ -120,10 +120,15 @@ export default function JerseyRegistration() {
         default:
           year = '';
       }
+      
+      // Add department detection
+      const detectedDepartment = getDepartmentFromPRN(value);
+      
       setFormData(prev => ({ 
         ...prev, 
         [id]: value,
-        year: year 
+        year: year,
+        department: detectedDepartment // Automatically set department
       }));
     } else {
       setFormData(prev => ({ ...prev, [id]: value }));
@@ -135,6 +140,38 @@ export default function JerseyRegistration() {
     }
     if (id === 'prn') {
       setErrors(prev => ({ ...prev, prn: '' }));
+    }
+  };
+
+  const validateEmail = (email: string) => {
+    return email.endsWith('@sakec.ac.in');
+  };
+
+  const validatePRN = (prn: string) => {
+    return /^[a-zA-Z0-9]{14}$/.test(prn);
+  };
+
+  const getDepartmentFromPRN = (prn: string) => {
+    const departmentCode = prn.substring(4, 6); // Get department code from PRN
+    switch (departmentCode) {
+      case 'CO':
+        return "Computer Engineering";
+      case 'IT':
+        return "Information Technology";
+      case 'EC':
+        return "Electronics & Computer Science";
+      case 'CS':
+        return "Cyber Security";
+      case 'ET':
+        return "Electronics and Telecommunication";
+      case 'AI':
+        return "Artificial Intelligence and Data Science";
+      case 'AC':
+        return "Advance Communication and Technology";
+      case 'VL':
+        return "Very Large Scale Integration";
+      default:
+        return "";
     }
   };
 
@@ -179,6 +216,10 @@ export default function JerseyRegistration() {
     }
 
     if (hasErrors) {
+      return;
+    }
+
+    if (prnWarning && !confirm('A registration with this PRN already exists. Do you want to update it?')) {
       return;
     }
 
@@ -235,6 +276,17 @@ export default function JerseyRegistration() {
       alert('An unexpected error occurred. Please try again later.');
     }
   };
+
+  const departments = [
+    "Computer Engineering",
+    "Information Technology",
+    "Electronics & Computer Science",
+    "Cyber Security",
+    "Electronics and Telecommunication",
+    "Artificial Intelligence and Data Science",
+    "Advance Communication and Technology",
+    "Very Large Scale Integration"
+  ];
 
   if (!isClient) {
     return (
@@ -313,6 +365,9 @@ export default function JerseyRegistration() {
                   {errors.prn && (
                     <p className="text-red-500 text-sm mt-1">{errors.prn}</p>
                   )}
+                  {prnWarning && (
+                    <p className="text-yellow-500 text-sm mt-1">{prnWarning}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -332,6 +387,29 @@ export default function JerseyRegistration() {
                     <p className="text-red-500 text-sm mt-1">{numberError}</p>
                   )}
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="department" className="text-xl font-medium">Department</Label>
+                  <Select 
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
+                    value={formData.department}
+                  >
+                    <SelectTrigger className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all">
+                      <SelectValue placeholder="Select your department" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 text-white border-gray-700">
+                      {departments.map((dept) => (
+                        <SelectItem 
+                          key={dept} 
+                          value={dept}
+                          className="focus:bg-gray-800 focus:text-white hover:bg-gray-700"
+                        >
+                          {dept}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
@@ -340,6 +418,10 @@ export default function JerseyRegistration() {
               <h3 className="text-2xl font-semibold mb-4 text-gray-200">Jersey Size</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <RadioGroup defaultValue={selectedSize} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="small" id="small" />
+                    <Label htmlFor="small">Xtra Small</Label>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="small" id="small" />
                     <Label htmlFor="small">Small</Label>
@@ -362,40 +444,45 @@ export default function JerseyRegistration() {
                   </div>
                 </RadioGroup>
                 <table className="table-auto border-collapse border border-gray-700 text-white w-full text-lg">
-                  <thead>
-                    <tr>
-                      <th className="border border-gray-600 px-4 py-2">Size</th>
-                      <th className="border border-gray-600 px-4 py-2">Chest (inches)</th>
-                      <th className="border border-gray-600 px-4 py-2">Length (inches)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="border border-gray-600 px-4 py-2">Small</td>
-                      <td className="border border-gray-600 px-4 py-2">34-36</td>
-                      <td className="border border-gray-600 px-4 py-2">28</td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-600 px-4 py-2">Medium</td>
-                      <td className="border border-gray-600 px-4 py-2">38-40</td>
-                      <td className="border border-gray-600 px-4 py-2">29</td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-600 px-4 py-2">Large</td>
-                      <td className="border border-gray-600 px-4 py-2">42-44</td>
-                      <td className="border border-gray-600 px-4 py-2">30</td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-600 px-4 py-2">XL</td>
-                      <td className="border border-gray-600 px-4 py-2">46-48</td>
-                      <td className="border border-gray-600 px-4 py-2">31</td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-600 px-4 py-2">XXL</td>
-                      <td className="border border-gray-600 px-4 py-2">50-52</td>
-                      <td className="border border-gray-600 px-4 py-2">32</td>
-                    </tr>
-                  </tbody>
+                <thead>
+  <tr>
+    <th className="border border-gray-600 px-4 py-2">Size</th>
+    <th className="border border-gray-600 px-4 py-2">Chest (inches)</th>
+    <th className="border border-gray-600 px-4 py-2">Length (inches)</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td className="border border-gray-600 px-4 py-2">XS</td>
+    <td className="border border-gray-600 px-4 py-2">36</td>
+    <td className="border border-gray-600 px-4 py-2">29</td>
+  </tr>
+  <tr>
+    <td className="border border-gray-600 px-4 py-2">S</td>
+    <td className="border border-gray-600 px-4 py-2">38</td>
+    <td className="border border-gray-600 px-4 py-2">30</td>
+  </tr>
+  <tr>
+    <td className="border border-gray-600 px-4 py-2">M</td>
+    <td className="border border-gray-600 px-4 py-2">40</td>
+    <td className="border border-gray-600 px-4 py-2">31</td>
+  </tr>
+  <tr>
+    <td className="border border-gray-600 px-4 py-2">L</td>
+    <td className="border border-gray-600 px-4 py-2">42</td>
+    <td className="border border-gray-600 px-4 py-2">32</td>
+  </tr>
+  <tr>
+    <td className="border border-gray-600 px-4 py-2">XL</td>
+    <td className="border border-gray-600 px-4 py-2">44</td>
+    <td className="border border-gray-600 px-4 py-2">33</td>
+  </tr>
+  <tr>
+    <td className="border border-gray-600 px-4 py-2">XXL</td>
+    <td className="border border-gray-600 px-4 py-2">46</td>
+    <td className="border border-gray-600 px-4 py-2">34</td>
+  </tr>
+</tbody>
                 </table>
               </div>
             </div>

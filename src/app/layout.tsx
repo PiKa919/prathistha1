@@ -12,6 +12,7 @@ import Head from "next/head";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster"
 import { CustomCursor } from "@/components/CustomCursor"
+import { Analytics } from "@vercel/analytics/react"
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
 
@@ -56,6 +57,7 @@ export default function RootLayout({
         <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
         <Toaster/>
         {/* {children} */}
+        <Analytics />
         <SpeedInsights />
         <Footer/>
         </div>
