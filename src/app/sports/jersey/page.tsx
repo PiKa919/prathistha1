@@ -13,7 +13,6 @@ import { ref, set, onValue } from "firebase/database";
 import Image from 'next/image';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import JerseyGalleryModal from '@/components/jerseymodalgallery';
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 
 interface FormData {

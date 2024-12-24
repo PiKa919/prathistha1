@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from 'next/image';
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -17,7 +18,7 @@ const Carousel = () => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -36,10 +37,11 @@ const Carousel = () => {
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
         >
-          <img
+          <Image
             src={slide}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover"
+            layout="fill"
+            objectFit="cover"
           />
         </div>
       ))}
