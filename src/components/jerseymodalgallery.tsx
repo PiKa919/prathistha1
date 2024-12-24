@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Image } from "lucide-react"
+import { Image as LucideImage } from "lucide-react"
+import Image from 'next/image'
 
 const JerseyGalleryModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ const JerseyGalleryModal = () => {
     },
     { 
       id: 6, 
-      image: "/olympus/jersey/navyblue.jpeg",
+      image: "/olympus/jersey/red.jpeg",
       description: "Anniversary Edition" 
     },
     { 
@@ -43,11 +44,6 @@ const JerseyGalleryModal = () => {
       image: "/olympus/jersey/orange.jpeg",
       description: "Team Captain Jersey" 
     },
-    { 
-        id: 8, 
-        image: "/olympus/jersey/red.jpeg",
-        description: "Team Captain Jersey" 
-      },
   ];
 
   return (
@@ -56,7 +52,7 @@ const JerseyGalleryModal = () => {
         onClick={() => setIsOpen(true)}
         className="mt-8 w-full max-w-md bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white text-xl py-6 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
       >
-        <Image className="w-6 h-6" />
+        <LucideImage className="w-6 h-6" />
         View Jersey Gallery
       </Button>
 
@@ -74,10 +70,11 @@ const JerseyGalleryModal = () => {
                   className="relative aspect-[4/3] rounded-lg overflow-hidden group hover:scale-[1.02] transition-all duration-300"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 border border-white/20">
-                    <img
+                    <Image
                       src={jersey.image}
                       alt={jersey.description}
-                      className="w-full h-full object-cover opacity-75 group-hover:opacity-100 transition-opacity duration-300"
+                      fill
+                      className="object-cover opacity-75 group-hover:opacity-100 transition-opacity duration-300"
                     />
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-black/60 backdrop-blur-sm">
                       <p className="text-white text-lg font-medium">

@@ -61,15 +61,9 @@ export function EnhancedTreeStyleBracket() {
   }, [])
 
   return (
-<<<<<<< HEAD
     <div className="w-full h-4/5 max-w-7xl mx-auto p-4 overflow-x-auto">
       <h2 className="text-3xl font-bold mb-4 text-center">Valorant Tournament Bracket</h2>
       <div className="flex flex-col items-center mb-6">
-=======
-    <div className="w-full max-w-7xl mx-auto p-4 overflow-x-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center">Valorant Tournament Bracket</h2>
-      <div className="flex flex-col items-center mb-8">
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
         <AnimatePresence>
           {winner && (
             <motion.div
@@ -84,21 +78,12 @@ export function EnhancedTreeStyleBracket() {
           )}
         </AnimatePresence>
       </div>
-<<<<<<< HEAD
       <div className="flex justify-between min-w-[1000px] gap-6">
         {tournamentData.map((round, roundIndex) => (
           <div key={round.name} className="flex-1 flex flex-col">
             <h3 className="text-xl font-semibold mb-3 text-center">{round.name}</h3>
             <div className="space-y-6 flex-1 flex flex-col justify-around">
               {round.matches.map((match) => (
-=======
-      <div className="flex justify-between min-w-[1000px] gap-8">
-        {tournamentData.map((round, roundIndex) => (
-          <div key={round.name} className="flex-1 flex flex-col">
-            <h3 className="text-xl font-semibold mb-4 text-center">{round.name}</h3>
-            <div className="space-y-8 flex-1 flex flex-col justify-around">
-              {round.matches.map((match, matchIndex) => (
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
                 <div key={match.id} className="relative">
                   <Card className="bg-background border-primary">
                     <CardContent className="p-2">
@@ -223,7 +208,3 @@ function Arrow({ direction, isHighlighted, offset }: {
     </div>
   )
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa

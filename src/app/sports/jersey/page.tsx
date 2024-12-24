@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { database } from '@/firebaseConfig';
 import { getStorage } from 'firebase/storage';
 const storage = getStorage();
@@ -27,10 +27,23 @@ interface FormData {
   paymentScreenshot: string;
 }
 
+interface JerseyData extends FormData {
+  timestamp: number;
+}
+
+interface DatabaseJersey {
+  [key: string]: JerseyData;
+}
+
+interface FirebaseError extends Error {
+  code?: string;
+}
+
 export default function JerseyRegistration() {
   const [isClient, setIsClient] = useState(false);
-  const [selectedSize, setSelectedSize] = useState<string>('medium');
-  const [jerseyNumber, setJerseyNumber] = useState<string>('');
+  // const [selectedSize, setSelectedSize] = useState<string>('medium');
+  const [selectedSize] = useState<string>('medium');
+  // const [jerseyNumber, setJerseyNumber] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errors, setErrors] = useState({
     email: '',
@@ -61,7 +74,7 @@ export default function JerseyRegistration() {
     onValue(jerseysRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const numbers = Object.values(data as any[]).map((jersey: any) => jersey.number);
+        const numbers = Object.values(data as DatabaseJersey).map((jersey: JerseyData) => jersey.number);
         setExistingNumbers(numbers);
       }
     });
@@ -177,7 +190,7 @@ export default function JerseyRegistration() {
           try {
           const snapshot = await uploadBytes(fileRef, selectedFile);
           paymentScreenshotUrl = await getDownloadURL(snapshot.ref);
-        } catch (uploadError: any) {
+        } catch (uploadError: unknown) {
           console.error('Error uploading file:', uploadError);
           alert('Error uploading payment screenshot. Please try again.');
           return;
@@ -206,15 +219,18 @@ export default function JerseyRegistration() {
           paymentScreenshot: ''
         });
         setSelectedFile(null);
-      } catch (dbError: any) {
+      } catch (dbError: unknown) {
         console.error('Database error:', dbError);
-        if (dbError.code === 'PERMISSION_DENIED') {
+        if (
+          dbError instanceof Error && 
+          (dbError as FirebaseError).code === 'PERMISSION_DENIED'
+        ) {
           alert('Unable to register jersey. Please check if you have already registered or contact the administrator.');
         } else {
           alert('Error saving registration. Please try again later.');
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('General error:', error);
       alert('An unexpected error occurred. Please try again later.');
     }

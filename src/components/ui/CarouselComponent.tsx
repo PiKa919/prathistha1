@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Carousel } from 'antd';
+import Image from 'next/image';
 
 const imageStyle: React.CSSProperties = {
   width: '100%',
@@ -16,56 +17,44 @@ const CarouselComponent: React.FC = () => {
 
   return (
     <Carousel afterChange={onChange} autoplay arrows>
-      <div>
-        <img
-          style={imageStyle}
-<<<<<<< HEAD
+      <div style={imageStyle}>
+        <Image
           src="/assets/banner/olympus/slide1.jpg"
-=======
-          src="https://via.placeholder.com/800x400?text=Slide+1"
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 1"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
         />
       </div>
-      <div>
-        <img
-          style={imageStyle}
-<<<<<<< HEAD
+      <div style={imageStyle}>
+        <Image
           src="/assets/banner/olympus/slide1.jpg"
-=======
-          src="https://via.placeholder.com/800x400?text=Slide+2"
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 2"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
         />
       </div>
-      <div>
-        <img
-          style={imageStyle}
-<<<<<<< HEAD
+      <div style={imageStyle}>
+        <Image
           src="/assets/banner/olympus/slide1.jpg"
-=======
-          src="https://via.placeholder.com/800x400?text=Slide+3"
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 3"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
         />
       </div>
-      <div>
-        <img
-          style={imageStyle}
-<<<<<<< HEAD
+      <div style={imageStyle}>
+        <Image
           src="/assets/banner/olympus/slide1.jpg"
-=======
-          src="https://via.placeholder.com/800x400?text=Slide+4"
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa
           alt="Slide 4"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
         />
       </div>
     </Carousel>
   );
 };
 
-<<<<<<< HEAD
 export default CarouselComponent;
-=======
-export default CarouselComponent;
->>>>>>> 6da2bd9000e2cb7b28ac714e645020d90790ebaa

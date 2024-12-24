@@ -1,10 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import HyperText from "@/components/ui/hyper-text";
 import Preloader from '@/components/preloader';
 import ScrollGallery from '@/components/scroll-gallery';
 import "swiper/css";
@@ -15,7 +13,7 @@ import './styles.css';
 import CountdownTimer from '@/components/ui/count-down';
 
 
-const targetDate = new Date('2025-02-21T00:00:00');
+// const targetDate = new Date('2025-02-21T00:00:00');
 
 function BroadcastButton() {
   const [isGlowing, setIsGlowing] = useState(false);

@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/navigation"
 import { Hero } from "@/components/hero"
 import { Stats } from "@/components/stats"
 import { Leaderboard } from "@/components/leaderboard"

@@ -6,9 +6,19 @@ import {
   useMotionTemplate,
   useMotionValue,
   useSpring,
-  AnimatePresence,
 } from "framer-motion";
 import { FiInstagram, FiLinkedin } from "react-icons/fi";
+
+interface TeamMember {
+  id: number;
+  title: string;
+  subheading: string;
+  image: string;
+  about: string;
+  instagram: string;
+  linkedin: string;
+  location: string;
+}
 
 const teamsData = {
   heads: [
@@ -28,7 +38,7 @@ const teamsData = {
       title: "Mr.Harsh Jain",
       subheading: "General Coordinator",
       image: "/team/festhead/harshJ.jpg",
-      about: "fatafat kaam karne wala banda",
+      about: "My life begins with 5...6... and ends with 7...8... dancing through my tech, chaos, and passion.",
       instagram: "harshjain",
       linkedin: "username1",
       location: "Colaba"
@@ -40,7 +50,7 @@ const teamsData = {
       title: "Mr. Aaradhya Bharat",
       subheading: "Cultural Secretary",
       image: "/team/cultural/aaradhya.jpg",
-      about: "Leading cultural activities and events.",
+      about: "A sports junkie by day, a guitar-strumming rockstar by night, and your Cultural Secretary 24/7 , keeping the vibe alive and the energy higher. ",
       instagram: "aaradhya.17",
       linkedin: "aaradhya-bahirat-045a54311",
       location: "Juhu Beach"
@@ -327,11 +337,11 @@ infra: [
         id: 1,
         title: "Mr. Kartik Tandekar",
         subheading: "Sports Secretary",
-        image: "/team/webapp/profile-1.jpg",
-        about: "Hakuna Matata",
-        instagram: "none",
+        image: "/team/sports/kartik.jpg",
+        about: "Nyctophilia",
+        instagram: "kartik.tandekar",
         linkedin: "none",
-        location: "Colaba"
+        location: "carter"
       },
       {
         id: 1,
@@ -476,7 +486,7 @@ infra: [
 
 };
 
-const HeadsSection = ({ data }: { data: any[] }) => (
+const HeadsSection = ({ data }: { data: TeamMember[] }) => (
   <div className="mb-16">
     <h2 className="text-4xl font-bold text-white text-center mb-10">
       Festival Heads
@@ -489,7 +499,7 @@ const HeadsSection = ({ data }: { data: any[] }) => (
   </div>
 );
 
-const Section = ({ title, data }: { title: string; data: any[] }) => (
+const Section = ({ title, data }: { title: string; data: TeamMember[] }) => (
   <div className="mb-16">
     <h2 className="text-4xl font-bold text-white text-center mb-10">
       {title}
@@ -561,7 +571,6 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
   const xSpring = useSpring(x);
   const ySpring = useSpring(y);
 
-  const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${y}deg)`;
   const mouseTransform = useMotionTemplate`perspective(1000px) rotateX(${xSpring}deg) rotateY(${ySpring}deg) scale(1.05)`;
 
   const handleMouseMove = (e: React.MouseEvent) => {
