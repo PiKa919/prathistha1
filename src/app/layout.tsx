@@ -56,6 +56,7 @@ export default function RootLayout({
         <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
         <Toaster/>
         {/* {children} */}
+        <SpeedInsights />
         <Footer/>
         </div>
       </body>
