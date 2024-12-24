@@ -1,25 +1,13 @@
 "use client"
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const menuItems = [
-  { 
-    label: 'Yuva',
-    path: '/yuva'
-  },
-  { 
-    label: 'Aurum',
-    path: '/aurum'
-  },
-  { 
-    label: 'Olympus',
-    path: '/sports/'
-  },
-  { 
-    label: 'Verve',
-    path: '/verve'
-  },
+  { label: 'Yuva', path: '/yuva' },
+  { label: 'Aurum', path: '/aurum' },
+  { label: 'Olympus', path: '/sports' },
+  { label: 'Verve', path: '/verve' },
   {
     label: 'Teams',
     path: '/team',
@@ -29,14 +17,8 @@ const menuItems = [
       { label: 'Faculty', path: '/team/faculty' }
     ]
   },
-  { 
-    label: 'Sponsors',
-    path: '/sponsors'
-  },
-  { 
-    label: 'Contact Us',
-    path: '/contact'
-  }
+  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'Contact Us', path: '/contact' }
 ];
 
 interface MenuItem {
@@ -51,9 +33,7 @@ const NavItem = ({ item, isMobile, onItemClick }: { item: MenuItem; isMobile?: b
 
   const handleMouseEnter = () => {
     if (!isMobile) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsHovered(true);
     }
   };
@@ -81,9 +61,21 @@ const NavItem = ({ item, isMobile, onItemClick }: { item: MenuItem; isMobile?: b
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div onClick={handleClick} className="nav-link">
-        {item.label}
-      </div>
+      {item.submenu ? (
+        <div 
+          onClick={handleClick} 
+          className={`nav-link ${item.submenu ? 'has-submenu' : ''}`}
+        >
+          {item.label}
+          {item.submenu && isMobile && (
+            <span className={`dropdown-arrow ${isHovered ? 'open' : ''}`}>▼</span>
+          )}
+        </div>
+      ) : (
+        <Link href={item.path} className="nav-link" onClick={onItemClick}>
+          {item.label}
+        </Link>
+      )}
       
       {item.submenu && (isHovered || (isMobile && isHovered)) && (
         <div className={`dropdown-menu ${isMobile ? 'mobile' : ''}`}>
@@ -105,21 +97,32 @@ const NavItem = ({ item, isMobile, onItemClick }: { item: MenuItem; isMobile?: b
 
 const Menu = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+    document.body.style.overflow = isMobileMenuOpen ? 'unset' : 'hidden';
   };
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+    document.body.style.overflow = 'unset';
   };
 
   return (
     <>
-      <nav className="nav-container">
+      <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-content">
           <div className="nav-wrapper">
-            {/* Logo Section */}
             <div className="logo-section">
               <Link href="/">
                 <Image
@@ -145,15 +148,17 @@ const Menu = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation Items */}
             <div className="nav-items">
               {menuItems.map((item, index) => (
                 <NavItem key={index} item={item} />
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button className="mobile-menu-button" onClick={toggleMobileMenu}>
+            <button 
+              className="mobile-menu-button" 
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+            >
               <div className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}>
                 <span></span>
                 <span></span>
@@ -163,10 +168,14 @@ const Menu = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Overlay */}
         <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}>
           {menuItems.map((item, index) => (
-            <NavItem key={index} item={item} isMobile onItemClick={closeMobileMenu} />
+            <NavItem 
+              key={index} 
+              item={item} 
+              isMobile 
+              onItemClick={closeMobileMenu}
+            />
           ))}
         </div>
       </nav>
@@ -179,16 +188,19 @@ const Menu = () => {
           font-style: normal;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500&family=Righteous&display=swap');
-
         .nav-container {
           background-color: rgba(0, 0, 0, 0.8);
           backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
           position: fixed;
           width: 100%;
           top: 0;
           z-index: 50;
+          transition: all 0.3s ease;
+        }
+
+        .nav-container.scrolled {
+          background-color: rgba(0, 0, 0, 0.95);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .nav-content {
@@ -207,17 +219,7 @@ const Menu = () => {
         .logo-section {
           display: flex;
           align-items: center;
-          gap: 1.5rem; /* Increased gap between items */
-        }
-
-        .logo-image {
-          height: 2.5rem;
-          width: auto;
-        }
-
-        .logo-placeholder {
-          display: flex;
-          align-items: center;
+          gap: 1.5rem;
         }
 
         .logo-text-container {
@@ -226,7 +228,7 @@ const Menu = () => {
           align-items: flex-start;
           margin-left: 0.5rem;
           position: relative;
-          min-width: 120px; /* Ensure enough width for the subtext */
+          min-width: 120px;
         }
 
         .logo-text {
@@ -248,19 +250,9 @@ const Menu = () => {
         }
 
         .nav-items {
-          display: none;
-        }
-
-        @media (min-width: 768px) {
-          .nav-items {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-          }
-
-          .mobile-menu {
-            display: none;
-          }
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
         }
 
         :global(.nav-item) {
@@ -272,10 +264,13 @@ const Menu = () => {
           color: white;
           text-decoration: none;
           transition: color 0.3s ease;
-          position: relative;
+          cursor: pointer;
           font-family: Arial, sans-serif;
           font-size: 1.1rem;
           letter-spacing: 0.5px;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
         :global(.nav-link::after) {
@@ -291,26 +286,38 @@ const Menu = () => {
         }
 
         :global(.nav-link:hover::after) {
-          width: calc(100% - 2rem); /* Subtracting padding from both sides */
+          width: calc(100% - 2rem);
         }
 
         :global(.nav-link:hover) {
           color: goldenrod;
         }
 
+        :global(.dropdown-arrow) {
+          font-size: 0.8rem;
+          transition: transform 0.3s ease;
+        }
+
+        :global(.dropdown-arrow.open) {
+          transform: rotate(180deg);
+        }
+
         :global(.dropdown-menu) {
           position: absolute;
           top: 100%;
           left: 0;
-          background-color: rgba(0, 0, 0, 0.9);
+          background: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.95) 0%,
+            rgba(20, 20, 20, 0.95) 100%
+          );
           min-width: 200px;
           padding: 0.75rem 0;
-          box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.2);
-          animation: dropdownAnimation 0.2s ease-out forwards;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
           border-radius: 12px;
           backdrop-filter: blur(8px);
           margin-top: 0.5rem;
-          transition: opacity 0.3s ease, transform 0.3s ease;
+          animation: dropdownAnimation 0.2s ease-out forwards;
         }
 
         :global(.dropdown-item) {
@@ -325,41 +332,23 @@ const Menu = () => {
           letter-spacing: 0.5px;
         }
 
-        :global(.dropdown-item:first-child) {
-          border-top-left-radius: 12px;
-          border-top-right-radius: 12px;
-        }
-
-        :global(.dropdown-item:last-child) {
-          border-bottom-left-radius: 12px;
-          border-bottom-right-radius: 12px;
+        :global(.dropdown-item:hover) {
+          background: rgba(218, 165, 32, 0.1);
+          color: goldenrod;
         }
 
         .mobile-menu-button {
           display: none;
-          background: linear-gradient(
-            135deg,
-            rgba(40, 40, 40, 0.95) 0%,
-            rgba(20, 20, 20, 0.95) 100%
-          );
+          background: transparent;
           border: none;
           cursor: pointer;
           padding: 12px;
-          z-index: 1000; // Increased z-index to stay on top
-          touch-action: manipulation;
-          -webkit-tap-highlight-color: transparent;
-          position: fixed; // Changed to fixed
-          top: 1rem;
-          right: 1rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
+          z-index: 1000;
         }
 
         .hamburger {
-          width: 28px;  // Slightly larger
-          height: 24px;  // Slightly larger
+          width: 28px;
+          height: 24px;
           position: relative;
           display: flex;
           flex-direction: column;
@@ -368,38 +357,45 @@ const Menu = () => {
 
         .hamburger span {
           display: block;
-          height: 3px;  // Slightly thicker lines
+          height: 3px;
           width: 100%;
           background-color: white;
           transition: all 0.3s ease;
-          border-radius: 2px;  // Rounded edges
+          transform-origin: left;
+          border-radius: 2px;
         }
 
-        .hamburger.open span:nth-child(1) {
-          transform: translateY(10.5px) rotate(45deg);  // Adjusted for new size
+        .hamburger.open span:first-child {
+          transform: rotate(45deg);
         }
 
         .hamburger.open span:nth-child(2) {
           opacity: 0;
         }
 
-        .hamburger.open span:nth-child(3) {
-          transform: translateY(-10.5px) rotate(-45deg);  // Adjusted for new size
+        .hamburger.open span:last-child {
+          transform: rotate(-45deg);
         }
 
         .mobile-menu-overlay {
           position: fixed;
-          top: 4rem;
+          top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: rgba(0, 0, 0, 0.95);
+          min-height: 60vh;
+          background: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.98) 0%,
+            rgba(20, 20, 20, 0.98) 100%
+          );
           backdrop-filter: blur(8px);
           z-index: 40;
-          padding: 1rem;
+          padding: 5rem 1rem 1rem 1rem;
           transform: translateX(100%);
           transition: transform 0.3s ease-in-out;
           display: none;
+          overflow-y: auto;
         }
 
         .mobile-menu-overlay.open {
@@ -412,27 +408,7 @@ const Menu = () => {
           }
 
           .mobile-menu-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;  // Fixed width
-            height: 48px;  // Fixed height for consistent touch target
-            margin-right: -8px;  // Offset the padding
-          }
-
-          .mobile-menu-button:active {
-            background: linear-gradient(
-              135deg,
-              rgba(50, 50, 50, 0.95) 0%,
-              rgba(30, 30, 30, 0.95) 100%
-            );
-            transform: scale(0.95);
-          }
-
-          .mobile-menu-overlay {
-            z-index: 999; // Just below the menu button
-            top: 0;
-            padding-top: 5rem;
+            display: block;
           }
 
           .mobile-menu-overlay {
@@ -443,9 +419,8 @@ const Menu = () => {
             margin: 1rem 0;
           }
 
-          :global(.nav-item.mobile .nav-link) {
-            font-size: 1.25rem;
-            padding: 0.75rem 1rem;
+          :global(.nav-link.has-submenu) {
+            justify-content: space-between;
           }
 
           :global(.dropdown-menu.mobile) {
@@ -453,11 +428,12 @@ const Menu = () => {
             background: transparent;
             box-shadow: none;
             margin-left: 1rem;
+            padding: 0.5rem 0;
             animation: none;
           }
 
-          :global(.dropdown-menu.mobile .dropdown-item) {
-            padding: 0.5rem 1rem;
+          :global(.dropdown-item) {
+            padding: 0.75rem 1rem;
             font-size: 1.1rem;
           }
         }
@@ -465,11 +441,11 @@ const Menu = () => {
         @keyframes dropdownAnimation {
           from {
             opacity: 0;
-            transform: scaleY(0);
+            transform: translateY(10px);
           }
           to {
             opacity: 1;
-            transform: scaleY(1);
+            transform: translateY(0);
           }
         }
       `}</style>
