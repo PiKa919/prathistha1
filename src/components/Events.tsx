@@ -1,0 +1,169 @@
+import { EventCard } from './EventCard'
+
+const events = [
+  {
+    title: "Crime Scene Investigation",
+    description: "Put your detective skills to the test in this thrilling crime scene investigation challenge.",
+    time: "10:00 AM - 12:00 PM",
+    place: "Forensic Lab",
+    videoUrl: "https://www.youtube.com/live/q_JsgpiuY98?si=GkrEnp70QbssXf55",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Escape Room",
+    description: "Work together to solve puzzles and escape before time runs out!",
+    time: "11:00 AM - 1:00 PM",
+    place: "Mystery Room",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "AR Treasure Hunt",
+    description: "Embark on a high-tech treasure hunt using augmented reality.",
+    time: "2:00 PM - 4:00 PM",
+    place: "Campus Grounds",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Giant Jenga",
+    description: "Test your steady hands and strategy in this supersized version of the classic game.",
+    time: "3:00 PM - 5:00 PM",
+    place: "Main Quad",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Glow-in-the-Dark Pickleball",
+    description: "Experience the fast-paced fun of pickleball with a luminous twist!",
+    time: "7:00 PM - 9:00 PM",
+    place: "Sports Complex",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Laser Maze",
+    description: "Navigate through a web of lasers in this Mission Impossible-style challenge.",
+    time: "1:00 PM - 3:00 PM",
+    place: "Physics Lab",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "BGMI Tournament",
+    description: "Compete in the ultimate BGMI showdown!",
+    time: "4:00 PM - 8:00 PM",
+    place: "Gaming Arena",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Valorant Championship",
+    description: "Show off your tactical prowess in this Valorant tournament.",
+    time: "5:00 PM - 9:00 PM",
+    place: "E-Sports Center",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Robo Sumo",
+    description: "Build and battle with your sumo wrestling robots!",
+    time: "11:00 AM - 1:00 PM",
+    place: "Robotics Lab",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Robo Race",
+    description: "Design, build, and race your custom robots in this high-speed competition.",
+    time: "2:00 PM - 4:00 PM",
+    place: "Racing Track",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Cozmo Clench",
+    description: "Program Cozmo robots to complete challenging tasks in this AI-focused event.",
+    time: "3:00 PM - 5:00 PM",
+    place: "AI Lab",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Technokagaz",
+    description: "Showcase your paper circuit designs in this innovative tech-meets-craft event.",
+    time: "10:00 AM - 12:00 PM",
+    place: "Design Studio",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Tech Expo",
+    description: "Explore cutting-edge technology demonstrations from industry leaders and student innovators.",
+    time: "9:00 AM - 5:00 PM",
+    place: "Exhibition Hall",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Code of Duty",
+    description: "Test your coding skills in this fast-paced programming challenge.",
+    time: "1:00 PM - 3:00 PM",
+    place: "Computer Lab",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Cybersecurity Challenge",
+    description: "Defend against simulated cyber attacks in this intense security competition.",
+    time: "4:00 PM - 6:00 PM",
+    place: "Security Operations Center",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "FIFA Tournament",
+    description: "Show off your virtual football skills in this exciting FIFA tournament.",
+    time: "6:00 PM - 10:00 PM",
+    place: "Gaming Lounge",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "VR Room",
+    description: "Immerse yourself in virtual worlds and experience the future of gaming and simulation.",
+    time: "11:00 AM - 7:00 PM",
+    place: "VR Lab",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Mortal Kombat Tournament",
+    description: "Test your fighting game skills in this classic Mortal Kombat showdown.",
+    time: "7:00 PM - 11:00 PM",
+    place: "Arcade Center",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  },
+  {
+    title: "Midtown Madness",
+    description: "Race through virtual city streets in this exciting gaming event.",
+    time: "5:00 PM - 8:00 PM",
+    place: "Simulation Room",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    imageUrl: "/placeholder.svg?height=200&width=300"
+  }
+]
+
+export function Events() {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold mb-6">Events</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {events.map((event, index) => (
+          <EventCard key={index} {...event} />
+        ))}
+      </div>
+    </div>
+  )
+}
