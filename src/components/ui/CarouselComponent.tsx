@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   
   const slides = [
     "/assets/banner/olympus/slide1.jpg",
@@ -28,6 +29,11 @@ const Carousel = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  // Add loading handler
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
   return (
     <div className="relative h-[80vh] w-full overflow-hidden">
       {slides.map((slide, index) => (
@@ -37,11 +43,17 @@ const Carousel = () => {
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
         >
+          {isLoading && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
           <Image
             src={slide}
             alt={`Slide ${index + 1}`}
             layout="fill"
             objectFit="cover"
+            priority={index === 0}
+            loading={index === 0 ? "eager" : "lazy"}
+            onLoad={handleImageLoad}
+            sizes="100vw"
+            quality={75}
           />
         </div>
       ))}
@@ -79,4 +91,4 @@ const Carousel = () => {
   );
 };
 
-export default Carousel;
+export default React.memo(Carousel);

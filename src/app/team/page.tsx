@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import { FiInstagram, FiLinkedin } from "react-icons/fi";
 
+
 interface TeamMember {
   id: number;
   title: string;
@@ -26,8 +27,8 @@ const teamsData = {
       id: 1,
       title: "Mr. Umang Jain",
       subheading: "General Secretary",
-      image: "/team/festhead/umangjain.jpg",
-      rectangleImage: "/team/festhead/umangj.jpg",
+      image: "/team/festhead/umangjain.webp",
+      rectangleImage: "/team/festhead/umangj.webp",
       about: "Ek scheme hai boss",
       instagram: "",
       linkedin: "umang-jain-a52264246",
@@ -37,7 +38,7 @@ const teamsData = {
       id: 2,
       title: "Mr. Harsh Jain",
       subheading: "General Coordinator",
-      image: "/team/festhead/harshJ.jpg",
+      image: "/team/festhead/harshJ.webp",
       about: "My life begins with 5...6... and ends with 7...8... dancing through my tech, chaos, and passion.",
       instagram: "harshjain",
       linkedin: "no data",
@@ -49,7 +50,7 @@ const teamsData = {
       id: 1,
       title: "Mr. Aaradhya Bharat",
       subheading: "Cultural Secretary",
-      image: "/team/cultural/aaradhya.jpg",
+      image: "/team/cultural/aaradhya.webp",
       about: "A sports junkie by day, a guitar-strumming rockstar by night, and your Cultural Secretary 24/7 , keeping the vibe alive and the energy higher. ",
       instagram: "aaradhya.17",
       linkedin: "aaradhya-bahirat-045a54311",
@@ -59,7 +60,7 @@ const teamsData = {
       id: 2,
       title: "Ms. Annanya Gupta",
       subheading: "Cultural Coordinator",
-      image: "/team/cultural/annanya.jpeg",
+      image: "/team/cultural/annanya.webp",
       about: "A curious mind with a passion for exploring stories, flavors, and places around the world.",
       instagram: "ananya_anannya_",
       linkedin: "anannya-gupta-3681531a4",
@@ -72,7 +73,7 @@ const teamsData = {
       id: 1,
       title: "Mr. Jitendra Rajde",
       subheading: "Off-Stage Secretary",
-      image: "/team/offstage/jitu.jpeg",
+      image: "/team/offstage/jitu.webp",
       about: "Moj masti rukni nai chaiye ",
       instagram: "jiitzz",
       linkedin: "none",
@@ -82,7 +83,7 @@ const teamsData = {
       id: 2,
       title: "Mr. Rahul Jana",
       subheading: "Off-Stage Coordinator",
-      image: "/team/offstage/rahul.jpg",
+      image: "/team/offstage/rahul.webp",
       about: "Come let's climb some mountains.",
       instagram: "rahul_jana_0905",
       linkedin: "rahul-jana-585534236",
@@ -92,7 +93,7 @@ const teamsData = {
       id: 3,
       title: "Mr. Kaushal Patel",
       subheading: "Off-stage Coordinator",
-      image: "/team/offstage/kaushal.png",
+      image: "/team/offstage/kaushal.webp",
       about: "Forged by challenges, driven by purpose, and unstoppable in the pursuit of success.",
       instagram: "kaushal_kp12",
       linkedin: "kaushal-rupesh-patel-a3bbb6246",
@@ -104,7 +105,7 @@ const teamsData = {
       id: 1,
       title: "Mr. Vinod Bhabal",
       subheading: "On-Stage Secretary",
-      image: "/team/onstage/vinod.jpg",
+      image: "/team/onstage/vinod.webp",
       about: "Brooklyn 99 S:4 Ep:13",
       instagram: "__maybe__vinod__",
       linkedin: "none",
@@ -114,7 +115,7 @@ const teamsData = {
       id: 2,
       title: "Ms. Nityaa Bhanushali",
       subheading: "On-Stage Coordinator",
-      image: "/team/onstage/Nityaa Bhanushali - NITYAA PANKAJ BHANUSHALI.jpg",
+      image: "/team/onstage/nitya.webp",
       about: "I am a very fun loving and lively soul who finds joy in dance, solace in books, and peace in nature.",
       instagram: "nityaa.04",
       linkedin: "nityaa-bhanushali-8489b725a",
@@ -126,7 +127,7 @@ const teamsData = {
         id: 1,
         title: "Mr. Krish Gala",
         subheading: "Social Media Secretary",
-        image: "/team/socialmedia/krishgala.jpeg",
+        image: "/team/socialmedia/krishgala.webp",
         about: "Who needs her, when likes and comments flood your notifications, at least they don’t break your heart!”",
         instagram: "galakrish02",
         linkedin: "krishgala2",
@@ -136,7 +137,7 @@ const teamsData = {
         id: 2,
         title: "Mr.Saish Dalvi",
         subheading: "Social Media Coordinator",
-        image: "/team/socialmedia/saish.jpg",
+        image: "/team/socialmedia/saish.webp",
         about: "The technical team is notifying me—good conditions are coming to Instagram! Time to upload a reel!",
         instagram: "saishhh04",
         linkedin: "none",
@@ -148,7 +149,7 @@ const teamsData = {
       id: 1,
       title: "Mr. Ankit Das",
       subheading: "Web & App Secretary",
-      image: "/team/webapp/ankit.jpg",
+      image: "/team/webapp/ankit.webp",
       about: "Leading web and app development.",
       instagram: "ankit",
       linkedin: "ankitdas",
@@ -158,7 +159,7 @@ const teamsData = {
         id: 2,
         title: "Mr. Pradnesh Revadekar",
         subheading: "Web & App Coordinator",
-        image: "/team/webapp/profile-2.jpeg",
+        image: "/team/webapp/profile-2.webp",
         about: "Hakuna Matata",
         instagram: "pradnesh_2504",
         linkedin: "pradnesh-revadekar",
@@ -170,7 +171,7 @@ const teamsData = {
         id: 1,
         title: "Mr. Aditya Dangat",
         subheading: "Creativity Secretary",
-        image: "team/creativity/AdityaDangat - ADITYA EKNATH DANGAT.jpg",
+        image: "team/creativity/aditya.webp",
         about: "A tech-savvy artist shaping creative excellence at every opportunity.",
         instagram: "__im_aditya.__",
         linkedin: "aditya-dangat-29a119234",
@@ -180,7 +181,7 @@ const teamsData = {
         id: 2,
         title: "Ms. Resha Naik",
         subheading: "Creativity Coordinator",
-        image: "/team/creativity/resha.jpg",
+        image: "/team/creativity/resha.webp",
         about: "Turning stress into steps and deadlines into designs!",
         instagram: "resha._.n",
         linkedin: "resha-naik-b448ab25a",
@@ -192,7 +193,7 @@ const teamsData = {
         id: 1,
         title: "Ms. Shreya Patwardhan",
         subheading: "Documentation Secretary",
-        image: "/team/documentation/shreya.jpg",
+        image: "/team/documentation/shreya.webp",
         about: "Everything you do comes back to you💫",
         instagram: "shreya_.patwardhan",
         linkedin: "none",
@@ -204,7 +205,7 @@ const teamsData = {
         id: 1,
         title: "Ms. Diya Dalui",
         subheading: "GFX and VFX Secretary",
-        image: "/team/graphics/diya.jpeg",
+        image: "/team/graphics/diya.webp",
         about: "just a slay queen doing her thing in SC-25 💅",
         instagram: "none",
         linkedin: "none",
@@ -214,7 +215,7 @@ const teamsData = {
         id: 2,
         title: "Mr. Danvirsinh Jadeja",
         subheading: "GFX and VFX Secretary",
-        image: "/team/graphics/danvir.jpg",
+        image: "/team/graphics/danvir.webp",
         about: "no data",
         instagram: "none",
         linkedin: "none",
@@ -224,7 +225,7 @@ const teamsData = {
         id: 3,
         title: "Mr. Pranav Jani",
         subheading: "GFX and VFX Coordinator",
-        image: "/team/graphics/pranav.jpeg",
+        image: "/team/graphics/pranav.webp",
         about: "Exploring new dimensions through immersive AR experiences and interactive technology.",
         instagram: "pranav_jani0003",
         linkedin: "pranav-jani-21545325b",
@@ -236,7 +237,7 @@ infra: [
         id: 1,
         title: "Mr. Ayur Shah",
         subheading: "Infra and Security Secretary",
-        image: "/team/infra/ayur.JPG",
+        image: "/team/infra/ayur.webp",
         about: "If you can't convince then confuse",
         instagram: "ayurshah13",
         linkedin: "none",
@@ -246,7 +247,7 @@ infra: [
         id: 2,
         title: "Mr. Amey Parab",
         subheading: "Infra and Security Coordinator",
-        image: "/team/infra/Amey Parab - AMEY JAYESH PARAB.jpg",
+        image: "/team/infra/Amey Parab - AMEY JAYESH PARAB.webp",
         about: "Improving day-by-day even if it is little as 1%",
         instagram: "ameyyyp29",
         linkedin: "amey-parab2910",
@@ -258,7 +259,7 @@ infra: [
         id: 1,
         title: "Ms. Bhakti Dhuri",
         subheading: "Ladies Representative",
-        image: "/team/lr/IMG-20241003-WA0018 - BHAKTI PRADIP DHURI.jpg",
+        image: "/team/lr/IMG-20241003-WA0018 - BHAKTI PRADIP DHURI.webp",
         about: "Chaos coordinator with a talent for making life an unpredictable adventure, fueled by caffeine and curiosity! ",
         instagram: "bhakti_dhurii",
         linkedin: "none",
@@ -268,7 +269,7 @@ infra: [
         id: 2,
         title: "Ms. Moxita Shah",
         subheading: "Ladies Representative",
-        image: "/team/lr/moxita.jpg",
+        image: "/team/lr/moxita.webp",
         about: "Walking the fine line between elegance and rebellion, I lead with heart, grit, and vision.",
         instagram: "moxitashahh",
         linkedin: "moxitashah",
@@ -280,7 +281,7 @@ infra: [
         id: 1,
         title: "Mr. Aniket Gursale",
         subheading: "Photography Secretary",
-        image: "/team/pap/aniket.jpeg",
+        image: "/team/pap/aniket.webp",
         about: "Turning moments into memories ",
         instagram: "aniketgursale_28",
         linkedin: "aniketgursale",
@@ -290,7 +291,7 @@ infra: [
         id: 1,
         title: "Mr. Rohan Koyande",
         subheading: "Photography Coodinator",
-        image: "/team/pap/rohan.jpeg",
+        image: "/team/pap/rohan.webp",
         about: "I do photography. ",
         instagram: "rohan_koyande",
         linkedin: "rohankoyande",
@@ -302,7 +303,7 @@ infra: [
         id: 1,
         title: "Ms. Nida Malik",
         subheading: "Publicity Secretary",
-        image: "/team/publicity/nida.jpeg",
+        image: "/team/publicity/nida.webp",
         about: "An ambitious fellow with a way with people and words. ",
         instagram: "none",
         linkedin: "nida-malik-84b220232",
@@ -312,7 +313,7 @@ infra: [
         id: 2,
         title: "Mr. Siddhant Mavani",
         subheading: "Publicity Coordinator",
-        image: "/team/publicity/nida.jpeg",
+        image: "/team/publicity/nida.webp",
         about: "An ambitious, detail-oriented innovator and problem-solver, constantly striving to achieve impactful results.",
         instagram: "m._.siddh",
         linkedin: "none",
@@ -369,7 +370,7 @@ infra: [
         id: 1,
         title: "Mr. Udit Shishodiya",
         subheading: "Technical Secretary",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/technical/udit.webp",
         about: "Waqt ke saath badalta nahi, balki waqt ko apne saath badalne ka hunar rakhta hoon.",
         instagram: "ankit",
         linkedin: "ankitdas",
@@ -379,7 +380,7 @@ infra: [
         id: 2,
         title: "Mr. Siddhart Gugaliya",
         subheading: "Technical Coordinator",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/technical/sidhart.webp",
         about: "Hakuna Matata",
         instagram: "none",
         linkedin: "none",
@@ -389,7 +390,7 @@ infra: [
         id: 3,
         title: "Mr. Heet Ruparel",
         subheading: "Technical Coordinator",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/technical/heet.webp",
         about: "A dedicated Technical Coordinator ensuring efficient workflows, team collaboration, and successful project outcomes.",
         instagram: "heet.ruparel",
         linkedin: "heet-ruparel-8299ab25a",
@@ -399,7 +400,7 @@ infra: [
         id: 4,
         title: "Mr. Yash Patel",
         subheading: "Joint Technical Coordinator",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/technical/yashpatel.webp",
         about: "Running the show, breaking the rules, and redefining what’s possible.",
         instagram: "_.yash37._",
         linkedin: "yash-patel-871926246",
@@ -412,7 +413,7 @@ infra: [
         id: 1,
         title: "Mr. Yashkumar Jain",
         subheading: "Treasurer Secretary",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/treasurer/yashjain.webp",
         about: "Managing the budget is a challenge, especially with everyone treating money as if it's just paper growing on trees.",
         instagram: "_14yash_",
         linkedin: "yash-jain-60885a205",
@@ -422,7 +423,7 @@ infra: [
         id: 2,
         title: "Mr. Diya Jain",
         subheading: "Treasurer Coordinator",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/treasurer/diya.webp",
         about: "Beautiful chaos wrapped in curiosity.",
         instagram: "diyajain_294",
         linkedin: "diya-jain-178a9024a",
@@ -434,7 +435,7 @@ infra: [
         id: 1,
         title: "Mr. Vinit Jain",
         subheading: "Celeb & Crisis Secretary",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/webapp/profile-1.webp",
         about: "Hakuna Matata",
         instagram: "none",
         linkedin: "none",
@@ -444,7 +445,7 @@ infra: [
         id: 2,
         title: "Mr. Abhay Jadhav",
         subheading: "Celeb & Crisis Coordinator",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/webapp/profile-1.webp",
         about: "Hakuna Matata",
         instagram: "none",
         linkedin: "none",
@@ -456,7 +457,7 @@ infra: [
         id: 1,
         title: "Mr. Tanish Nandu",
         subheading: "Marathon Secretary",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/marathon/tanish.webp",
         about: "I am just a Chill guy who owns the race!!",
         instagram: "tanish_nandu",
         linkedin: "tanish-nandu-524345237",
@@ -466,7 +467,7 @@ infra: [
         id: 2,
         title: "Mr. Ashish Bangari",
         subheading: "Joint Marathon Secretary",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/webapp/profile-1.webp",
         about: "Hakuna Matata",
         instagram: "none",
         linkedin: "none",
@@ -476,7 +477,7 @@ infra: [
         id: 3,
         title: "Ms. Anshita Jain",
         subheading: "Joint Marathon Secretary",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/marathon/anshita.webp",
         about: "Unfiltered? Yes Sorry? No",
         instagram: "butterscotch__07__09",
         linkedin: "none",
@@ -488,7 +489,7 @@ infra: [
         id: 1,
         title: "Mr. Yash Tupat",
         subheading: "Extended Council",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/technical/Yash Tupat - YASH KISHOR TUPAT.webp",
         about: "Light Camera Action ",
         instagram: "misox_30",
         linkedin: "yash-kishor-tupat-34711b232",
@@ -498,7 +499,7 @@ infra: [
         id: 2,
         title: "Mr. Aarush Palsamkar",
         subheading: "Extended Council",
-        image: "/team/webapp/profile-1.jpg",
+        image: "/team/webapp/profile-1.webp",
         about: "I never wish to be easily defined  ",
         instagram: "_.aaru5h",
         linkedin: "aarush-palsamkar-62631028b",
@@ -599,9 +600,7 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
   const xSpring = useSpring(x, { stiffness: 300, damping: 30 });
   const ySpring = useSpring(y, { stiffness: 300, damping: 30 });
 
-  // Base transform for the card
   const transform = useMotionTemplate`perspective(1000px) rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
-  // Enhanced transform with scale effect for mouse movement
   const mouseTransform = useMotionTemplate`perspective(1000px) rotateX(${xSpring}deg) rotateY(${ySpring}deg) scale(1.05)`;
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -650,8 +649,7 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
           height: "100%",
           position: "relative",
           transformStyle: "preserve-3d",
-          // Use transform for base state and mouseTransform for hover state
-          transform: isFlipped ? transform : mouseTransform,
+          transform: isFlipped ? "rotateY(180deg)" : transform,
         }}
         animate={{
           rotateY: isFlipped ? 180 : 0,
@@ -687,23 +685,22 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
                 scale: [1, 1.1, 1],
               }}
               transition={{
-                duration: 2, // Duration of dots animation
+                duration: 2,
                 ease: "easeInOut",
               }}
-              onAnimationComplete={() => setIsLoading(false)} // End loading after dots animation
+              onAnimationComplete={() => setIsLoading(false)}
               style={{
                 background: `radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.3) 1px, transparent 0)`,
                 backgroundSize: "16px 16px",
               }}
             />
           )}
-          {/* Image */}
           <motion.div
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url('${image}')` }}
             initial={{ opacity: 0 }}
-            animate={{ opacity: isLoading ? 0 : 1 }} // Image fades in after dots animation
-            transition={{ duration: 0.5 }} // Quick fade-in for the image
+            animate={{ opacity: isLoading ? 0 : 1 }}
+            transition={{ duration: 0.5 }}
           />
           <div
             className="absolute bottom-0 left-0 right-0 flex flex-col items-start justify-end p-4 text-white"
@@ -722,7 +719,7 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            rotateY: "180deg",
+            transform: "rotateY(180deg)",
             border: "8px solid",
             borderImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1%, transparent 1%) 1",
             borderImageSlice: "1",
@@ -730,7 +727,7 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
             boxShadow: "0 0 8px rgba(255,255,255,0.5)",
           }}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:16px_16px]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:16px_16px]" />
           <div className="relative h-full p-4 flex flex-col">
             <div className="flex-1 rounded-md bg-white/10 backdrop-blur-md p-4 shadow-lg border border-white/20">
               <div className="space-y-3">
@@ -747,7 +744,6 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
               </div>
             </div>
             
-            {/* Buttons */}
             <div className="space-y-3 mt-4">
               <div className="grid grid-cols-2 gap-3">
                 <motion.a
@@ -773,14 +769,12 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
                   LinkedIn
                 </motion.a>
               </div>
-              </div>
+            </div>
           </div>
         </motion.div>
-
-  
       </motion.div>
     </div>
   );
-};  
+};
 
 export default Example;

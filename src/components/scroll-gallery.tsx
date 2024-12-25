@@ -5,18 +5,18 @@ import Image from 'next/image'
 
 // Define gallery images
 const galleryImages = [
-  '/scroll/1.jpg',
-  '/scroll/2.jpg',
-  '/scroll/3.jpg',
-  '/scroll/4.jpg',
-  '/scroll/5.jpg',
-  '/scroll/6.jpg',
-  '/scroll/7.jpeg',
-  '/scroll/8.jpg',
-  '/scroll/9.jpg',
-  '/scroll/10.jpg',
-  '/scroll/11.jpg',
-  '/scroll/12.jpg',
+  '/scroll/1.webp',
+  '/scroll/2.webp',
+  '/scroll/3.webp',
+  '/scroll/4.webp',
+  '/scroll/5.webp',
+  '/scroll/6.webp',
+  '/scroll/7.webp',
+  '/scroll/8.webp',
+  '/scroll/9.webp',
+  '/scroll/10.webp',
+  '/scroll/11.webp',
+  '/scroll/12.webp',
 ]
 
 export default function ScrollGallery() {

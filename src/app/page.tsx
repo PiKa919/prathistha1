@@ -43,28 +43,28 @@ function FestivalPhases() {
       description: 'A celebration of youth and vigor, YUVA kicks off our fest with high energy events and performances.',
       bgClass: 'bg-yuva',
       glowClass: 'glow-yuva',
-      imagePath: '/phases/yuva.jpg'
+      imagePath: '/phases/yuva.webp'
     },
     {
       name: 'OLYMPUS',
       description: 'Channeling the spirit of ancient Greek games, OLYMPUS brings competitive sports and intellectual challenges.',
       bgClass: 'bg-olympus',
       glowClass: 'glow-olympus',
-      imagePath: '/phases/olympus.jpg'
+      imagePath: '/phases/olympus.webp'
     },
     {
       name: 'AURUM',
       description: 'AURUM, our golden phase, showcases the pinnacle of talent and creativity across various disciplines.',
       bgClass: 'bg-aurum',
       glowClass: 'glow-aurum',
-      imagePath: '/phases/aurum.jpg'
+      imagePath: '/phases/aurum.webp'
     },
     {
       name: 'VERVE',
       description: 'The grand finale, VERVE, is a spectacular display of music, dance, and cultural extravaganza.',
       bgClass: 'bg-verve',
       glowClass: 'glow-verve',
-      imagePath: '/phases/verve.jpg'
+      imagePath: '/phases/verve.webp'
     }
   ]
 
@@ -172,16 +172,16 @@ export default function Home() {
                 className="mySwiper"
               >
                 <SwiperSlide>
-                  <Image src="/assets/banner/homepage.jpg" alt="Banner 1" width={400} height={300} />
+                  <Image src="/assets/banner/homepage.webp" alt="Banner 1" width={400} height={300} />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Image src="/assets/banner/homepage.jpg" alt="Banner 2" width={400} height={300} />
+                  <Image src="/assets/banner/homepage.webp" alt="Banner 2" width={400} height={300} />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Image src="/assets/banner/homepage.jpg" alt="Banner 3" width={400} height={300}/>
+                  <Image src="/assets/banner/homepage.webp" alt="Banner 3" width={400} height={300}/>
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Image src="/assets/banner/homepage.jpg" alt="Banner 4" width={400} height={300} />
+                  <Image src="/assets/banner/homepage.webp" alt="Banner 4" width={400} height={300} />
                 </SwiperSlide>
               </Swiper>
             </div>

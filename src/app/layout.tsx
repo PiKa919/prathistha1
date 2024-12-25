@@ -1,41 +1,46 @@
+import { Suspense } from 'react'
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next"
-
+import { Analytics } from "@vercel/analytics/react"
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-config.autoAddCss = false
-
 import Menu from "@/components/menu";
-import Head from "next/head";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster"
 import { CustomCursor } from "@/components/CustomCursor"
-import { Analytics } from "@vercel/analytics/react"
 
-<link rel="icon" href="/favicon.ico" sizes="any" />
+config.autoAddCss = false
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
+  display: 'swap',  // Add display swap for better font loading
+  preload: true,
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+  display: 'swap',
+  preload: true,
 });
 
 export const metadata: Metadata = {
   title: "Pratishtha Website",
   description: "Official Website for Pratishtha SAKEC Fest 2025",
-  icons: [
-    {
-      url: "/favicon.ico",
-      sizes: "any",
-    },
-  ],
+  icons: {
+    icon: '/favicon.ico',
+  },
+  metadataBase: new URL('https://pratishtha-web.vercel.app'),
+  openGraph: {
+    title: 'Prathistha Website',
+    description: 'Official website for Pratishtha SAKEC Fest 2025',
+    url: 'https://pratishtha-web.vercel.app',
+  },
 };
 
 export default function RootLayout({
@@ -44,25 +49,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <meta name="description" content="Official website for Pratishtha SAKEC Fest 2025" />
-        <meta property="og:title" content="Prathistha Website" />
-        <meta property="og:url" content="https://pratishtha-web.vercel.app" />
-      </Head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/MAEL____.TTF"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <CustomCursor />
-        <Menu/>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Menu />
+        </Suspense>
         <div className="content">
-        <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
-        <Toaster/>
-        {/* {children} */}
-        <Analytics />
-        <SpeedInsights />
-        <Footer/>
+          <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
+          <Toaster/>
+          <Analytics />
+          <SpeedInsights />
+          <Footer/>
         </div>
       </body>
     </html>

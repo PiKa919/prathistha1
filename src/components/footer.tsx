@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
             <h3 className="footer-subtitle">College Map</h3>
             <div className="map-container">              
               <Image
-                src="/footer/maps.jpg"
+                src="/footer/maps.webp"
                 alt="College Fest Map"
                 className="map-image"
                 width={400} // Specify the width

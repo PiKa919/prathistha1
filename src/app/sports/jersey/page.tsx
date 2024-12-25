@@ -495,7 +495,7 @@ export default function JerseyRegistration() {
                 <div className="space-y-4">
                   <div className="bg-white/10 p-6 rounded-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 duration-300">
                     <Image
-                      src="/payment/qr-code.png"
+                      src="/payment/qr-code.webp"
                       alt="Payment QR Code"
                       width={250}
                       height={250}
