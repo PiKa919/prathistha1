@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic'
 import Link from "next/link"
-import { Suspense } from 'react'
 
 const LoadingIcon = () => <div className="w-4 h-4 bg-gray-200 animate-pulse rounded" />
 

@@ -601,7 +601,6 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
   const ySpring = useSpring(y, { stiffness: 300, damping: 30 });
 
   const transform = useMotionTemplate`perspective(1000px) rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
-  const mouseTransform = useMotionTemplate`perspective(1000px) rotateX(${xSpring}deg) rotateY(${ySpring}deg) scale(1.05)`;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!ref.current || isFlipped) return;
