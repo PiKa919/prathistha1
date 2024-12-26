@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useMemo } from 'react';
 import { database } from '@/firebaseConfig';
-import { ref, onValue, update } from "firebase/database";
+import { ref, onValue, update, remove } from "firebase/database";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,6 +39,8 @@ export default function AdminPage() {
   const [registrations, setRegistrations] = useState<Record<string, JerseyRegistration>>({});
   const [filter, setFilter] = useState({ department: '', year: '', search: '' });
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState<Record<string, boolean>>({});
+  const [editedData, setEditedData] = useState<Record<string, Partial<JerseyRegistration>>>({});
 
   const departments = [
     "Computer Engineering",
@@ -71,7 +73,7 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'OLYMPUS9965';
     const now = Date.now();
 
     if (lockoutUntil && now < lockoutUntil) {
@@ -148,6 +150,41 @@ export default function AdminPage() {
     } catch (error) {
       console.error('Error updating status:', error);
       alert('Failed to update status');
+    }
+  };
+
+  const handleEditChange = (key: string, field: keyof JerseyRegistration, value: string) => {
+    setEditedData(prev => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        [field]: value
+      }
+    }));
+  };
+
+  const saveChanges = async (key: string) => {
+    try {
+      await update(ref(database, `jerseys/${key}`), editedData[key]);
+      setEditMode(prev => ({ ...prev, [key]: false }));
+      setEditedData(prev => ({ ...prev, [key]: {} }));
+    } catch (error) {
+      console.error('Error saving changes:', error);
+      alert('Failed to save changes');
+    }
+  };
+
+  const deleteRegistration = async (key: string) => {
+    try {
+      await remove(ref(database, `jerseys/${key}`));
+      setRegistrations(prev => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+    } catch (error) {
+      console.error('Error deleting registration:', error);
+      alert('Failed to delete registration');
     }
   };
 
@@ -266,6 +303,7 @@ export default function AdminPage() {
                 <TableHead>Year</TableHead>
                 <TableHead>Payment Screenshot</TableHead>
                 <TableHead>Registration Date</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -275,8 +313,28 @@ export default function AdminPage() {
                   className={index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}
                 >
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{registration.prn}</TableCell>
-                  <TableCell>{registration.name}</TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Input
+                        value={editedData[registration.key]?.prn || registration.prn}
+                        onChange={(e) => handleEditChange(registration.key, 'prn', e.target.value)}
+                        className="bg-gray-800 border-gray-700"
+                      />
+                    ) : (
+                      registration.prn
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Input
+                        value={editedData[registration.key]?.name || registration.name}
+                        onChange={(e) => handleEditChange(registration.key, 'name', e.target.value)}
+                        className="bg-gray-800 border-gray-700"
+                      />
+                    ) : (
+                      registration.name
+                    )}
+                  </TableCell>
                   <TableCell>
                     <Button
                       onClick={() => updateStatus(
@@ -309,10 +367,50 @@ export default function AdminPage() {
                       {registration.paymentVerified ? 'Verified' : 'Not Verified'}
                     </Button>
                   </TableCell>
-                  <TableCell>{registration.jerseyText}</TableCell>
-                  <TableCell>{registration.number}</TableCell>
-                  <TableCell>{registration.size}</TableCell>
-                  <TableCell>{registration.department}</TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Input
+                        value={editedData[registration.key]?.jerseyText || registration.jerseyText}
+                        onChange={(e) => handleEditChange(registration.key, 'jerseyText', e.target.value)}
+                        className="bg-gray-800 border-gray-700"
+                      />
+                    ) : (
+                      registration.jerseyText
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Input
+                        value={editedData[registration.key]?.number || registration.number}
+                        onChange={(e) => handleEditChange(registration.key, 'number', e.target.value)}
+                        className="bg-gray-800 border-gray-700"
+                      />
+                    ) : (
+                      registration.number
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Input
+                        value={editedData[registration.key]?.size || registration.size}
+                        onChange={(e) => handleEditChange(registration.key, 'size', e.target.value)}
+                        className="bg-gray-800 border-gray-700"
+                      />
+                    ) : (
+                      registration.size
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Input
+                        value={editedData[registration.key]?.department || registration.department}
+                        onChange={(e) => handleEditChange(registration.key, 'department', e.target.value)}
+                        className="bg-gray-800 border-gray-700"
+                      />
+                    ) : (
+                      registration.department
+                    )}
+                  </TableCell>
                   <TableCell>{registration.actualYear}</TableCell>
                   <TableCell>
                     {registration.paymentScreenshot ? (
@@ -329,6 +427,31 @@ export default function AdminPage() {
                   <TableCell>
                     {new Date(registration.timestamp).toLocaleDateString()} 
                     {new Date(registration.timestamp).toLocaleTimeString()}
+                  </TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <Button
+                        onClick={() => saveChanges(registration.key)}
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        Save
+                      </Button>
+                    ) : (
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => setEditMode(prev => ({ ...prev, [registration.key]: true }))}
+                          className="bg-yellow-600 hover:bg-yellow-700"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => deleteRegistration(registration.key)}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

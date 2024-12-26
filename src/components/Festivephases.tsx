@@ -12,7 +12,12 @@ const FestivalPhases = () => {
       bgClass: 'from-indigo-500 to-purple-500',
       glowClass: 'shadow-indigo-500/50',
       imagePath: '/phases/yuva.webp',
-      icon: '🌟'
+      icon: '🌟',
+      highlights: [
+        'Flex Reveal',
+        'Handprint painting',
+        'White Kurta Day'
+      ]
     },
     {
       name: 'OLYMPUS',
@@ -20,7 +25,12 @@ const FestivalPhases = () => {
       bgClass: 'from-emerald-500 to-teal-500',
       glowClass: 'shadow-emerald-500/50',
       imagePath: '/phases/olympus.webp',
-      icon: '🏆'
+      icon: '🏆',
+      highlights: [
+        'Sports tournaments',
+        'Chess & Carrom championships',
+        'Inter & Intra Sports'
+      ]
     },
     {
       name: 'AURUM',
@@ -28,7 +38,12 @@ const FestivalPhases = () => {
       bgClass: 'from-yellow-400 to-amber-500',
       glowClass: 'shadow-yellow-400/50',
       imagePath: '/phases/aurum.webp',
-      icon: '✨'
+      icon: '✨',
+      highlights: [
+        'Valorant & BGMI tournaments',
+        'Technical symposium',
+        'Hackathons & Workshops'
+      ]
     },
     {
       name: 'VERVE',
@@ -36,7 +51,13 @@ const FestivalPhases = () => {
       bgClass: 'from-rose-500 to-pink-500',
       glowClass: 'shadow-rose-500/50',
       imagePath: '/phases/verve.webp',
-      icon: '🎭'
+      icon: '🎭',
+      highlights: [
+        'Cultural performances',
+        'Celebrity guest show',
+        'Award ceremony',
+        'DJ Night'
+      ]
     }
   ];
 
@@ -87,9 +108,9 @@ const FestivalPhases = () => {
                 >
                   <h4 className="text-lg font-semibold text-white mb-2">Highlights</h4>
                   <ul className="list-disc list-inside text-gray-300 space-y-1">
-                    <li>Special performances</li>
-                    <li>Interactive workshops</li>
-                    <li>Competitive events</li>
+                    {phase.highlights.map((highlight, idx) => (
+                      <li key={idx}>{highlight}</li>
+                    ))}
                   </ul>
                 </motion.div>
               )}

@@ -301,13 +301,13 @@ export default function JerseyRegistration() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex flex-col lg:flex-row pt-24"> {/* Added pt-24 here */}
       {/* Jersey Mockups Section */}
-      <div className="w-full lg:w-[40%] p-8 flex flex-col justify-start items-center bg-black/30 backdrop-blur-sm">
-        <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Jersey Mockups</h2>
-        <div className="space-y-12 w-full max-w-md transition-all hover:scale-105 duration-300">
-          <div className="relative w-full h-64">
+      <div className="w-full lg:w-[40%] p-4 md:p-8 flex flex-col justify-start items-center bg-black/30 backdrop-blur-sm">
+        <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Jersey Mockups</h2>
+        <div className="space-y-8 md:space-y-12 w-full max-w-md transition-all hover:scale-105 duration-300">
+          <div className="relative w-full h-48 md:h-64">
             <Image src="/olympus/jersey/back.webp" alt="Jersey Front" layout="fill" objectFit="contain" />
           </div>
-          <div className="relative w-full h-64">
+          <div className="relative w-full h-48 md:h-64">
             <Image src="/olympus/jersey/front.webp" alt="Jersey Back" layout="fill" objectFit="contain" />
           </div>
         </div>
@@ -315,38 +315,38 @@ export default function JerseyRegistration() {
       </div>
 
       {/* Registration Form Section */}
-      <div className="w-full lg:w-[60%] p-6 overflow-y-auto backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-8">
-          <h1 className="text-6xl font-bold mb-8 text-center bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+      <div className="w-full lg:w-[60%] p-4 md:p-6 overflow-y-auto backdrop-blur-sm">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 max-w-4xl py-4 md:py-8">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 md:mb-8 text-center bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Jersey Registration
           </h1>
           
-          <form className="space-y-8 bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20" onSubmit={handleSubmit}>
+          <form className="space-y-6 md:space-y-8 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-8 shadow-2xl border border-white/20" onSubmit={handleSubmit}>
             {/* Personal Details Section */}
-            <div className="space-y-6 p-6 bg-black/30 rounded-xl">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-200">Personal Details</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4 md:space-y-6 p-4 md:p-6 bg-black/30 rounded-xl">
+              <h3 className="text-xl md:text-2xl font-semibold mb-2 md:mb-4 text-gray-200">Personal Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-xl font-medium">Full Name</Label>
+                  <Label htmlFor="name" className="text-lg md:text-xl font-medium">Full Name</Label>
                   <Input 
                     id="name" 
                     placeholder="Enter your full name" 
-                    className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all" 
+                    className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all" 
                     onChange={handleChange} 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="jerseyText" className="text-xl font-medium">Text on Jersey</Label>
-                  <Input id="jerseyText" placeholder="Enter the text to be put on the jersey" className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all" onChange={handleChange} />
+                  <Label htmlFor="jerseyText" className="text-lg md:text-xl font-medium">Text on Jersey</Label>
+                  <Input id="jerseyText" placeholder="Enter the text to be put on the jersey" className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all" onChange={handleChange} />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-xl font-medium">Email</Label>
+                  <Label htmlFor="email" className="text-lg md:text-xl font-medium">Email</Label>
                   <Input 
                     id="email" 
                     type="email" 
                     placeholder="Enter your SAKEC email" 
-                    className={`bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all ${
+                    className={`bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all ${
                       errors.email ? 'border-red-500' : ''
                     }`}
                     onChange={handleChange}
@@ -358,11 +358,11 @@ export default function JerseyRegistration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="prn" className="text-xl font-medium">PRN</Label>
+                  <Label htmlFor="prn" className="text-lg md:text-xl font-medium">PRN</Label>
                   <Input 
                     id="prn" 
                     placeholder="Enter your 14-character PRN" 
-                    className={`bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all ${
+                    className={`bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all ${
                       errors.prn ? 'border-red-500' : ''
                     }`}
                     onChange={handleChange}
@@ -377,14 +377,14 @@ export default function JerseyRegistration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="number" className="text-xl font-medium">Jersey Number</Label>
+                  <Label htmlFor="number" className="text-lg md:text-xl font-medium">Jersey Number</Label>
                   <Input 
                     id="number" 
                     type="number" 
                     placeholder="Choose your jersey number (0-999)"
                     min="0"
                     max="999"
-                    className={`w-full text-xl h-12 bg-black/50 text-white border-gray-700 focus:ring-2 focus:ring-white/50 transition-all ${
+                    className={`w-full text-lg md:text-xl h-10 md:h-12 bg-black/50 text-white border-gray-700 focus:ring-2 focus:ring-white/50 transition-all ${
                       numberError ? 'border-red-500' : ''
                     }`}
                     onChange={handleChange}
@@ -395,12 +395,12 @@ export default function JerseyRegistration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="department" className="text-xl font-medium">Department</Label>
+                  <Label htmlFor="department" className="text-lg md:text-xl font-medium">Department</Label>
                   <Select 
                     onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
                     value={formData.department}
                   >
-                    <SelectTrigger className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all">
+                    <SelectTrigger className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all">
                       <SelectValue placeholder="Select your department" />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-900 text-white border-gray-700">
@@ -420,9 +420,9 @@ export default function JerseyRegistration() {
             </div>
 
             {/* Size Selection Section */}
-            <div className="space-y-6 p-6 bg-black/30 rounded-xl">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-200">Jersey Size</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4 md:space-y-6 p-4 md:p-6 bg-black/30 rounded-xl">
+              <h3 className="text-xl md:text-2xl font-semibold mb-2 md:mb-4 text-gray-200">Jersey Size</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                 <RadioGroup defaultValue={selectedSize} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <div className="flex items-center space-x-2">
                     <RadioGroupItem value="small" id="small" />
@@ -449,44 +449,44 @@ export default function JerseyRegistration() {
                     <Label htmlFor="xxl">XXL</Label>
                   </div>
                 </RadioGroup>
-                <table className="table-auto border-collapse border border-gray-700 text-white w-full text-lg">
+                <table className="table-auto border-collapse border border-gray-700 text-white w-full text-sm md:text-lg">
                 <thead>
   <tr>
-    <th className="border border-gray-600 px-4 py-2">Size</th>
-    <th className="border border-gray-600 px-4 py-2">Chest (inches)</th>
-    <th className="border border-gray-600 px-4 py-2">Length (inches)</th>
+    <th className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">Size</th>
+    <th className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">Chest (inches)</th>
+    <th className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">Length (inches)</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td className="border border-gray-600 px-4 py-2">XS</td>
-    <td className="border border-gray-600 px-4 py-2">36</td>
-    <td className="border border-gray-600 px-4 py-2">29</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">XS</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">36</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">29</td>
   </tr>
   <tr>
-    <td className="border border-gray-600 px-4 py-2">S</td>
-    <td className="border border-gray-600 px-4 py-2">38</td>
-    <td className="border border-gray-600 px-4 py-2">30</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">S</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">38</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">30</td>
   </tr>
   <tr>
-    <td className="border border-gray-600 px-4 py-2">M</td>
-    <td className="border border-gray-600 px-4 py-2">40</td>
-    <td className="border border-gray-600 px-4 py-2">31</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">M</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">40</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">31</td>
   </tr>
   <tr>
-    <td className="border border-gray-600 px-4 py-2">L</td>
-    <td className="border border-gray-600 px-4 py-2">42</td>
-    <td className="border border-gray-600 px-4 py-2">32</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">L</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">42</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">32</td>
   </tr>
   <tr>
-    <td className="border border-gray-600 px-4 py-2">XL</td>
-    <td className="border border-gray-600 px-4 py-2">44</td>
-    <td className="border border-gray-600 px-4 py-2">33</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">XL</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">44</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">33</td>
   </tr>
   <tr>
-    <td className="border border-gray-600 px-4 py-2">XXL</td>
-    <td className="border border-gray-600 px-4 py-2">46</td>
-    <td className="border border-gray-600 px-4 py-2">34</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">XXL</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">46</td>
+    <td className="border border-gray-600 px-2 md:px-4 py-1 md:py-2">34</td>
   </tr>
 </tbody>
                 </table>
@@ -494,35 +494,35 @@ export default function JerseyRegistration() {
             </div>
 
             {/* Payment Section */}
-            <div className="space-y-6 p-6 bg-black/30 rounded-xl">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-200">Payment Details</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4 md:space-y-6 p-4 md:p-6 bg-black/30 rounded-xl">
+              <h3 className="text-xl md:text-2xl font-semibold mb-2 md:mb-4 text-gray-200">Payment Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="space-y-4">
-                  <div className="bg-white/10 p-6 rounded-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 duration-300">
+                  <div className="bg-white/10 p-4 md:p-6 rounded-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 duration-300">
                     <Image
                       src="/payment/qr-code.webp"
                       alt="Payment QR Code"
-                      width={250}
-                      height={250}
-                      className="mx-auto transform scale-124"
+                      width={200}
+                      height={200}
+                      className="mx-auto transform scale-110 md:scale-124"
                     />
                   </div>
-                  <p className="text-center text-gray-400">Scan QR code to pay ₹500</p>
+                  <p className="text-center text-gray-400">Scan QR code to pay ₹350</p>
                 </div>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="transactionId" className="text-xl font-medium">Transaction ID</Label>
+                    <Label htmlFor="transactionId" className="text-lg md:text-xl font-medium">Transaction ID</Label>
                     <Input
                       id="transactionId"
                       placeholder="Enter UPI transaction ID"
-                      className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all"
+                      className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all"
                       value={formData.transactionId}
                       onChange={handleChange}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="paymentScreenshot" className="text-xl font-medium">Payment Screenshot</Label>
+                    <Label htmlFor="paymentScreenshot" className="text-lg md:text-xl font-medium">Payment Screenshot</Label>
                     <div 
                       className="relative border-2 border-dashed border-gray-700 rounded-lg p-4"
                       onPaste={handlePaste}
@@ -531,7 +531,7 @@ export default function JerseyRegistration() {
                         id="paymentScreenshot"
                         type="file"   
                         accept="image/*"
-                        className="bg-black/50 text-white border-gray-700 text-xl h-12 focus:ring-2 focus:ring-white/50 transition-all"
+                        className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all"
                         onChange={handleFileChange}
                       />
                       <p className="text-gray-400 text-sm mt-2">
@@ -550,7 +550,7 @@ export default function JerseyRegistration() {
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-200 text-lg md:text-xl py-4 md:py-6 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02]"
+              className="w-full bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-200 text-base md:text-lg py-3 md:py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02]"
             >
               Register Jersey
             </Button>

@@ -11,38 +11,43 @@ const JerseyGalleryModal = () => {
   const jerseyGallery = [
     { 
       id: 1, 
-      image: "/olympus/jersey/babypink.jpeg",
+      image: "/olympus/jersey/babypink.webp",
       description: "Baby Pink - AIDS" 
     },
     { 
       id: 2, 
-      image: "/olympus/jersey/bisleri.jpeg",
-      description: "Bisleri" 
+      image: "/olympus/jersey/bisleri.webp",
+      description: "Bisleri - VLSI" 
     },
     { 
       id: 3, 
-      image: "/olympus/jersey/black.jpeg",
-      description: "Special Edition Black" 
+      image: "/olympus/jersey/green.webp",
+      description: "FLORESCENT LEMON - EXTC" 
     },
     { 
       id: 4, 
-      image: "/olympus/jersey/blue.jpeg",
-      description: "Dark Firozi" 
+      image: "/olympus/jersey/blue.webp",
+      description: "Dark Firozi - ECS" 
     },
     { 
       id: 5, 
-      image: "/olympus/jersey/lemonyellow.jpeg",
+      image: "/olympus/jersey/lemonyellow.webp",
       description: "Lemon Yellow - IT" 
     },
     { 
       id: 6, 
-      image: "/olympus/jersey/red.jpeg",
+      image: "/olympus/jersey/red.webp",
       description: "Red - COMPS" 
     },
     { 
       id: 7, 
-      image: "/olympus/jersey/orange.jpeg",
-      description: "Orange" 
+      image: "/olympus/jersey/orange.webp",
+      description: "Orange - CYSE" 
+    },
+    { 
+      id: 8, 
+      image: "/olympus/jersey/navyblue.webp",
+      description: "Navy Blue - ACT" 
     },
   ];
 
@@ -57,13 +62,13 @@ const JerseyGalleryModal = () => {
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-[75vw] max-h-[75vh] bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white border border-white/20">
-          <div className="p-6">
-            <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+        <DialogContent className="max-w-[90vw] max-h-[90vh] bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white border border-white/20">
+          <div className="p-4 md:p-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Jersey Gallery
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto max-h-[calc(75vh-8rem)]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 overflow-y-auto max-h-[calc(90vh-8rem)]">
               {jerseyGallery.map((jersey) => (
                 <div
                   key={jersey.id}
@@ -76,8 +81,8 @@ const JerseyGalleryModal = () => {
                       fill
                       className="object-cover opacity-75 group-hover:opacity-100 transition-opacity duration-300"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-black/60 backdrop-blur-sm">
-                      <p className="text-white text-lg font-medium">
+                    <div className="absolute bottom-0 left-0 right-0 p-2 md:p-4 bg-black/60 backdrop-blur-sm">
+                      <p className="text-white text-sm md:text-lg font-medium">
                         {jersey.description}
                       </p>
                     </div>
