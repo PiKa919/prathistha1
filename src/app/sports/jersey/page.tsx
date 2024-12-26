@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Jersey } from '@/components/Jersey'
+// import { Jersey } from '@/components/Jersey'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,7 +13,8 @@ import { ref, set, onValue } from "firebase/database";
 import Image from 'next/image';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import JerseyGalleryModal from '@/components/jerseymodalgallery';
-
+// import JerseyFront from '@public/olympus/jersey/front.webp';
+// import JerseyBack from '@public/olympus/jersey/back.webp';
 
 interface FormData {
   name: string;
@@ -303,8 +304,12 @@ export default function JerseyRegistration() {
       <div className="w-full lg:w-[40%] p-8 flex flex-col justify-start items-center bg-black/30 backdrop-blur-sm">
         <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Jersey Mockups</h2>
         <div className="space-y-12 w-full max-w-md transition-all hover:scale-105 duration-300">
-          <Jersey color="bg-red-500" number="10" />
-          <Jersey color="bg-blue-500" number="23" />
+          <div className="relative w-full h-64">
+            <Image src="/olympus/jersey/back.webp" alt="Jersey Front" layout="fill" objectFit="contain" />
+          </div>
+          <div className="relative w-full h-64">
+            <Image src="/olympus/jersey/front.webp" alt="Jersey Back" layout="fill" objectFit="contain" />
+          </div>
         </div>
         <JerseyGalleryModal />
       </div>
