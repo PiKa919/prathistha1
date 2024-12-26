@@ -30,16 +30,16 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Pratishtha Website",
-  description: "Official Website for Pratishtha SAKEC Fest 2025",
-  icons: {
-    icon: '/favicon.ico',
-  },
-  metadataBase: new URL('https://pratishtha-web.vercel.app'),
+  title: 'Pratishtha 2024',
+  description: 'Pratishtha - Annual College Symposium at SAKEC',
+  keywords: ['college fest', 'symposium', 'SAKEC', 'Pratishtha', 'technical fest'],
+  authors: [{ name: 'SAKEC' }],
+  robots: 'index, follow',
   openGraph: {
-    title: 'Prathistha Website',
-    description: 'Official website for Pratishtha SAKEC Fest 2025',
-    url: 'https://pratishtha-web.vercel.app',
+    type: 'website',
+    locale: 'en_IE',
+    url: 'https://pratishtha-web.vercel.app/',
+    siteName: 'Pratishtha 2024',
   },
 };
 
