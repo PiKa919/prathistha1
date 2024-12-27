@@ -427,8 +427,8 @@ export default function JerseyRegistration() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                 <RadioGroup defaultValue={selectedSize} onValueChange={(value) => setFormData({ ...formData, size: value })}>
                 <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="small" id="small" />
-                    <Label htmlFor="small">Xtra Small</Label>
+                    <RadioGroupItem value="X-small" id="X-small" />
+                    <Label htmlFor="X-small">Xtra Small</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="small" id="small" />
