@@ -3,12 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GradualSpacing from './ui/gradual-spacing'
-import { Merienda } from 'next/font/google'
 
-const merienda = Merienda({ 
-  subsets: ['latin'],
-  weight: ['900'] // Using bold weight
-})
 
 const words = ['Get', 'Ready', 'for']
 const finalText = 'Prathistha 2025'
@@ -71,7 +66,17 @@ export default function Preloader() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h1 className={`${merienda.className} text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-text-shine`}>
+                  <h1
+                    className="text-6xl font-bold"
+                    style={{
+                      fontFamily: 'Mael, sans-serif',
+                      background: 'linear-gradient(to right, #FFD700, #FFC700)',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                      lineHeight: '5.0', 
+                      letterSpacing: '0.05em',
+                    }}
+                  >
                     {finalText}
                   </h1>
                 </motion.div>

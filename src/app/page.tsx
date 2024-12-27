@@ -3,70 +3,47 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Spline from '@splinetool/react-spline';
 import Preloader from '@/components/preloader';
-import ScrollGallery from '@/components/scroll-gallery';
+import ScrollGallery from "@/components/scroll-gallery";
+import CountdownTimer from "@/components/ui/count-down";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import './styles.css';
-import CountdownTimer from '@/components/ui/count-down';
-
-
-// const targetDate = new Date('2025-02-21T00:00:00');
-
-function BroadcastButton() {
-  const [isGlowing, setIsGlowing] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsGlowing((prev) => !prev);
-    }, 1500);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="broadcast-button-container">
-      <div className="broadcast-button-wrapper">
-        <button className={`broadcast-button ${isGlowing ? 'glowing' : ''}`}>
-          Join the Broadcast Channel
-        </button>
-      </div>
-    </div>
-  );
-}
+import "./styles.css";
 
 function FestivalPhases() {
   const phases = [
     {
-      name: 'YUVA',
-      description: 'A celebration of youth and vigor, YUVA kicks off our fest with high energy events and performances.',
-      bgClass: 'bg-yuva',
-      glowClass: 'glow-yuva',
-      imagePath: '/phases/yuva.jpg'
+      name: "YUVA",
+      description: "A celebration of youth and vigor, YUVA kicks off our fest with high energy events and performances.",
+      bgClass: "bg-yuva",
+      glowClass: "glow-yuva",
+      imagePath: "/phases/yuva.jpg",
     },
     {
-      name: 'OLYMPUS',
-      description: 'Channeling the spirit of ancient Greek games, OLYMPUS brings competitive sports and intellectual challenges.',
-      bgClass: 'bg-olympus',
-      glowClass: 'glow-olympus',
-      imagePath: '/phases/olympus.jpg'
+      name: "OLYMPUS",
+      description: "Channeling the spirit of ancient Greek games, OLYMPUS brings competitive sports and intellectual challenges.",
+      bgClass: "bg-olympus",
+      glowClass: "glow-olympus",
+      imagePath: "/phases/olympus.jpg",
     },
     {
-      name: 'AURUM',
-      description: 'AURUM, our golden phase, showcases the pinnacle of talent and creativity across various disciplines.',
-      bgClass: 'bg-aurum',
-      glowClass: 'glow-aurum',
-      imagePath: '/phases/aurum.jpg'
+      name: "AURUM",
+      description: "AURUM, our golden phase, showcases the pinnacle of talent and creativity across various disciplines.",
+      bgClass: "bg-aurum",
+      glowClass: "glow-aurum",
+      imagePath: "/phases/aurum.jpg",
     },
     {
-      name: 'VERVE',
-      description: 'The grand finale, VERVE, is a spectacular display of music, dance, and cultural extravaganza.',
-      bgClass: 'bg-verve',
-      glowClass: 'glow-verve',
-      imagePath: '/phases/verve.jpg'
-    }
-  ]
+      name: "VERVE",
+      description: "The grand finale, VERVE, is a spectacular display of music, dance, and cultural extravaganza.",
+      bgClass: "bg-verve",
+      glowClass: "glow-verve",
+      imagePath: "/phases/verve.jpg",
+    },
+  ];
 
   return (
     <div className="festival-phases">
@@ -76,7 +53,6 @@ function FestivalPhases() {
             <section className={`festival-phase ${phase.bgClass}`}>
               <div className="festival-phase-content">
                 {index % 2 === 0 ? (
-                  // Left image alignment (odd indices: 0, 2)
                   <>
                     <div className="festival-phase-image-container">
                       <div className={`festival-phase-image-glow ${phase.glowClass}`}></div>
@@ -96,7 +72,6 @@ function FestivalPhases() {
                     </div>
                   </>
                 ) : (
-                  // Right image alignment (even indices: 1, 3)
                   <>
                     <div className="festival-phase-text">
                       <p className="festival-phase-description pr-8">
@@ -151,7 +126,7 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const targetDate = new Date('2025-12-30T00:00:00'); // 21st February 2025
+  const targetDate = new Date("2025-03-30T00:00:00");
 
   return (
     <div className="min-h-screen">
@@ -163,11 +138,9 @@ export default function Home() {
             <div className="content">
               <Swiper
                 spaceBetween={30}
-                effect={'fade'}
+                effect={"fade"}
                 navigation={true}
-                pagination={{
-                  clickable: true,
-                }}
+                pagination={{ clickable: true }}
                 modules={[EffectFade, Navigation, Pagination]}
                 className="mySwiper"
               >
@@ -177,15 +150,12 @@ export default function Home() {
                 <SwiperSlide>
                   <Image src="/assets/banner/homepage.jpg" alt="Banner 2" width={400} height={300} />
                 </SwiperSlide>
-                <SwiperSlide>
-                  <Image src="/assets/banner/homepage.jpg" alt="Banner 3" width={400} height={300}/>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Image src="/assets/banner/homepage.jpg" alt="Banner 4" width={400} height={300} />
-                </SwiperSlide>
               </Swiper>
             </div>
-            <BroadcastButton />
+            {/* Replacing BroadcastButton with Spline */}
+            <div className="spline-container">
+              <Spline scene="https://prod.spline.design/GfOUfu42ul3wEdHu/scene.splinecode" />
+            </div>
             <div className="countdown-timer">
               <CountdownTimer targetDate={targetDate} />
             </div>

@@ -14,7 +14,7 @@ export default function AurumPage() {
       <main className="space-y-12 py-12">
         <Leaderboard />
         <Events />
-        <Hackathon />
+        {/* <Hackathon /> */}
       </main>
       <footer className="bg-gray-800 text-white py-6">
         <div className="container mx-auto px-4 text-center">

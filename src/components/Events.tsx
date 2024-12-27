@@ -7,7 +7,8 @@ const events = [
     time: "10:00 AM - 12:00 PM",
     place: "Forensic Lab",
     videoUrl: "https://www.youtube.com/live/q_JsgpiuY98?si=GkrEnp70QbssXf55",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹200"
   },
   {
     title: "Escape Room",
@@ -15,7 +16,8 @@ const events = [
     time: "11:00 AM - 1:00 PM",
     place: "Mystery Room",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹250"
   },
   {
     title: "AR Treasure Hunt",
@@ -23,7 +25,8 @@ const events = [
     time: "2:00 PM - 4:00 PM",
     place: "Campus Grounds",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹150"
   },
   {
     title: "Giant Jenga",
@@ -31,7 +34,8 @@ const events = [
     time: "3:00 PM - 5:00 PM",
     place: "Main Quad",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹100"
   },
   {
     title: "Glow-in-the-Dark Pickleball",
@@ -39,7 +43,8 @@ const events = [
     time: "7:00 PM - 9:00 PM",
     place: "Sports Complex",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹180"
   },
   {
     title: "Laser Maze",
@@ -47,7 +52,8 @@ const events = [
     time: "1:00 PM - 3:00 PM",
     place: "Physics Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹220"
   },
   {
     title: "BGMI Tournament",
@@ -55,7 +61,8 @@ const events = [
     time: "4:00 PM - 8:00 PM",
     place: "Gaming Arena",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹300"
   },
   {
     title: "Valorant Championship",
@@ -63,7 +70,8 @@ const events = [
     time: "5:00 PM - 9:00 PM",
     place: "E-Sports Center",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹300"
   },
   {
     title: "Robo Sumo",
@@ -71,7 +79,8 @@ const events = [
     time: "11:00 AM - 1:00 PM",
     place: "Robotics Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹250"
   },
   {
     title: "Robo Race",
@@ -79,7 +88,8 @@ const events = [
     time: "2:00 PM - 4:00 PM",
     place: "Racing Track",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹280"
   },
   {
     title: "Cozmo Clench",
@@ -87,7 +97,8 @@ const events = [
     time: "3:00 PM - 5:00 PM",
     place: "AI Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹200"
   },
   {
     title: "Technokagaz",
@@ -95,7 +106,8 @@ const events = [
     time: "10:00 AM - 12:00 PM",
     place: "Design Studio",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹150"
   },
   {
     title: "Tech Expo",
@@ -103,7 +115,8 @@ const events = [
     time: "9:00 AM - 5:00 PM",
     place: "Exhibition Hall",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "Free"
   },
   {
     title: "Code of Duty",
@@ -111,7 +124,8 @@ const events = [
     time: "1:00 PM - 3:00 PM",
     place: "Computer Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹200"
   },
   {
     title: "Cybersecurity Challenge",
@@ -119,7 +133,8 @@ const events = [
     time: "4:00 PM - 6:00 PM",
     place: "Security Operations Center",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹250"
   },
   {
     title: "FIFA Tournament",
@@ -127,7 +142,8 @@ const events = [
     time: "6:00 PM - 10:00 PM",
     place: "Gaming Lounge",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹200"
   },
   {
     title: "VR Room",
@@ -135,7 +151,8 @@ const events = [
     time: "11:00 AM - 7:00 PM",
     place: "VR Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹300"
   },
   {
     title: "Mortal Kombat Tournament",
@@ -143,7 +160,8 @@ const events = [
     time: "7:00 PM - 11:00 PM",
     place: "Arcade Center",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹180"
   },
   {
     title: "Midtown Madness",
@@ -151,7 +169,8 @@ const events = [
     time: "5:00 PM - 8:00 PM",
     place: "Simulation Room",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    imageUrl: "/placeholder.svg?height=200&width=300"
+    imageUrl: "/placeholder.svg?height=200&width=300",
+    price: "₹220"
   }
 ]
 
@@ -167,3 +186,4 @@ export function Events() {
     </div>
   )
 }
+

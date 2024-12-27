@@ -40,6 +40,7 @@
     "@react-three/drei": "^9.119.0",
     "@react-three/fiber": "^8.17.10",
     "@shadcn/ui": "^0.0.4",
+    "@splinetool/react-spline": "^4.0.0",
     "@types/three": "^0.170.0",
     "@vercel/analytics": "^1.4.1",
     "@vercel/speed-insights": "^1.1.0",
