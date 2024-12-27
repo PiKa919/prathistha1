@@ -104,23 +104,25 @@ export default function JerseyRegistration() {
         }
       });
 
-      const firstTwoDigits = value.substring(0, 2);
+      // Modified year detection logic
       let year = '';
-      switch (firstTwoDigits) {
-        case '21':
-          year = 'Fourth Year';
-          break;
-        case '22':
-          year = 'Third Year';
-          break;
-        case '23':
-          year = 'Second Year';
-          break;
-        case '24':
-          year = 'First Year';
-          break;
-        default:
-          year = '';
+      if (value.toUpperCase().startsWith('PRN') || /^PRN\d+$/.test(value)) {
+        year = 'First Year';
+      } else {
+        const firstTwoDigits = value.substring(0, 2);
+        switch (firstTwoDigits) {
+          case '21':
+            year = 'Fourth Year';
+            break;
+          case '22':
+            year = 'Third Year';
+            break;
+          case '23':
+            year = 'Second Year';
+            break;
+          default:
+            year = 'First Year';
+        }
       }
       
       // Add department detection
@@ -329,21 +331,28 @@ export default function JerseyRegistration() {
               <h3 className="text-xl md:text-2xl font-semibold mb-2 md:mb-4 text-gray-200">Personal Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-lg md:text-xl font-medium">Full Name</Label>
+                  <Label htmlFor="name" className="text-lg md:text-xl font-medium">Full Name *</Label>
                   <Input 
                     id="name" 
                     placeholder="Enter your full name" 
                     className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all" 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    required 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="jerseyText" className="text-lg md:text-xl font-medium">Text on Jersey</Label>
-                  <Input id="jerseyText" placeholder="Enter the text to be put on the jersey" className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all" onChange={handleChange} />
+                  <Label htmlFor="jerseyText" className="text-lg md:text-xl font-medium">Text on Jersey *</Label>
+                  <Input 
+                    id="jerseyText" 
+                    placeholder="Enter the text to be put on the jersey" 
+                    className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all" 
+                    onChange={handleChange}
+                    required 
+                  />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-lg md:text-xl font-medium">Email</Label>
+                  <Label htmlFor="email" className="text-lg md:text-xl font-medium">Email *</Label>
                   <Input 
                     id="email" 
                     type="email" 
@@ -353,6 +362,7 @@ export default function JerseyRegistration() {
                     }`}
                     onChange={handleChange}
                     value={formData.email}
+                    required
                   />
                   {errors.email && (
                     <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -360,7 +370,7 @@ export default function JerseyRegistration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="prn" className="text-lg md:text-xl font-medium">PRN</Label>
+                  <Label htmlFor="prn" className="text-lg md:text-xl font-medium">PRN *</Label>
                   <Input 
                     id="prn" 
                     placeholder="Enter your 14-character PRN" 
@@ -369,7 +379,9 @@ export default function JerseyRegistration() {
                     }`}
                     onChange={handleChange}
                     value={formData.prn}
+                    required
                   />
+                  <p className="text-gray-400 text-sm">FEs write PRN first and then enter your 11 digit number</p>
                   {errors.prn && (
                     <p className="text-red-500 text-sm mt-1">{errors.prn}</p>
                   )}
@@ -379,7 +391,7 @@ export default function JerseyRegistration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="number" className="text-lg md:text-xl font-medium">Jersey Number</Label>
+                  <Label htmlFor="number" className="text-lg md:text-xl font-medium">Jersey Number *</Label>
                   <Input 
                     id="number" 
                     type="number" 
@@ -390,6 +402,7 @@ export default function JerseyRegistration() {
                       numberError ? 'border-red-500' : ''
                     }`}
                     onChange={handleChange}
+                    required
                   />
                   {numberError && (
                     <p className="text-red-500 text-sm mt-1">{numberError}</p>
@@ -513,18 +526,19 @@ export default function JerseyRegistration() {
                 </div>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="transactionId" className="text-lg md:text-xl font-medium">Transaction ID</Label>
+                    <Label htmlFor="transactionId" className="text-lg md:text-xl font-medium">Transaction ID *</Label>
                     <Input
                       id="transactionId"
                       placeholder="Enter UPI transaction ID"
                       className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all"
                       value={formData.transactionId}
                       onChange={handleChange}
+                      required
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="paymentScreenshot" className="text-lg md:text-xl font-medium">Payment Screenshot</Label>
+                    <Label htmlFor="paymentScreenshot" className="text-lg md:text-xl font-medium">Payment Screenshot *</Label>
                     <div 
                       className="relative border-2 border-dashed border-gray-700 rounded-lg p-4"
                       onPaste={handlePaste}
@@ -535,6 +549,7 @@ export default function JerseyRegistration() {
                         accept="image/*"
                         className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all"
                         onChange={handleFileChange}
+                        required
                       />
                       <p className="text-gray-400 text-sm mt-2">
                         You can also paste (Ctrl+V) a screenshot directly here

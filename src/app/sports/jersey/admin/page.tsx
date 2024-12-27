@@ -63,6 +63,9 @@ export default function AdminPage() {
   ];
 
   const getYearFromPRN = (prn: string) => {
+    if (prn.toUpperCase().startsWith('PRN')) {
+      return 'First Year';
+    }
     const firstTwoDigits = prn.substring(0, 2);
     switch (firstTwoDigits) {
       case '21': return 'Fourth Year';

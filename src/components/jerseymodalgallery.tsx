@@ -12,7 +12,7 @@ const JerseyGalleryModal = () => {
     { 
       id: 1, 
       image: "/olympus/jersey/babypink.webp",
-      description: "Baby Pink - AIDS" 
+      description: "Baby Pink - AIDS/BVOC AIDS" 
     },
     { 
       id: 2, 
@@ -42,7 +42,7 @@ const JerseyGalleryModal = () => {
     { 
       id: 7, 
       image: "/olympus/jersey/orange.webp",
-      description: "Orange - CYSE" 
+      description: "Orange - CYSE/BVOC CYSE" 
     },
     { 
       id: 8, 

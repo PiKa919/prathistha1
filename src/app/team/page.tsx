@@ -87,7 +87,7 @@ const teamsData = {
       about: "Come let's climb some mountains.",
       instagram: "rahul_jana_0905",
       linkedin: "rahul-jana-585534236",
-      location: "Haji Ali Dargah"
+      location: "Fort, Colaba"
     },
     {
       id: 3,
