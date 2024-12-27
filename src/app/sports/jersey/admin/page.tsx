@@ -50,7 +50,9 @@ export default function AdminPage() {
     "Electronics and Telecommunication",
     "Artificial Intelligence and Data Science",
     "Advance Communication and Technology",
-    "Very Large Scale Integration"
+    "Very Large Scale Integration",
+    "B.VOC AIDS",
+    "B.VOC CYSE",
   ];
 
   const years = [
