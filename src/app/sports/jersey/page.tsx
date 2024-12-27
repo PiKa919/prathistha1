@@ -202,7 +202,7 @@ export default function JerseyRegistration() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate email and PRN
+    // Validate email, PRN, and department
     let hasErrors = false;
     if (!validateEmail(formData.email)) {
       setErrors(prev => ({ ...prev, email: 'Email must be a valid SAKEC email (@sakec.ac.in)' }));
@@ -210,6 +210,10 @@ export default function JerseyRegistration() {
     }
     if (!validatePRN(formData.prn)) {
       setErrors(prev => ({ ...prev, prn: 'PRN must be exactly 14 characters (letters or numbers)' }));
+      hasErrors = true;
+    }
+    if (!formData.department) {
+      alert('Please select your department');
       hasErrors = true;
     }
 
@@ -232,7 +236,7 @@ export default function JerseyRegistration() {
       
       if (selectedFile) {
         const fileRef = storageRef(storage, `payment-screenshots/${formData.prn}-${Date.now()}`);
-          try {
+        try {
           const snapshot = await uploadBytes(fileRef, selectedFile);
           paymentScreenshotUrl = await getDownloadURL(snapshot.ref);
         } catch (uploadError: unknown) {
@@ -410,10 +414,11 @@ export default function JerseyRegistration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="department" className="text-lg md:text-xl font-medium">Department</Label>
+                  <Label htmlFor="department" className="text-lg md:text-xl font-medium">Department *</Label>
                   <Select 
                     onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
                     value={formData.department}
+                    required
                   >
                     <SelectTrigger className="bg-black/50 text-white border-gray-700 text-lg md:text-xl h-10 md:h-12 focus:ring-2 focus:ring-white/50 transition-all">
                       <SelectValue placeholder="Select your department" />
