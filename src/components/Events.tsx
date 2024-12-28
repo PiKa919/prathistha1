@@ -8,7 +8,12 @@ const events = [
     place: "Forensic Lab",
     videoUrl: "https://www.youtube.com/live/q_JsgpiuY98?si=GkrEnp70QbssXf55",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹200"
+    price: "₹200",
+    ranking: {
+      first: "Team Sherlock",
+      second: "CSI Masters",
+      third: "Detective Squad"
+    }
   },
   {
     title: "Escape Room",
@@ -17,7 +22,12 @@ const events = [
     place: "Mystery Room",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹250"
+    price: "₹250",
+    ranking: {
+      first: "Escape Artists",
+      second: "Puzzle Breakers",
+      third: "Time Benders"
+    }
   },
   {
     title: "AR Treasure Hunt",
@@ -26,7 +36,12 @@ const events = [
     place: "Campus Grounds",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹150"
+    price: "₹150",
+    ranking: {
+      first: "Team Rocket",
+      second: "Treasure Hunters",
+      third: "AR Explorers"
+    }
   },
   {
     title: "Giant Jenga",
@@ -35,7 +50,12 @@ const events = [
     place: "Main Quad",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹100"
+    price: "₹100",
+    ranking: {
+      first: "Jenga Masters",
+      second: "Tower Builders",
+      third: "Steady Hands"
+    }
   },
   {
     title: "Glow-in-the-Dark Pickleball",
@@ -44,7 +64,12 @@ const events = [
     place: "Sports Complex",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹180"
+    price: "₹180",
+    ranking: {
+      first: "Night Owls",
+      second: "Glow Getters",
+      third: "Pickleball Pros"
+    }
   },
   {
     title: "Laser Maze",
@@ -53,7 +78,12 @@ const events = [
     place: "Physics Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹220"
+    price: "₹220",
+    ranking: {
+      first: "Laser Ninjas",
+      second: "Maze Masters",
+      third: "Mission Accomplished"
+    }
   },
   {
     title: "BGMI Tournament",
@@ -62,7 +92,12 @@ const events = [
     place: "Gaming Arena",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹300"
+    price: "₹300",
+    ranking: {
+      first: "Chicken Dinners",
+      second: "BGMI Champs",
+      third: "Elite Squad"
+    }
   },
   {
     title: "Valorant Championship",
@@ -71,7 +106,12 @@ const events = [
     place: "E-Sports Center",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹300"
+    price: "₹300",
+    ranking: {
+      first: "Valorant Veterans",
+      second: "Tactical Titans",
+      third: "Agent Aces"
+    }
   },
   {
     title: "Robo Sumo",
@@ -80,7 +120,12 @@ const events = [
     place: "Robotics Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹250"
+    price: "₹250",
+    ranking: {
+      first: "Robo Rumble",
+      second: "Sumo Stars",
+      third: "Bot Brawlers"
+    }
   },
   {
     title: "Robo Race",
@@ -89,7 +134,12 @@ const events = [
     place: "Racing Track",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹280"
+    price: "₹280",
+    ranking: {
+      first: "Speed Demons",
+      second: "Robo Racers",
+      third: "Circuit Champions"
+    }
   },
   {
     title: "Cozmo Clench",
@@ -98,7 +148,12 @@ const events = [
     place: "AI Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹200"
+    price: "₹200",
+    ranking: {
+      first: "AI Aces",
+      second: "Cozmo Commanders",
+      third: "Coding Crew"
+    }
   },
   {
     title: "Technokagaz",
@@ -107,7 +162,12 @@ const events = [
     place: "Design Studio",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹150"
+    price: "₹150",
+    ranking: {
+      first: "Circuit Wizards",
+      second: "Paper Pros",
+      third: "Technocrats"
+    }
   },
   {
     title: "Tech Expo",
@@ -116,7 +176,12 @@ const events = [
     place: "Exhibition Hall",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "Free"
+    price: "Free",
+    ranking: {
+      first: "Innovation Inc.",
+      second: "Tech Titans",
+      third: "Future Forward"
+    }
   },
   {
     title: "Code of Duty",
@@ -125,7 +190,12 @@ const events = [
     place: "Computer Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹200"
+    price: "₹200",
+    ranking: {
+      first: "Coding Ninjas",
+      second: "Debug Masters",
+      third: "Algorithm Aces"
+    }
   },
   {
     title: "Cybersecurity Challenge",
@@ -134,7 +204,12 @@ const events = [
     place: "Security Operations Center",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹250"
+    price: "₹250",
+    ranking: {
+      first: "Cyber Warriors",
+      second: "Security Squad",
+      third: "Firewall Force"
+    }
   },
   {
     title: "FIFA Tournament",
@@ -143,7 +218,12 @@ const events = [
     place: "Gaming Lounge",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹200"
+    price: "₹200",
+    ranking: {
+      first: "FIFA Fanatics",
+      second: "Football Fury",
+      third: "Goal Getters"
+    }
   },
   {
     title: "VR Room",
@@ -152,7 +232,12 @@ const events = [
     place: "VR Lab",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹300"
+    price: "₹300",
+    ranking: {
+      first: "VR Voyagers",
+      second: "Virtual Victors",
+      third: "Reality Rebels"
+    }
   },
   {
     title: "Mortal Kombat Tournament",
@@ -161,7 +246,12 @@ const events = [
     place: "Arcade Center",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹180"
+    price: "₹180",
+    ranking: {
+      first: "Kombat Kings",
+      second: "Fighting Force",
+      third: "Mortal Masters"
+    }
   },
   {
     title: "Midtown Madness",
@@ -170,7 +260,12 @@ const events = [
     place: "Simulation Room",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     imageUrl: "/placeholder.svg?height=200&width=300",
-    price: "₹220"
+    price: "₹220",
+    ranking: {
+      first: "Street Racers",
+      second: "City Slickers",
+      third: "Speed Demons"
+    }
   }
 ]
 

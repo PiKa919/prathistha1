@@ -11,10 +11,15 @@ interface EventCardProps {
   place: string
   videoUrl: string
   imageUrl: string
-  price: string // New field
+  price: string
+  ranking: {
+    first: string
+    second: string
+    third: string
+  }
 }
 
-export function EventCard({ title, description, time, place, videoUrl, imageUrl, price }: EventCardProps) {
+export function EventCard({ title, description, time, place, videoUrl, imageUrl, price, ranking }: EventCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
@@ -26,7 +31,7 @@ export function EventCard({ title, description, time, place, videoUrl, imageUrl,
         <p className="text-gray-600 mb-2">{place}</p>
         <p className="text-gray-800 font-semibold mb-4">{price}</p>
         <Button onClick={() => setIsModalOpen(true)}
-          style={{ width: '320px' }}
+        style={{ width: '100%' }}  
         >
           More Info
         </Button>
@@ -40,6 +45,8 @@ export function EventCard({ title, description, time, place, videoUrl, imageUrl,
         place={place}
         videoUrl={videoUrl}
         price={price}
+        imageUrl={imageUrl}
+        ranking={ranking}
       />
     </div>
   )
