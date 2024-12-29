@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { EffectFade, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Spline from '@splinetool/react-spline';
 import ScrollGallery from '@/components/scroll-gallery';
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -12,26 +13,26 @@ import './styles.css';
 import CountdownTimer from '@/components/ui/count-down';
 import FestivalPhases from '@/components/Festivephases';
 
-function BroadcastButton() {
-  const [isGlowing, setIsGlowing] = useState(false);
+// function BroadcastButton() {
+//   const [isGlowing, setIsGlowing] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsGlowing((prev) => !prev);
-    }, 1500);
-    return () => clearInterval(interval);
-  }, []);
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setIsGlowing((prev) => !prev);
+//     }, 1500);
+//     return () => clearInterval(interval);
+//   }, []);
 
-  return (
-    <div className="broadcast-button-container">
-      <div className="broadcast-button-wrapper">
-        <button className={`broadcast-button ${isGlowing ? 'glowing' : ''}`}>
-          Join the Broadcast Channel
-        </button>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="broadcast-button-container">
+//       <div className="broadcast-button-wrapper">
+//         <button className={`broadcast-button ${isGlowing ? 'glowing' : ''}`}>
+//           Join the Broadcast Channel
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -78,7 +79,11 @@ export default function Home() {
                 </SwiperSlide>
               </Swiper>
             </div>
-            <BroadcastButton />
+            {/* <BroadcastButton /> */}
+            {/* Replacing BroadcastButton with Spline */}
+            <div className="spline-container">
+              <Spline scene="https://prod.spline.design/GfOUfu42ul3wEdHu/scene.splinecode" />
+            </div>
             <div className="countdown-timer">
               <CountdownTimer targetDate={targetDate} />
             </div>
