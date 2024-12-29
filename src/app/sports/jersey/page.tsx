@@ -62,36 +62,13 @@ export default function JerseyRegistration() {
     transactionId: '',
     paymentScreenshot: ''
   });
-  const [numberError, setNumberError] = useState('');
-  const [existingNumbers, setExistingNumbers] = useState<string[]>([]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    // Fetch existing jersey numbers and PRNs
-    const jerseysRef = ref(database, 'jerseys');
-    onValue(jerseysRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const numbers = Object.values(data as DatabaseJersey).map((jersey: JerseyData) => jersey.number);
-        setExistingNumbers(numbers);
-      }
-    });
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
-    
-    if (id === 'number') {
-      // Check if number already exists
-      if (existingNumbers.includes(value)) {
-        setNumberError('This jersey number is already taken. Please choose a different number.');
-        return;
-      }
-      setNumberError('');
-    }
 
     if (id === 'prn') {
       // Check if PRN exists
@@ -215,12 +192,6 @@ export default function JerseyRegistration() {
     if (!formData.department) {
       alert('Please select your department');
       hasErrors = true;
-    }
-
-    // Add number validation
-    if (numberError) {
-      alert('Please choose a different jersey number');
-      return;
     }
 
     if (hasErrors) {
@@ -402,15 +373,10 @@ export default function JerseyRegistration() {
                     placeholder="Choose your jersey number (0-999)"
                     min="0"
                     max="999"
-                    className={`w-full text-lg md:text-xl h-10 md:h-12 bg-black/50 text-white border-gray-700 focus:ring-2 focus:ring-white/50 transition-all ${
-                      numberError ? 'border-red-500' : ''
-                    }`}
+                    className={`w-full text-lg md:text-xl h-10 md:h-12 bg-black/50 text-white border-gray-700 focus:ring-2 focus:ring-white/50 transition-all`}
                     onChange={handleChange}
                     required
                   />
-                  {numberError && (
-                    <p className="text-red-500 text-sm mt-1">{numberError}</p>
-                  )}
                 </div>
 
                 <div className="space-y-2">
