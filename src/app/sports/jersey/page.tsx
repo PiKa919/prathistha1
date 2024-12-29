@@ -29,13 +29,7 @@ interface FormData {
   paymentScreenshot: string;
 }
 
-interface JerseyData extends FormData {
-  timestamp: number;
-}
-
-interface DatabaseJersey {
-  [key: string]: JerseyData;
-}
+// Remove this unused interface since we're not using it anymore
 
 interface FirebaseError extends Error {
   code?: string;
@@ -65,6 +59,17 @@ export default function JerseyRegistration() {
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    // Fetch existing jersey numbers and PRNs
+    const jerseysRef = ref(database, 'jerseys');
+    onValue(jerseysRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        // const numbers = Object.values(data as Record<string, JerseyData>).map((jersey: JerseyData) => jersey.number); // Remove this line
+      }
+    });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
