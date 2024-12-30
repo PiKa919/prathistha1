@@ -20,6 +20,27 @@ body {
   min-height: 100vh;
 }
 
+.spline-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Full width of the parent */
+  height: 100%; /* Full height of the parent */
+  min-height: 400px; /* Ensure it has enough space */
+  margin: auto;
+  position: relative; /* To avoid interference from other positioning */
+  overflow: hidden; /* Prevent unwanted overflow */
+}
+
+.spline-container canvas {
+  display: block;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto; /* Ensure it adapts */
+  height: auto;
+}
+
 .menu-container {
   position: relative;
   z-index: 1000;

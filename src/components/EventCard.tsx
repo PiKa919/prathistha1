@@ -23,7 +23,7 @@ export function EventCard({ title, description, time, place, videoUrl, imageUrl,
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
       <Image src={imageUrl} alt={title} width={300} height={200} className="w-full object-cover h-48" />
       <div className="p-4">
         <h3 className="font-bold text-xl mb-2">{title}</h3>
