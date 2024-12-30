@@ -195,7 +195,7 @@ export default function AdminPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center pt-20">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
       </div>
     );
@@ -203,7 +203,7 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center pt-20">
         <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md p-8 bg-gray-900 rounded-lg">
           <h1 className="text-2xl font-bold text-center mb-6">Admin Access</h1>
           {lockoutUntil && Date.now() < lockoutUntil ? (
@@ -235,7 +235,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="min-h-screen bg-black text-white p-8 pt-20">
       {selectedImage && (
         <ImageModal
           imageUrl={selectedImage}

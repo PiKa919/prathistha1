@@ -36,6 +36,13 @@ interface FirebaseError extends Error {
 }
 
 export default function JerseyRegistration() {
+  // Add new state for tracking link clicks
+  const [clickedLinks, setClickedLinks] = useState({
+    pratishtha: false,
+    sportsClub: false,
+    youtube: false
+  });
+
   const [isClient, setIsClient] = useState(false);
   const [selectedSize] = useState<string>('medium');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -259,6 +266,19 @@ export default function JerseyRegistration() {
       console.error('General error:', error);
       alert('An unexpected error occurred. Please try again later.');
     }
+  };
+
+  // Add function to handle link clicks
+  const handleLinkClick = (linkName: 'pratishtha' | 'sportsClub' | 'youtube') => {
+    setClickedLinks(prev => ({
+      ...prev,
+      [linkName]: true
+    }));
+  };
+
+  // Add function to check if all links are clicked
+  const allLinksClicked = () => {
+    return Object.values(clickedLinks).every(clicked => clicked);
   };
 
   const departments = [
@@ -541,9 +561,65 @@ export default function JerseyRegistration() {
               </div>
             </div>
 
+            {/* Social Media Links */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <a 
+                href="https://www.instagram.com/pratishtha_sakecfest/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`bg-gradient-to-r ${
+                  clickedLinks.pratishtha 
+                    ? 'from-green-600 to-green-700' 
+                    : 'from-purple-600 to-pink-600'
+                } text-white py-2 px-4 rounded-lg text-center text-sm md:text-base hover:opacity-90 transition-all`}
+                onClick={() => handleLinkClick('pratishtha')}
+              >
+                {clickedLinks.pratishtha ? '✓ Pratishtha' : 'Pratishtha'}
+              </a>
+              <a 
+                href="https://www.instagram.com/sakec_sportsclub/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`bg-gradient-to-r ${
+                  clickedLinks.sportsClub 
+                    ? 'from-green-600 to-green-700' 
+                    : 'from-pink-500 to-orange-500'
+                } text-white py-2 px-4 rounded-lg text-center text-sm md:text-base hover:opacity-90 transition-all`}
+                onClick={() => handleLinkClick('sportsClub')}
+              >
+                {clickedLinks.sportsClub ? '✓ Sports Club Instagram' : 'Sports Club Instagram'}
+              </a>
+              <a 
+                href="https://youtu.be/TaQE5t2KQHM?si=0VcZiaJ_dDl78VN7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`bg-gradient-to-r ${
+                  clickedLinks.youtube 
+                    ? 'from-green-600 to-green-700' 
+                    : 'from-red-600 to-red-700'
+                } text-white py-2 px-4 rounded-lg text-center text-sm md:text-base hover:opacity-90 transition-all`}
+                onClick={() => handleLinkClick('youtube')}
+              >
+                {clickedLinks.youtube ? '✓ Pratishtha YouTube' : 'Pratishtha YouTube'}
+              </a>
+            </div>
+
+            {!allLinksClicked() && (
+              <p className="text-yellow-500 text-center mb-4">
+                Please visit all three links above before registering
+              </p>
+            )}
+
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-200 text-base md:text-lg py-3 md:py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02]"
+              disabled={!allLinksClicked()}
+              className={`w-full bg-gradient-to-r ${
+                allLinksClicked()
+                  ? 'from-white to-gray-300 text-black hover:from-gray-100 hover:to-gray-200'
+                  : 'from-gray-600 to-gray-700 text-gray-300 cursor-not-allowed'
+              } text-base md:text-lg py-3 md:py-4 rounded-xl font-semibold transition-all duration-300 ${
+                allLinksClicked() ? 'hover:scale-[1.02]' : ''
+              }`}
             >
               Register Jersey
             </Button>
