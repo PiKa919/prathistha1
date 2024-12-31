@@ -99,7 +99,7 @@ export default function ScrollGallery() {
     <div className="bg-black text-white min-h-screen py-20" ref={containerRef}>
       <div className="max-w-7xl mx-auto px-4 mb-200 text-center">
         <h1 className="text-4xl md:text-4xl font-bold mb-8">
-          GLIMPSE
+        Chronicles From the Past
         </h1>
       </div>
 

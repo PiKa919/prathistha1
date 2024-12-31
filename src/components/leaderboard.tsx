@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Maximize2, Minimize2 } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
+import { database } from "@/firebaseConfig"
+import { ref, onValue } from "firebase/database"
 
 // First, define interfaces
 interface CCEntry {
@@ -13,6 +15,8 @@ interface CCEntry {
   clId: string;
   name: string;
   ccPoints: number;
+  ccName: string;
+  ccNumber: string;
 }
 
 interface PREntry {
@@ -20,47 +24,73 @@ interface PREntry {
   clId: string;
   name: string;
   prPoints: number;
+  ccName: string;
+  ccNumber: string;
 }
 
-interface GameData {
+interface LeaderboardData {
   cc: CCEntry[];
   pr: PREntry[];
 }
 
-interface LeaderboardData {
-  [key: string]: GameData;
+interface ParticipantData {
+  name: string;
+  ccName: string;
+  ccNumber: string;
+  ccPoints: number;
+  prPoints: number;
 }
 
 // Update the component
 export function Leaderboard() {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currentGameId, setCurrentGameId] = useState<string>("game1");
+  const [ccLeaderboard, setCCLeaderboard] = useState<CCEntry[]>([]);
+  const [prLeaderboard, setPRLeaderboard] = useState<PREntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const games = [
-    { id: "game1", name: "Game 1" },
-    { id: "game2", name: "Game 2" },
-    { id: "game3", name: "Game 3" }
-  ]
+  useEffect(() => {
+    const rsvpsRef = ref(database, 'rsvps');
+    
+    const unsubscribe = onValue(rsvpsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const participants = Object.entries(data).map(([id, value]) => ({
+          id,
+          ...(value as ParticipantData)
+        }));
 
-  const leaderboardData: LeaderboardData = {
-    game1: {
-      cc: [
-        { rank: 1, clId: "CL001", name: "Alex Chen", ccPoints: 1500 },
-        { rank: 2, clId: "CL002", name: "Maria Garcia", ccPoints: 1400 },
-        { rank: 3, clId: "CL003", name: "John Smith", ccPoints: 1300 },
-        { rank: 4, clId: "CL004", name: "Yuki Tanaka", ccPoints: 1200 },
-        { rank: 5, clId: "CL005", name: "Anna Kowalski", ccPoints: 1100 },
-      ],
-      pr: [
-        { rank: 1, clId: "CL003", name: "John Smith", prPoints: 1000 },
-        { rank: 2, clId: "CL001", name: "Alex Chen", prPoints: 950 },
-        { rank: 3, clId: "CL004", name: "Yuki Tanaka", prPoints: 900 },
-        { rank: 4, clId: "CL002", name: "Maria Garcia", prPoints: 850 },
-        { rank: 5, clId: "CL005", name: "Anna Kowalski", prPoints: 800 },
-      ]
-    }
-    // Add more game data as needed
-  }
+        // Sort CC Points
+        const ccSorted = [...participants]
+          .sort((a, b) => (b.ccPoints || 0) - (a.ccPoints || 0))
+          .map((p, index) => ({
+            rank: index + 1,
+            clId: p.id,
+            name: p.name,
+            ccPoints: p.ccPoints || 0,
+            ccName: p.ccName || '',
+            ccNumber: p.ccNumber || ''
+          }));
+
+        // Sort PR Points
+        const prSorted = [...participants]
+          .sort((a, b) => (b.prPoints || 0) - (a.prPoints || 0))
+          .map((p, index) => ({
+            rank: index + 1,
+            clId: p.id,
+            name: p.name,
+            prPoints: p.prPoints || 0,
+            ccName: p.ccName || '',
+            ccNumber: p.ccNumber || ''
+          }));
+
+        setCCLeaderboard(ccSorted);
+        setPRLeaderboard(prSorted);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const getRankColor = (rank: number) => {
     switch (rank) {
@@ -69,6 +99,10 @@ export function Leaderboard() {
       case 3: return "bg-gradient-to-r from-yellow-600/20 to-transparent"
       default: return ""
     }
+  }
+
+  if (loading) {
+    return <div className="text-center p-4">Loading leaderboard...</div>;
   }
 
   return (
@@ -81,21 +115,7 @@ export function Leaderboard() {
         isFullscreen ? "h-full" : "max-h-[600px]"
       )}>
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold">Leaderboard</h2>
-            <div className="flex gap-2">
-              {games.map((game) => (
-                <Button
-                  key={game.id}
-                  variant={currentGameId === game.id ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentGameId(game.id)}
-                >
-                  {game.name}
-                </Button>
-              ))}
-            </div>
-          </div>
+          <h2 className="text-2xl font-bold">Leaderboard</h2>
           <Button variant="outline" size="icon" onClick={() => setIsFullscreen(!isFullscreen)}>
             {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
           </Button>
@@ -118,14 +138,15 @@ export function Leaderboard() {
                 <TableHeader className="sticky top-0 bg-black/50 backdrop-blur-sm">
                   <TableRow>
                     <TableHead className="w-[80px]">Rank</TableHead>
-                    <TableHead>CL ID</TableHead>
+                    <TableHead>CC Name</TableHead>
+                    <TableHead>CC Number</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead className="text-right">Points</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <AnimatePresence mode="wait">
-                    {leaderboardData[currentGameId].cc.map((entry) => (
+                    {(isFullscreen ? ccLeaderboard : ccLeaderboard.slice(0, 5)).map((entry) => (
                       <motion.tr
                         key={entry.clId}
                         className={cn(getRankColor(entry.rank), "transition-colors")}
@@ -135,7 +156,8 @@ export function Leaderboard() {
                         transition={{ duration: 0.3 }}
                       >
                         <TableCell className="font-medium">{entry.rank}</TableCell>
-                        <TableCell>{entry.clId}</TableCell>
+                        <TableCell>{entry.ccName}</TableCell>
+                        <TableCell>{entry.ccNumber}</TableCell>
                         <TableCell>{entry.name}</TableCell>
                         <TableCell className="text-right font-bold text-blue-400">{entry.ccPoints}</TableCell>
                       </motion.tr>
@@ -159,14 +181,15 @@ export function Leaderboard() {
                 <TableHeader className="sticky top-0 bg-black/50 backdrop-blur-sm">
                   <TableRow>
                     <TableHead className="w-[80px]">Rank</TableHead>
-                    <TableHead>CL ID</TableHead>
+                    <TableHead>CC Name</TableHead>
+                    <TableHead>CC Number</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead className="text-right">Points</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <AnimatePresence mode="wait">
-                    {leaderboardData[currentGameId].pr.map((entry) => (
+                    {(isFullscreen ? prLeaderboard : prLeaderboard.slice(0, 5)).map((entry) => (
                       <motion.tr
                         key={entry.clId}
                         className={cn(getRankColor(entry.rank), "transition-colors")}
@@ -176,7 +199,8 @@ export function Leaderboard() {
                         transition={{ duration: 0.3 }}
                       >
                         <TableCell className="font-medium">{entry.rank}</TableCell>
-                        <TableCell>{entry.clId}</TableCell>
+                        <TableCell>{entry.ccName}</TableCell>
+                        <TableCell>{entry.ccNumber}</TableCell>
                         <TableCell>{entry.name}</TableCell>
                         <TableCell className="text-right font-bold text-green-400">{entry.prPoints}</TableCell>
                       </motion.tr>

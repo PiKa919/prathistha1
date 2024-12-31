@@ -47,7 +47,7 @@ export default function CountdownTimer({ targetDate }: CountdownProps) {
         {Object.entries(remainingTime).map(([unit, value]) => (
           value !== undefined && (
             <div key={unit} className="flex flex-col items-center">
-              <div className="backdrop-blur-md bg-white/10 rounded-lg p-6 shadow-lg border border-white/20">
+              <div className="backdrop-blur-md bg-gradient-radial from-white/15 via-white/7.5 to-transparent rounded-lg p-6 shadow-lg">
                 <span className="text-4xl font-bold">{value}</span>
               </div>
               <span className="text-sm mt-2 uppercase tracking-wider">{unit}</span>

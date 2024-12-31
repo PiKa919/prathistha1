@@ -9,7 +9,7 @@ import { useEffect } from "react"
 
 function ParallaxImage() {
   const mesh = useRef<THREE.Mesh>(null)
-  const texture = useLoader(TextureLoader, '/assets/banner/bg-image.jpg')
+  const texture = useLoader(TextureLoader, '/assets/banner/bg-image.webp')
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

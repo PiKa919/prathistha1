@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Background3D } from "./3d-background"
+import RSVPModal from "./rsvp-modal"
 
 export function Hero() {
   return (
@@ -27,9 +27,7 @@ export function Hero() {
           <p className="mx-auto max-w-[600px] text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Unite with fellow leaders to strategize, innovate, and elevate Prathistha. This exclusive meet-up is your platform to share ideas, collaborate, and drive the success of our college&apos;s biggest event.
           </p>
-          <Button size="lg" className="rounded-full">
-            RSVP Today
-          </Button>
+          <RSVPModal />
         </motion.div>
       </div>
     </section>

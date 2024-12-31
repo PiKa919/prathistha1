@@ -1,13 +1,14 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { FaUniversity, FaUsers, FaChalkboardTeacher, FaHashtag } from "react-icons/fa"
 
 export function Stats() {
   const stats = [
-    { number: "60+", label: "Competitions" },
-    { number: "2000+", label: "Participants" },
-    { number: "12+", label: "Countries" },
-    { number: "14+", label: "Partners" },
+    { number: "50+", label: "Participating Colleges", icon: <FaUniversity className="text-4xl" /> },
+    { number: "150+", label: " Contingent Leaders", icon: <FaUsers className="text-4xl" /> },
+    { number: "10+", label: "Interactive Workshops", icon: <FaChalkboardTeacher className="text-4xl" /> },
+    { number: "500+", label: "Social Media Mentions", icon: <FaHashtag className="text-4xl" /> },
   ]
 
   return (
@@ -22,7 +23,10 @@ export function Stats() {
               transition={{ delay: index * 0.1 }}
               className="text-center"
             >
-              <div className="text-4xl font-bold text-primary">{stat.number}</div>
+              <div className="flex items-center justify-center gap-2 text-primary">
+                {stat.icon}
+                <div className="text-4xl font-bold">{stat.number}</div>
+              </div>
               <div className="text-gray-400 mt-2">{stat.label}</div>
             </motion.div>
           ))}

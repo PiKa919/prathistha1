@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const menuItems = [
-  { label: 'Yuva', path: '/yuva' },
   { label: 'Aurum', path: '/aurum' },
   { label: 'Olympus', path: '/sports' },
   { label: 'Verve', path: '/verve' },
@@ -124,7 +123,7 @@ const Menu = () => {
         <div className="nav-content">
           <div className="nav-wrapper">
             <div className="logo-section">
-              <Link href="/">
+              <a href="https://www.sakec.ac.in" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/assets/logos/sakec_white.png"
                   alt="Logo"
@@ -132,8 +131,9 @@ const Menu = () => {
                   height={40}
                   className="logo-image"
                 />
-              </Link>
+              </a>
               <div className="logo-placeholder">
+                <Link href="/team">
                 <Image
                   src="/assets/logos/sc_logo.png"
                   alt="Student council Logo"
@@ -141,11 +141,14 @@ const Menu = () => {
                   height={60}
                   className="logo-image"
                 />
+                </Link>
               </div>
+              <Link href="/">
               <div className="logo-text-container">
                 <h1 className="logo-text">Prathistha</h1>
                 <span className="logo-subtext">sakecfest</span>
               </div>
+              </Link>
             </div>
 
             <div className="nav-items">
