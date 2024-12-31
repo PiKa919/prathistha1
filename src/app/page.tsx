@@ -12,8 +12,6 @@ import "swiper/css/pagination";
 import './styles.css';
 import CountdownTimer from '@/components/ui/count-down';
 import FestivalPhases from '@/components/Festivephases';
-import { Button } from '@/components/ui/button';
-import { Link } from 'lucide-react';
 
 // function BroadcastButton() {
 //   const [isGlowing, setIsGlowing] = useState(false);

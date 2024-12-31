@@ -28,11 +28,6 @@ interface PREntry {
   ccNumber: string;
 }
 
-interface LeaderboardData {
-  cc: CCEntry[];
-  pr: PREntry[];
-}
-
 interface ParticipantData {
   name: string;
   ccName: string;
