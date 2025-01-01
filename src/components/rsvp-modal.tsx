@@ -21,10 +21,11 @@ export default function RSVPModal() {
         setIsSubmitting(true);
 
         try {
-          const rsvpCollection = collection(firestore, "rsvps");
-          const rsvpData = { email: "example@example.com", timestamp: new Date().toISOString() };
-          await addDoc(rsvpCollection, rsvpData);
-          console.log("RSVP submitted successfully:", rsvpData);
+            const rsvpCollection = collection(firestore, "rsvps");
+            const rsvpData = { email, timestamp: new Date().toISOString(), status: "pending" };
+            await addDoc(rsvpCollection, rsvpData);
+
+            console.log("RSVP submitted successfully:", rsvpData);
             setSubmitted(true);
             setEmail("");
 
