@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ImageModal from '@/components/ImageModal';
+import * as XLSX from 'xlsx';
 
 interface JerseyRegistration {
   name: string;
@@ -193,6 +194,39 @@ export default function AdminPage() {
     }
   };
 
+  const exportToExcel = () => {
+    const dataToExport = filteredRegistrations.map((registration, index) => ({
+      'Sr. No.': index + 1,
+      'PRN': registration.prn,
+      'Name': registration.name,
+      'Jersey Text': registration.jerseyText,
+      'Number': registration.number,
+      'Size': registration.size,
+      'Department': registration.department,
+      'Year': registration.actualYear,
+      'Jersey Status': registration.jerseyReceived ? 'Received' : 'Not Received',
+      'Payment Status': registration.paymentVerified ? 'Verified' : 'Not Verified',
+      'Transaction ID': registration.transactionId,
+      'Payment Screenshot URL': registration.paymentScreenshot || 'No screenshot',
+      'Registration Date': new Date(registration.timestamp).toLocaleString(),
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+    // Adjust column width for the URL column
+    const urlColumnIndex = Object.keys(dataToExport[0]).indexOf('Payment Screenshot URL');
+    if (!ws['!cols']) ws['!cols'] = [];
+    ws['!cols'][urlColumnIndex] = { width: 50 }; // Make URL column wider
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Jersey Registrations');
+    
+    const date = new Date().toISOString().split('T')[0];
+    const fileName = `jersey_registrations_${date}.xlsx`;
+    
+    XLSX.writeFile(wb, fileName);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center pt-20">
@@ -254,6 +288,12 @@ export default function AdminPage() {
             <div className="text-sm text-gray-400">
               Total Registrations: {filteredRegistrations.length}
             </div>
+            <Button 
+              onClick={exportToExcel}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Export to Excel
+            </Button>
             <Button 
               onClick={() => setIsAuthenticated(false)}
               className="bg-red-600 hover:bg-red-700"
