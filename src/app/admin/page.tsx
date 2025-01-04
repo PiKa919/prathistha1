@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { database } from "@/firebaseConfig"
+import { database, firestore } from "@/firebaseConfig"
 import { ref, set, onValue, remove } from "firebase/database"
+import { collection, onSnapshot } from "firebase/firestore"
 
 interface ParticipantData {
   name: string;
@@ -17,11 +18,18 @@ interface ParticipantData {
   prPoints: number;
 }
 
+interface RSVPData {
+  email: string;
+  timestamp: string;
+  status: string;
+}
+
 export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const { toast } = useToast()
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [rsvps, setRsvps] = useState<RSVPData[]>([]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,11 +61,21 @@ export default function AdminPage() {
   useEffect(() => {
     if (isAuthenticated) {
       const rsvpsRef = ref(database, 'rsvps');
-      const unsubscribe = onValue(rsvpsRef, (snapshot) => {
+      const unsubscribe1 = onValue(rsvpsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) setParticipants(data);
       });
-      return () => unsubscribe();
+
+      const rsvpCollection = collection(firestore, "rsvps");
+      const unsubscribe2 = onSnapshot(rsvpCollection, (snapshot) => {
+        const rsvpData = snapshot.docs.map(doc => doc.data() as RSVPData);
+        setRsvps(rsvpData);
+      });
+
+      return () => {
+        unsubscribe1();
+        unsubscribe2();
+      };
     }
   }, [isAuthenticated]);
 
@@ -157,6 +175,35 @@ export default function AdminPage() {
         </div>
 
         <div className="space-y-8">
+          {/* RSVP List */}
+          <Card className="bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle>RSVP List</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Timestamp</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {rsvps.map((rsvp, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{rsvp.email}</TableCell>
+                        <TableCell>{new Date(rsvp.timestamp).toLocaleString()}</TableCell>
+                        <TableCell>{rsvp.status}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Entry Form */}
           <Card className="bg-gray-900 border-gray-800">
             <CardHeader>

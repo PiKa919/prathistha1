@@ -43,14 +43,14 @@ export default function CountdownTimer({ targetDate }: CountdownProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="text-2xl font-bold text-center mb-4">It&apos;s almost time!</div>
-      <div className="flex gap-8">
+      <div className="flex flex-wrap justify-center gap-4 md:gap-8">
         {Object.entries(remainingTime).map(([unit, value]) => (
           value !== undefined && (
             <div key={unit} className="flex flex-col items-center">
-              <div className="backdrop-blur-md bg-gradient-radial from-white/15 via-white/7.5 to-transparent rounded-lg p-6 shadow-lg">
-                <span className="text-4xl font-bold">{value}</span>
+              <div className="backdrop-blur-md bg-gradient-radial from-white/15 via-white/7.5 to-transparent rounded-lg p-4 md:p-6 shadow-lg">
+                <span className="text-3xl md:text-4xl font-bold">{value}</span>
               </div>
-              <span className="text-sm mt-2 uppercase tracking-wider">{unit}</span>
+              <span className="text-xs md:text-sm mt-2 uppercase tracking-wider">{unit}</span>
             </div>
           )
         ))}

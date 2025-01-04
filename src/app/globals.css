@@ -7,7 +7,15 @@
   src: url('/fonts/MAEL____.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/NeueMontreal-Bold.woff') format('woff'),
+       url('/fonts/NeueMontreal-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
 @layer base {
@@ -74,6 +82,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Neue Montreal', sans-serif;
   }
 }
 
@@ -215,4 +224,8 @@ html, body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+.font-neue-montreal {
+  font-family: 'Neue Montreal', sans-serif;
 }
