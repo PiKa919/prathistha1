@@ -30,9 +30,9 @@ const teamsData = {
       image: "/team/festhead/umangjain.webp",
       rectangleImage: "/team/festhead/umangj.webp",
       about: "Ek scheme hai boss",
-      instagram: "",
+      instagram: "pratishtha_sakecfest",
       linkedin: "umang-jain-a52264246",
-      location: "Marine Drive"
+      location: "Colaba Cause-way"
     },
     {
       id: 2,
@@ -41,8 +41,8 @@ const teamsData = {
       image: "/team/festhead/harshJ.webp",
       about: "My life begins with 5...6... and ends with 7...8... dancing through my tech, chaos, and passion.",
       instagram: "harshjain",
-      linkedin: "no data",
-      location: "Colaba"
+      linkedin: "harshkumarjain",
+      location: "Siddhivinayak "
     },
   ],
   culturals: [
@@ -54,7 +54,7 @@ const teamsData = {
       about: "A sports junkie by day, a guitar-strumming rockstar by night, and your Cultural Secretary 24/7 , keeping the vibe alive and the energy higher. ",
       instagram: "aaradhya.17",
       linkedin: "aaradhya-bahirat-045a54311",
-      location: "Juhu Beach"
+      location: "Home, RCF"
     },
     {
       id: 2,
@@ -64,7 +64,7 @@ const teamsData = {
       about: "A curious mind with a passion for exploring stories, flavors, and places around the world.",
       instagram: "ananya_anannya_",
       linkedin: "anannya-gupta-3681531a4",
-      location: "Gateway of India"
+      location: "Kala Ghoda"
     },
 
   ],
@@ -76,8 +76,8 @@ const teamsData = {
       image: "/team/offstage/jitu.webp",
       about: "Moj masti rukni nai chaiye ",
       instagram: "jiitzz",
-      linkedin: "none",
-      location: "Bandra-Worli Sea Link"
+      linkedin: "school/sakec",
+      location: "Council Room"
     },
     {
       id: 2,
@@ -87,7 +87,7 @@ const teamsData = {
       about: "Come let's climb some mountains.",
       instagram: "rahul_jana_0905",
       linkedin: "rahul-jana-585534236",
-      location: "Fort, Colaba"
+      location: "Fort Colaba"
     },
     {
       id: 3,
@@ -97,7 +97,7 @@ const teamsData = {
       about: "Forged by challenges, driven by purpose, and unstoppable in the pursuit of success.",
       instagram: "kaushal_kp12",
       linkedin: "kaushal-rupesh-patel-a3bbb6246",
-      location: "Sanjay Gandhi National Park"
+      location: "Gorai Beach"
     },
   ],
   onstage: [
@@ -108,8 +108,8 @@ const teamsData = {
       image: "/team/onstage/vinod.webp",
       about: "Brooklyn 99 S:4 Ep:13",
       instagram: "__maybe__vinod__",
-      linkedin: "none",
-      location: "Chhatrapati Shivaji Terminus"
+      linkedin: "school/sakec",
+      location: "Thane"
     },
     {
       id: 2,
@@ -119,7 +119,7 @@ const teamsData = {
       about: "I am a very fun loving and lively soul who finds joy in dance, solace in books, and peace in nature.",
       instagram: "nityaa.04",
       linkedin: "nityaa-bhanushali-8489b725a",
-      location: "Elephanta Caves"
+      location: "Bandra Worli Sea Link"
     },
   ],
   socialmedia: [
@@ -131,7 +131,7 @@ const teamsData = {
         about: "Who needs her, when likes and comments flood your notifications, at least they don’t break your heart!”",
         instagram: "galakrish02",
         linkedin: "krishgala2",
-        location: "Marine Drive"
+        location: "Elephanta Caves"
       },
       {
         id: 2,
@@ -140,8 +140,8 @@ const teamsData = {
         image: "/team/socialmedia/saish.webp",
         about: "The technical team is notifying me—good conditions are coming to Instagram! Time to upload a reel!",
         instagram: "saishhh04",
-        linkedin: "none",
-        location: "Colaba"
+        linkedin: "school/sakec",
+        location: "Any Beach"
       },
   ],
   webapp: [
@@ -163,7 +163,7 @@ const teamsData = {
         about: "Hakuna Matata",
         instagram: "pradnesh_2504",
         linkedin: "pradnesh-revadekar",
-        location: "Gateway of India"
+        location: "Lalbaug"
       },
   ],
   creativity: [
@@ -175,7 +175,7 @@ const teamsData = {
         about: "A tech-savvy artist shaping creative excellence at every opportunity.",
         instagram: "__im_aditya.__",
         linkedin: "aditya-dangat-29a119234",
-        location: "Bandra-Worli Sea Link"
+        location: "Siddhivinayak"
       },
       {
         id: 2,
@@ -185,7 +185,7 @@ const teamsData = {
         about: "Turning stress into steps and deadlines into designs!",
         instagram: "resha._.n",
         linkedin: "resha-naik-b448ab25a",
-        location: "Haji Ali Dargah"
+        location: "Home, Marine Drive"
       },
   ],
  documentation: [
@@ -196,8 +196,8 @@ const teamsData = {
         image: "/team/documentation/shreya.webp",
         about: "Everything you do comes back to you💫",
         instagram: "shreya_.patwardhan",
-        linkedin: "none",
-        location: "Sanjay Gandhi National Park"
+        linkedin: "school/sakec",
+        location: "Marine Drive"
       },
   ],
   graphics: [
@@ -207,8 +207,8 @@ const teamsData = {
         subheading: "GFX and VFX Secretary",
         image: "/team/graphics/diya.webp",
         about: "just a slay queen doing her thing in SC-25 💅",
-        instagram: "none",
-        linkedin: "none",
+        instagram: "pratishtha_sakecfest",
+        linkedin: "school/sakec",
         location: "Cuffe parade"
       },
       {
@@ -217,8 +217,8 @@ const teamsData = {
         subheading: "GFX and VFX Secretary",
         image: "/team/graphics/danvir.webp",
         about: "no data",
-        instagram: "none",
-        linkedin: "none",
+        instagram: "pratishtha_sakecfest",
+        linkedin: "school/sakec",
         location: "Elephanta Caves"
       },
       {
@@ -240,8 +240,8 @@ infra: [
         image: "/team/infra/ayur.webp",
         about: "If you can't convince then confuse",
         instagram: "ayurshah13",
-        linkedin: "none",
-        location: "Colaba"
+        linkedin: "school/sakec",
+        location: "Marine Drive"
       },
       {
         id: 2,
@@ -251,7 +251,7 @@ infra: [
         about: "Improving day-by-day even if it is little as 1%",
         instagram: "ameyyyp29",
         linkedin: "amey-parab2910",
-        location: "Juhu Beach"
+        location: "Chembur"
       },
   ],
   lr: [
@@ -262,8 +262,8 @@ infra: [
         image: "/team/lr/IMG-20241003-WA0018 - BHAKTI PRADIP DHURI.webp",
         about: "Chaos coordinator with a talent for making life an unpredictable adventure, fueled by caffeine and curiosity! ",
         instagram: "bhakti_dhurii",
-        linkedin: "none",
-        location: "Gateway of India"
+        linkedin: "school/sakec",
+        location: "Nariman Point"
       },
       {
         id: 2,
@@ -273,7 +273,7 @@ infra: [
         about: "Walking the fine line between elegance and rebellion, I lead with heart, grit, and vision.",
         instagram: "moxitashahh",
         linkedin: "moxitashah",
-        location: "Bandra-Worli Sea Link"
+        location: "Malabar Hills"
       },
   ],
   pap: [
@@ -285,7 +285,7 @@ infra: [
         about: "Turning moments into memories ",
         instagram: "aniketgursale_28",
         linkedin: "aniketgursale",
-        location: "Haji Ali Dargah"
+        location: "Marine Drive"
       },
       {
         id: 1,
@@ -295,7 +295,7 @@ infra: [
         about: "I do photography. ",
         instagram: "rohan_koyande",
         linkedin: "rohankoyande",
-        location: "Sanjay Gandhi National Park"
+        location: "Worli"
       },
   ],
  publicity: [
@@ -305,9 +305,9 @@ infra: [
         subheading: "Publicity Secretary",
         image: "/team/publicity/nida.webp",
         about: "An ambitious fellow with a way with people and words. ",
-        instagram: "none",
+        instagram: "pratishtha_sakecfest",
         linkedin: "nida-malik-84b220232",
-        location: "Chhatrapati Shivaji Terminus"
+        location: "Kala Ghoda"
       },
       {
         id: 2,
@@ -316,8 +316,8 @@ infra: [
         image: "/team/publicity/sid.webp",
         about: "An ambitious, detail-oriented innovator and problem-solver, constantly striving to achieve impactful results.",
         instagram: "m._.siddh",
-        linkedin: "none",
-        location: "Elephanta Caves"
+        linkedin: "school/sakec",
+        location: "Marine Drive"
       },
   ],
   sponsorship: [
@@ -329,7 +329,7 @@ infra: [
         about: "Trailblazing second-year Sponsorship Secretary, securing partnerships, inspiring peers, and leaving a lasting legacy.",
         instagram: "viplaavv",
         linkedin: "viplav-bhujbal-b7411528b",
-        location: "Marine Drive"
+        location: "Prabhadevi"
       },
       
   ],
@@ -341,7 +341,7 @@ infra: [
         image: "/team/sports/kartik.webp",
         about: "Nyctophilia",
         instagram: "kartik.tandekar",
-        linkedin: "none",
+        linkedin: "school/sakec",
         location: "carter"
       },
       {
@@ -352,7 +352,7 @@ infra: [
         about: "I'm a  volleyball player who spikes on the court and panics off it. A topper who’s always late but somehow always on point. Chaos might follow me, but I still ace it every time!",
         instagram: "sanikatajane_11",
         linkedin: "sanika-tajane-7a843a247",
-        location: "Juhu Beach"
+        location: "Churchgate"
       },
       {
         id: 3,
@@ -361,8 +361,8 @@ infra: [
         image: "/team/sports/vedantgharat.jpg",
         about: "Fueled by sports, led by passion, and inspired to make a difference.",
         instagram: "v_edant_g",
-        linkedin: "none",
-        location: "Gateway of India"
+        linkedin: "school/sakec",
+        location: "RCF Chembur"
       },
   ],
   technical: [
@@ -372,9 +372,9 @@ infra: [
         subheading: "Technical Secretary",
         image: "/team/technical/udit.webp",
         about: "Waqt ke saath badalta nahi, balki waqt ko apne saath badalne ka hunar rakhta hoon.",
-        instagram: "ankit",
-        linkedin: "ankitdas",
-        location: "Bandra-Worli Sea Link"
+        instagram: "ig_udit.jain",
+        linkedin: "udit-sunil-shishodiya-042a20246",
+        location: "Sanjay Gandhi National Park"
       },
       {
         id: 2,
@@ -382,8 +382,8 @@ infra: [
         subheading: "Technical Coordinator",
         image: "/team/technical/sidhart.webp",
         about: "Hakuna Matata",
-        instagram: "none",
-        linkedin: "none",
+        instagram: "pratishtha_sakecfest",
+        linkedin: "school/sakec",
         location: "Haji Ali Dargah"
       },
       {
@@ -394,7 +394,7 @@ infra: [
         about: "A dedicated Technical Coordinator ensuring efficient workflows, team collaboration, and successful project outcomes.",
         instagram: "heet.ruparel",
         linkedin: "heet-ruparel-8299ab25a",
-        location: "Sanjay Gandhi National Park"
+        location: "BKC"
       },
       {
         id: 4,
@@ -404,7 +404,7 @@ infra: [
         about: "Running the show, breaking the rules, and redefining what’s possible.",
         instagram: "_.yash37._",
         linkedin: "yash-patel-871926246",
-        location: "Chhatrapati Shivaji Terminus"
+        location: "Malabar Hills"
       },
 
   ],
@@ -417,7 +417,7 @@ infra: [
         about: "Managing the budget is a challenge, especially with everyone treating money as if it's just paper growing on trees.",
         instagram: "_14yash_",
         linkedin: "yash-jain-60885a205",
-        location: "Elephanta Caves"
+        location: "Marine Drive"
       },
       {
         id: 2,
@@ -427,7 +427,7 @@ infra: [
         about: "Beautiful chaos wrapped in curiosity.",
         instagram: "diyajain_294",
         linkedin: "diya-jain-178a9024a",
-        location: "Marine Drive"
+        location: "Juhu Beach"
       },
   ],
   celeb: [
@@ -437,8 +437,8 @@ infra: [
         subheading: "Celeb & Crisis Secretary",
         image: "/team/webapp/profile-1.webp",
         about: "Hakuna Matata",
-        instagram: "none",
-        linkedin: "none",
+        instagram: "pratishtha_sakecfest",
+        linkedin: "school/sakec",
         location: "Colaba"
       },
       {
@@ -447,8 +447,8 @@ infra: [
         subheading: "Celeb & Crisis Coordinator",
         image: "/team/webapp/profile-1.webp",
         about: "Hakuna Matata",
-        instagram: "none",
-        linkedin: "none",
+        instagram: "pratishtha_sakecfest",
+        linkedin: "school/sakec",
         location: "Juhu Beach"
       },
   ],
@@ -461,7 +461,7 @@ infra: [
         about: "I am just a Chill guy who owns the race!!",
         instagram: "tanish_nandu",
         linkedin: "tanish-nandu-524345237",
-        location: "Gateway of India"
+        location: "Thane XD"
       },
       {
         id: 2,
@@ -469,8 +469,8 @@ infra: [
         subheading: "Joint Marathon Secretary",
         image: "/team/webapp/profile-1.webp",
         about: "Hakuna Matata",
-        instagram: "none",
-        linkedin: "none",
+        instagram: "pratishtha_sakecfest",
+        linkedin: "school/sakec",
         location: "Bandra-Worli Sea Link"
       },
       {
@@ -480,8 +480,8 @@ infra: [
         image: "/team/marathon/anshita.webp",
         about: "Unfiltered? Yes Sorry? No",
         instagram: "butterscotch__07__09",
-        linkedin: "none",
-        location: "Haji Ali Dargah"
+        linkedin: "school/sakec",
+        location: "Ramashrey Matunga"
       },
   ],
   extended: [
