@@ -3,7 +3,7 @@
       "id": 1,
       "title": "ARE AWESOME",
       "tagline": "NEXTJS 13 & SWIPER SLIDER",
-      "image": "/image1.jpg",
+      "image": "/image1.webp",
       "buttons": [
         {
           "id": 1,
@@ -17,7 +17,7 @@
       "id": 2,
       "title": "GIVE IT A SHOOT",
       "tagline": "IF YOU LIKE IT",
-      "image": "/image2.jpg",
+      "image": "/image2.webp",
       "buttons": [
         {
           "id": 1,
@@ -28,4 +28,3 @@
       ]
     }
   ]
-  
