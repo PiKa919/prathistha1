@@ -84,9 +84,16 @@ const TeaserPage = () => {
       {/* Content container */}
       <div className="relative z-10 text-center space-y-8 px-4">
         <h1 className="text-4xl md:text-6xl font-bold text-white animate-fade-in tracking-wider font-neue-montreal">
-          Get ready for the biggest reveal
-          <br />
-          of the year!
+          <span className="inline-block" style={{
+            background: 'linear-gradient(180deg, #BCF2F6 0%, #08C2FF 50%, #006BFF 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: '0 0 40px rgba(8, 194, 255, 0.5)'
+          }}>
+            Get ready for the biggest reveal
+            <br />
+            of the year!
+          </span>
         </h1>
         
         <CountdownTimer targetDate={targetDate} />

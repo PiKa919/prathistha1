@@ -239,7 +239,7 @@ export default function MultistepFormPage(): JSX.Element {
           </div>
           <div className="flex-1 flex justify-end">
             <Image 
-              src="/olympus/jersey/orange.jpeg" 
+              src="/olympus/jersey/orange.webp" 
               alt="Jersey Preview"
               width={256}
               height={256}
