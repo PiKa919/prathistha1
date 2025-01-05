@@ -40,10 +40,7 @@ import { EnhancedTreeStyleBracket } from '@/components/ui/enhanced-tree-style-br
 
 // Move bracket games type definition after the constant
 const BRACKET_GAMES = [
-  'BGMI',
   'Cricket',
-  'Valorant',
-  'FIFA',
   'Football',
   'Basketball',
   'Volleyball',
@@ -51,8 +48,6 @@ const BRACKET_GAMES = [
   'Badminton',
   'Chess',
   'Baseball',
-  'Rocket League',
-  'League of Legends',
   'Tennis'
 ] as const;
 
@@ -73,13 +68,6 @@ interface Game {
 // we can remove them and their related imports
 
 const sports: Record<string, Array<Game>> = {
-  esports: [
-    { name: 'BGMI', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1000 - i * 10 })) },
-    { name: 'FIFA', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 800 - i * 8 })) },
-    { name: 'Valorant', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1200 - i * 12 })) },
-    { name: 'Rocket League', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 600 - i * 6 })) },
-    { name: 'League of Legends', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `Team ${String.fromCharCode(65 + i)}`, points: 1500 - i * 15 })) },
-  ],
   inter: [
     { name: 'Cricket', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 500 - i * 5 })) },
     { name: 'Football', description: '', image: '', status: '', leaderboard: Array.from({ length: 25 }, (_, i) => ({ rank: i + 1, team: `College ${String.fromCharCode(65 + i)}`, points: 300 - i * 3 })) },
@@ -249,18 +237,18 @@ export default function MultistepFormPage(): JSX.Element {
         </div>
       </div>
 
-      <Tabs defaultValue="esports" className="mt-12">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="esports">E-Sports</TabsTrigger>
+      <Tabs defaultValue="inter" className="mt-12">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="inter">Inter-College</TabsTrigger>
           <TabsTrigger value="intra">Intra-College</TabsTrigger>
         </TabsList>
-        {Object.entries(sports).map(([category, games]) => (
-          // In the TabsContent mapping, remove category from SportsCategorySection props
-          <TabsContent key={category} value={category}>
-            <SportsCategorySection games={games} />
-          </TabsContent>
-        ))}
+        {Object.entries(sports)
+          .filter(([category]) => category === 'inter' || category === 'intra')
+          .map(([category, games]) => (
+            <TabsContent key={category} value={category}>
+              <SportsCategorySection games={games} />
+            </TabsContent>
+          ))}
       </Tabs>
 
       <SportsSchedule/>

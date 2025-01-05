@@ -11,14 +11,16 @@ const games = [
   {
     id: 'bgmi',
     title: 'BGMI',
-    price: 200,
-    image: '/placeholder.svg?height=300&width=300'
+    price: 1000,
+    originalPrice: 1500,
+    image: '/esports/bgmi.webp'
   },
   {
     id: 'valorant',
     title: 'Valorant',
-    price: 200,
-    image: '/esports/valo-profile.png'
+    price: 1000,
+    originalPrice: 1500,
+    image: '/esports/valo.webp'
   },
   {
     id: 'fifa',
@@ -37,17 +39,28 @@ export function GameCards() {
         {games.map((game) => (
           <Card key={game.id} className="overflow-hidden">
             <CardContent className="p-0">
-              <Image
-                src={game.image}
-                alt={game.title}
-                width={300}
-                height={300}
-                className="w-full aspect-square object-cover bg-muted"
-              />
+              {game.id === 'fifa' ? (
+                <div className="w-full aspect-square bg-muted flex items-center justify-center">
+                  <span className="text-2xl font-bold text-gray-500">Coming Soon</span>
+                </div>
+              ) : (
+                <Image
+                  src={game.image}
+                  alt={game.title}
+                  width={300}
+                  height={300}
+                  className="w-full aspect-square object-cover bg-muted"
+                />
+              )}
               <div className="p-4 space-y-4">
                 <h3 className="text-2xl font-bold text-center">{game.title}</h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-xl font-bold">${game.price}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl font-bold">₹{game.price}</span>
+                    {(game.id === 'bgmi' || game.id === 'valorant') && (
+                      <span className="text-gray-500 line-through">₹{game.originalPrice}</span>
+                    )}
+                  </div>
                   <Button onClick={() => setSelectedGame(game.id)}>
                     Register
                   </Button>

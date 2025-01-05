@@ -28,23 +28,23 @@ const tournamentData: Round[] = [
   {
     name: "Quarter-Finals",
     matches: [
-      { id: "QF1", team1: { id: "T1", name: "Fnatic", seed: 1 }, team2: { id: "T2", name: "Cloud9", seed: 8 }, winner: "Fnatic", score: [13, 7] },
-      { id: "QF2", team1: { id: "T3", name: "Team Liquid", seed: 4 }, team2: { id: "T4", name: "Sentinels", seed: 5 }, winner: "Sentinels", score: [11, 13] },
-      { id: "QF3", team1: { id: "T5", name: "100 Thieves", seed: 3 }, team2: { id: "T6", name: "G2 Esports", seed: 6 }, winner: "G2 Esports", score: [8, 13] },
-      { id: "QF4", team1: { id: "T7", name: "LOUD", seed: 2 }, team2: { id: "T8", name: "OpTic Gaming", seed: 7 }, winner: "OpTic Gaming", score: [10, 13] },
+      { id: "QF1", team1: { id: "T1", name: "Team 1", seed: 1 }, team2: { id: "T2", name: "Team 2", seed: 8 }, winner: "Team 1", score: [13, 7] },
+      { id: "QF2", team1: { id: "T3", name: "Team 3", seed: 4 }, team2: { id: "T4", name: "Team 4", seed: 5 }, winner: "Team 4", score: [11, 13] },
+      { id: "QF3", team1: { id: "T5", name: "Team 5", seed: 3 }, team2: { id: "T6", name: "Team 6", seed: 6 }, winner: "Team 6", score: [8, 13] },
+      { id: "QF4", team1: { id: "T7", name: "Team 7", seed: 2 }, team2: { id: "T8", name: "Team 8", seed: 7 }, winner: "Team 8", score: [10, 13] },
     ]
   },
   {
     name: "Semi-Finals",
     matches: [
-      { id: "SF1", team1: { id: "T1", name: "Fnatic" }, team2: { id: "T4", name: "Sentinels" }, winner: "Fnatic", score: [13, 11] },
-      { id: "SF2", team1: { id: "T6", name: "G2 Esports" }, team2: { id: "T8", name: "OpTic Gaming" }, winner: "OpTic Gaming", score: [9, 13] },
+      { id: "SF1", team1: { id: "T1", name: "Team 1" }, team2: { id: "T4", name: "Team 4" }, winner: "Team 1", score: [13, 11] },
+      { id: "SF2", team1: { id: "T6", name: "Team 6" }, team2: { id: "T8", name: "Team 8" }, winner: "Team 8", score: [9, 13] },
     ]
   },
   {
     name: "Final",
     matches: [
-      { id: "F1", team1: { id: "T1", name: "Fnatic" }, team2: { id: "T8", name: "OpTic Gaming" }, winner: "Fnatic", score: [13, 11] },
+      { id: "F1", team1: { id: "T1", name: "Team 1" }, team2: { id: "T8", name: "Team 8" }, winner: "Team 1", score: [13, 11] },
     ]
   }
 ]

@@ -145,7 +145,7 @@ const Menu = () => {
               </div>
               <Link href="/">
               <div className="logo-text-container">
-                <h1 className="logo-text">Prathistha</h1>
+                <h1 className="logo-text">Pratishtha</h1>
                 <span className="logo-subtext">sakecfest</span>
               </div>
               </Link>

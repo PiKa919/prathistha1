@@ -1,16 +1,16 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card" // Removed CardHeader
+import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { MapPin, Clock, AlertCircle } from 'lucide-react'
-import Image from 'next/image' // Added import for next/image
+import Image from 'next/image'
 
 const gameContent = {
   bgmi: {
     name: "BGMI Tournament",
-    banner: "/esports/bgmi-banner.jpg",
-    description: "Battle Grounds Mobile India tournament featuring intense battle royale action.",
+    banner: "/esports/bgmi.webp",
+    description: "🎮 Conquer the BGMI Battleground!\n\n📅 2nd - 12th Feb 2025\n📍 Shah & Anchor Kutchhi Engineering College\n👥 4+1 Squad | 16+ Eligibility\n\n🔥 Epic LAN Gaming & Prizes!\n💸 Register: ₹1000 (till 16th Jan) | ₹1500 (after)\n\n🔗 \nAre you ready to dominate?",
     rules: [
       "Squad size: 4 players",
       "Device: Mobile only",
@@ -19,16 +19,16 @@ const gameContent = {
       "Three matches per round",
       "Top 16 teams qualify for finals"
     ],
-    startDate: "March 15, 2024 - 10:00 AM",
-    endDate: "March 16, 2024 - 6:00 PM",
+    startDate: "Feb 2, 2025 - 10:00 AM",
+    endDate: "Feb 12, 2025 - 6:00 PM",
     location: "Online",
-    eventHead: "John Doe",
-    eventCoHead: "Jane Smith"
+    eventHead: "Atharva: 9987858462",
+    eventCoHead: "Jayesh: 8850416884"
   },
   valorant: {
     name: "Valorant Championship",
     banner: "/esports/valo-banner.jpg",
-    description: "Competitive 5v5 tactical shooter tournament with elimination rounds.",
+    description: "Join the Ultimate Valorant LAN Battle!\n\n📅 10th-12th Feb 2025\n📍 Shah & Anchor Kutchhi Engineering College\n👥 5v5 | 16+ | Thrilling Prizes\n\n💸 Register:\n• ₹1000/team (till 16th Jan)\n• ₹1500/team (after 16th Jan)\n\n🔗 Register Here",
     rules: [
       "Team size: 5 players",
       "Platform: PC only",
@@ -37,11 +37,11 @@ const gameContent = {
       "Standard competitive rules apply",
       "Anti-cheat required"
     ],
-    startDate: "March 20, 2024 - 2:00 PM",
-    endDate: "March 21, 2024 - 8:00 PM",
+    startDate: "Feb 10, 2025 - 2:00 PM",
+    endDate: "Feb 12, 2025 - 8:00 PM",
     location: "Online",
-    eventHead: "Alex Wilson",
-    eventCoHead: "Sarah Parker"
+    eventHead: "Harsh: 8390073464",
+    eventCoHead: "Neel: 7738002054"
   },
   fifa: {
     name: "FIFA Tournament",
@@ -75,24 +75,30 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
   const content = gameContent[gameId as keyof typeof gameContent];
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-gray-900 light:bg-white rounded-lg overflow-hidden h-[32rem]">
-      <div className="relative h-32 bg-sky-900 light:bg-sky-100 overflow-hidden">
-        <Image
-          src={content.banner}
-          alt={content.name}
-          layout="fill"
-          objectFit="cover"
-        />
+    <div className="w-full max-w-4xl mx-auto bg-gray-900 light:bg-white rounded-lg overflow-hidden h-[75vh]">
+      <div className="relative h-24 bg-sky-900 light:bg-sky-100 overflow-hidden">
+        {gameId === 'fifa' ? (
+          <div className="w-full h-full flex items-center justify-center text-white text-xl font-bold">
+            Coming Soon
+          </div>
+        ) : (
+          <Image
+            src={content.banner}
+            alt={content.name}
+            layout="fill"
+            objectFit="cover"
+          />
+        )}
       </div>
 
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 light:bg-gray-100">
         <div className="flex items-center gap-4">
-          <div className="bg-gray-700 light:bg-white p-3 rounded-lg text-center min-w-[80px]">
-            <div className="text-sm text-red-400 light:text-red-600 font-medium">March</div>
-            <div className="text-2xl font-bold text-white light:text-gray-900">2024</div>
+          <div className="bg-gray-700 light:bg-white p-2 rounded-lg text-center min-w-[70px]">
+            <div className="text-sm text-red-400 light:text-red-600 font-medium">Feb</div>
+            <div className="text-xl font-bold text-white light:text-gray-900">2025</div>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white light:text-gray-900">{content.name}</h1>
+            <h1 className="text-xl font-bold text-white light:text-gray-900">{content.name}</h1>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 bg-green-500 rounded-full" />
               <span className="font-medium text-gray-200 light:text-gray-900">Registration Open</span>
@@ -100,17 +106,17 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button variant="secondary">Leaderboard</Button>
-          <Button variant="destructive">Register Now</Button>
+          <Button variant="secondary" size="sm">Leaderboard</Button>
+          <Button variant="destructive" size="sm">Register Now</Button>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-3 p-3 h-[calc(32rem-160px)] overflow-y-auto bg-gray-900 light:bg-white">
-        <Card className="md:col-span-2 h-full bg-gray-800 border-gray-700 light:bg-white light:border-gray-200">
+      <div className="grid md:grid-cols-3 gap-3 p-3 overflow-y-auto bg-gray-900 light:bg-white h-[calc(60vh-108px)]">
+        <Card className="md:col-span-2 bg-gray-800 border-gray-700 light:bg-white light:border-gray-200">
           <CardContent className="p-4">
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-2 text-white light:text-gray-900">Event Description:</h2>
-              <p className="text-gray-300 light:text-gray-600">{content.description}</p>
+              <p className="text-gray-300 light:text-gray-600 whitespace-pre-line">{content.description}</p>
             </div>
 
             <div>
@@ -129,8 +135,8 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
 
         <div className="space-y-2">
           <Card className="bg-gray-800 border-gray-700 light:bg-white light:border-gray-200">
-            <CardContent className="p-4">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white light:text-gray-900">
+            <CardContent className="p-3">
+              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2 text-white light:text-gray-900">
                 <Clock className="h-5 w-5" />
                 Date & Time
               </h2>
@@ -142,8 +148,8 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
           </Card>
 
           <Card className="bg-gray-800 border-gray-700 light:bg-white light:border-gray-200">
-            <CardContent className="p-4">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white light:text-gray-900">
+            <CardContent className="p-3">
+              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2 text-white light:text-gray-900">
                 <MapPin className="h-5 w-5" />
                 Location - {content.location}
               </h2>
@@ -151,13 +157,13 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
           </Card>
 
           <Card className="bg-gray-800 border-gray-700 light:bg-white light:border-gray-200">
-            <CardContent className="p-4">
-              <div className="space-y-6">
+            <CardContent className="p-3">
+              <div className="space-y-4">
                 <div>
-                  <h2 className="text-lg font-semibold mb-4 text-white light:text-gray-900">EVENT HEAD</h2>
+                  <h2 className="text-lg font-semibold mb-3 text-white light:text-gray-900">EVENT HEAD</h2>
                   <div className="flex items-center gap-3">
                     <Avatar>
-                      <AvatarImage src="/placeholder.svg" />
+                      <AvatarImage src="/event-head-placeholder.svg" />
                       <AvatarFallback>EH</AvatarFallback>
                     </Avatar>
                     <span className="font-medium text-gray-200 light:text-gray-900">{content.eventHead}</span>
@@ -165,10 +171,10 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
                 </div>
 
                 <div>
-                  <h2 className="text-lg font-semibold mb-4 text-white light:text-gray-900">EVENT CO-HEAD</h2>
+                  <h2 className="text-lg font-semibold mb-3 text-white light:text-gray-900">EVENT CO-HEAD</h2>
                   <div className="flex items-center gap-3">
                     <Avatar>
-                      <AvatarImage src="/placeholder.svg" />
+                      <AvatarImage src="/event-cohead-placeholder.svg" />
                       <AvatarFallback>EC</AvatarFallback>
                     </Avatar>
                     <span className="font-medium text-gray-200 light:text-gray-900">{content.eventCoHead}</span>
@@ -182,4 +188,3 @@ export default function EventRegistration({ gameId }: EventRegistrationProps) {
     </div>
   )
 }
-

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -40,7 +40,7 @@ const teamsData = {
       subheading: "General Coordinator",
       image: "/team/festhead/harshJ.webp",
       about: "My life begins with 5...6... and ends with 7...8... dancing through my tech, chaos, and passion.",
-      instagram: "harshjain",
+      instagram: "harrrshjjain",
       linkedin: "harshkumarjain",
       location: "Siddhivinayak "
     },
@@ -505,11 +505,23 @@ infra: [
         linkedin: "aarush-palsamkar-62631028b",
         location: "Jehangir Art gallery"
       },
-  ]
+  ],
+  esports: [
+    {
+      id: 1,
+      title: "Mr. Shreyans Vora",
+      subheading: "E-Sports Secretary",
+      image: "/team/webapp/profile-1.webp",
+      about: "Game on, level up! 🎮",
+      instagram: "pratishtha_sakecfest",
+      linkedin: "school/sakec",
+      location: "Gaming Paradise"
+    },
+  ],
 };
 
 const HeadsSection = ({ data }: { data: TeamMember[] }) => (
-  <div className="mb-16">
+  <div className="mb-16" id="heads">
     <h2 className="text-4xl font-bold text-white text-center mb-10">
       Festival Heads
     </h2>
@@ -521,28 +533,45 @@ const HeadsSection = ({ data }: { data: TeamMember[] }) => (
   </div>
 );
 
-const Section = ({ title, data }: { title: string; data: TeamMember[] }) => (
-  <div className="mb-16">
-    <h2 className="text-4xl font-bold text-white text-center mb-10">
-      {title}
-    </h2>
-    {data.length <= 2 ? (
-      <div className="flex justify-center gap-8">
-        {data.map((card) => (
-          <TiltCard key={card.id} {...card} />
-        ))}
-      </div>
-    ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {data.map((card) => (
-          <TiltCard key={card.id} {...card} />
-        ))}
-      </div>
-    )}
-  </div>
-);
+const Section = ({ title, data }: { title: string; data: TeamMember[] }) => {
+  // Convert title to URL-friendly format
+  const sectionId = title.toLowerCase().replace(/[& ]/g, '-');
+  
+  return (
+    <div className="mb-16" id={sectionId}>
+      <h2 className="text-4xl font-bold text-white text-center mb-10">
+        {title}
+      </h2>
+      {data.length <= 2 ? (
+        <div className="flex justify-center gap-8">
+          {data.map((card) => (
+            <TiltCard key={card.id} {...card} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {data.map((card) => (
+            <TiltCard key={card.id} {...card} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Example = () => {
+  useEffect(() => {
+    // Handle initial hash navigation
+    if (window.location.hash) {
+      const element = document.querySelector(window.location.hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, []);
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden px-4 py-24">
       {/* Sparks effect */}
@@ -552,25 +581,26 @@ const Example = () => {
         <div className="absolute w-[150px] h-[150px] bg-blue-500 opacity-20 rounded-full blur-3xl bottom-20 left-20 animate-pulse" />
       </div>
       <div className="max-w-6xl mx-auto pt-8 relative z-10">
-       <HeadsSection data={teamsData.heads} />
+        <HeadsSection data={teamsData.heads} />
         <Section title="Cultural Team" data={teamsData.culturals} />
-        <Section title="Off Stage Team" data={teamsData.offstage} />
-        <Section title="On Stage Team" data={teamsData.onstage} />
-        <Section title="Web & App Team" data={teamsData.webapp} />
-        <Section title="Social Media Team" data={teamsData.socialmedia} />
-        <Section title="Creativity Team" data={teamsData.creativity} />
-        <Section title="Documentation Team" data={teamsData.documentation} />
-        <Section title="Graphics Team" data={teamsData.graphics} />
-        <Section title="Infrastructure Team" data={teamsData.infra} />
-        <Section title="Ladies Representatives" data={teamsData.lr} />
-        <Section title="Photography Team" data={teamsData.pap} />
-        <Section title="Publicity Team" data={teamsData.publicity} />
-        <Section title="Sponsorship Team" data={teamsData.sponsorship} />
         <Section title="Sports Team" data={teamsData.sports} />
+        <Section title="E-Sports Team" data={teamsData.esports} />
         <Section title="Technical Team" data={teamsData.technical} />
-        <Section title="Treasury Team" data={teamsData.treasurer} />
-        <Section title="Celebrity & Crisis Team" data={teamsData.celeb} />
+        <Section title="Ladies Representatives" data={teamsData.lr} />
         <Section title="Marathon Team" data={teamsData.marathon} />
+        <Section title="On Stage Team" data={teamsData.onstage} />
+        <Section title="Off Stage Team" data={teamsData.offstage} />
+        <Section title="Treasury Team" data={teamsData.treasurer} />
+        <Section title="Sponsorship Team" data={teamsData.sponsorship} />
+        <Section title="Social Media Team" data={teamsData.socialmedia} />
+        <Section title="Publicity Team" data={teamsData.publicity} />
+        <Section title="Web & App Team" data={teamsData.webapp} />
+        <Section title="Graphics Team" data={teamsData.graphics} />
+        <Section title="Creativity Team" data={teamsData.creativity} />
+        <Section title="Infrastructure Team" data={teamsData.infra} />
+        <Section title="Celebrity & Crisis Team" data={teamsData.celeb} />
+        <Section title="Photography Team" data={teamsData.pap} />
+        <Section title="Documentation Team" data={teamsData.documentation} />
       </div>
     </div>
   );
