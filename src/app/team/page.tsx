@@ -511,11 +511,11 @@ infra: [
       id: 1,
       title: "Mr. Shreyans Vora",
       subheading: "E-Sports Secretary",
-      image: "/team/webapp/profile-1.webp",
-      about: "Game on, level up! 🎮",
-      instagram: "pratishtha_sakecfest",
+      image: "/team/esports/shreyans.webp",
+      about: "Passionate esports leader fostering teamwork, innovation, and excellence in competitive gaming",
+      instagram: "vshreyans10",
       linkedin: "school/sakec",
-      location: "Gaming Paradise"
+      location: "MARINE DRIVE"
     },
   ],
 };
@@ -601,6 +601,7 @@ const Example = () => {
         <Section title="Celebrity & Crisis Team" data={teamsData.celeb} />
         <Section title="Photography Team" data={teamsData.pap} />
         <Section title="Documentation Team" data={teamsData.documentation} />
+        <Section title="Extended Council" data={teamsData.extended} />
       </div>
     </div>
   );

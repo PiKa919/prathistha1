@@ -6,7 +6,7 @@ import { getYearColors } from '@/lib/colors'
 export default function SponsorsPage({ params }: { params: { year: string } }) {
   const { year } = params
   const { titleSponsor, sponsors } = (sponsorsData[year as keyof typeof sponsorsData]) || sponsorsData['2024']
-  const colors = getYearColors(year)
+  const colors = getYearColors(year || '2024') // Ensure default year is used for colors
 
   return (
     <div className={`space-y-12 ${colors.background} min-h-screen -mt-8 -mx-4 p-8`}>

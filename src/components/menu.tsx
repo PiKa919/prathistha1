@@ -16,7 +16,7 @@ const menuItems = [
       { label: 'Faculty', path: '/team/faculty' }
     ]
   },
-  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'Sponsors', path: '/sponsors/2024' },
   { label: 'Contact Us', path: '/contact' }
 ];
 
