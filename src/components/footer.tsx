@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
       <div className="footer-container">
         <div className="footer-grid">
           <div className="footer-section">
-            <h3 className="footer-title">Prathistha 2024</h3>
+            <h3 className="footer-title">Pratishtha 2025</h3>
             <p className="footer-description">Experience the future of education and entertainment at our Annual College Symposium.</p>
             <div className="social-links">
               {[
