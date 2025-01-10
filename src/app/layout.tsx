@@ -30,7 +30,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Pratishtha 2024',
+  title: 'Pratishtha 2025',
   description: 'Pratishtha - Annual College Symposium at SAKEC',
   keywords: ['college fest', 'symposium', 'SAKEC', 'Pratishtha', 'technical fest'],
   authors: [{ name: 'SAKEC' }],

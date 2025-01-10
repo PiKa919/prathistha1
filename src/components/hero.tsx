@@ -20,7 +20,7 @@ export function Hero() {
             👋 Welcome to CL Meet
           </div>
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="text-blue-400">Prathishtha.</span>{" "}
+            <span className="text-blue-400">Pratishtha.</span>{" "}
             <span className="text-green-400">Contingent Leaders.</span>{" "}
             <span className="text-yellow-400">Meet.</span>
           </h1>
