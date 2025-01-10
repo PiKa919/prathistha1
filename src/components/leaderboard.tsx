@@ -8,14 +8,14 @@ import { database } from "@/firebaseConfig"
 import { ref, onValue } from "firebase/database"
 
 // First, define interfaces
-interface CCEntry {
-  rank: number;
-  clId: string;
-  name: string;
-  ccPoints: number;
-  ccName: string;
-  ccNumber: string;
-}
+// interface CCEntry {
+//   rank: number;
+//   clId: string;
+//   name: string;
+//   ccPoints: number;
+//   ccName: string;
+//   ccNumber: string;
+// }
 
 interface PREntry {
   rank: number;
