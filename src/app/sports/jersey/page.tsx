@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 // import { Jersey } from '@/components/Jersey'
-// import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -610,7 +610,7 @@ export default function JerseyRegistration() {
               </p>
             )}
 
-            {/* <Button 
+             <Button 
               type="submit" 
               disabled={!allLinksClicked()}
               className={`w-full bg-gradient-to-r ${
@@ -622,7 +622,7 @@ export default function JerseyRegistration() {
               }`}
             >
               Register Jersey
-            </Button> */}
+            </Button> 
           </form>
         </div>
       </div>
