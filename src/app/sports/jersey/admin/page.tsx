@@ -456,7 +456,26 @@ export default function AdminPage() {
                       registration.department
                     )}
                   </TableCell>
-                  <TableCell>{registration.actualYear}</TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <select
+                        value={editedData[registration.key]?.year || registration.year}
+                        onChange={(e) =>
+                          handleEditChange(registration.key, 'year', e.target.value)
+                        }
+                        className="bg-gray-800 border-gray-700 rounded-md p-2"
+                      >
+                        {years.map((year) => (
+                          <option key={year.value} value={year.label}>
+                            {year.label}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      registration.year
+                    )}
+                  </TableCell>
+                  {/* <TableCell>{registration.actualYear}</TableCell> */}
                   <TableCell>
                     {registration.paymentScreenshot ? (
                       <Button
