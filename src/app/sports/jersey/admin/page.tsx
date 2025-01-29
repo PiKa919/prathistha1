@@ -197,6 +197,7 @@ export default function AdminPage() {
   const exportToExcel = () => {
     const dataToExport = filteredRegistrations.map((registration, index) => ({
       'Sr. No.': index + 1,
+      'Email': registration.email,
       'PRN': registration.prn,
       'Name': registration.name,
       'Jersey Text': registration.jerseyText,
@@ -337,6 +338,7 @@ export default function AdminPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Sr. No.</TableHead>
+                <TableHead>Email</TableHead>
                 <TableHead>PRN</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Jersey Status</TableHead>
@@ -358,6 +360,7 @@ export default function AdminPage() {
                   className={index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}
                 >
                   <TableCell>{index + 1}</TableCell>
+                  <TableCell>{registration.email}</TableCell>
                   <TableCell>
                     {editMode[registration.key] ? (
                       <Input
@@ -456,7 +459,26 @@ export default function AdminPage() {
                       registration.department
                     )}
                   </TableCell>
-                  <TableCell>{registration.actualYear}</TableCell>
+                  <TableCell>
+                    {editMode[registration.key] ? (
+                      <select
+                        value={editedData[registration.key]?.year || registration.year}
+                        onChange={(e) =>
+                          handleEditChange(registration.key, 'year', e.target.value)
+                        }
+                        className="bg-gray-800 border-gray-700 rounded-md p-2"
+                      >
+                        {years.map((year) => (
+                          <option key={year.value} value={year.label}>
+                            {year.label}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      registration.year
+                    )}
+                  </TableCell>
+                  {/* <TableCell>{registration.actualYear}</TableCell> */}
                   <TableCell>
                     {registration.paymentScreenshot ? (
                       <Button
