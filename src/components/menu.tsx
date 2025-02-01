@@ -45,14 +45,30 @@ const NavItem = ({ item, isMobile, onItemClick }: { item: MenuItem; isMobile?: b
     }
   };
 
-  const handleClick = () => {
+  // const handleClick = () => {
+  //   if (isMobile) {
+  //     setIsHovered(!isHovered);
+  //   }
+  //   if (onItemClick && (!item.submenu || isMobile)) {
+  //     onItemClick();
+  //   }
+  // };
+  const handleClick = (e: React.MouseEvent) => {
     if (isMobile) {
       setIsHovered(!isHovered);
+  
+      // Prevent closing the menu when clicking a parent item with a submenu
+      if (item.submenu) {
+        e.stopPropagation(); // Stops event bubbling
+        return;
+      }
     }
-    if (onItemClick && (!item.submenu || isMobile)) {
+  
+    if (onItemClick) {
       onItemClick();
     }
   };
+  
 
   return (
     <div 

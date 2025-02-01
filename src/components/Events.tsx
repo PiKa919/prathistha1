@@ -1,4 +1,4 @@
-import { EventCard } from './EventCard'
+import { EventCard } from "./EventCard"
 
 const events = [
   {
@@ -12,8 +12,9 @@ const events = [
     ranking: {
       first: "Team Sherlock",
       second: "CSI Masters",
-      third: "Detective Squad"
-    }
+      third: "Detective Squad",
+    },
+    date: "2023-09-15",
   },
   {
     title: "Escape Room",
@@ -26,8 +27,9 @@ const events = [
     ranking: {
       first: "Escape Artists",
       second: "Puzzle Breakers",
-      third: "Time Benders"
-    }
+      third: "Time Benders",
+    },
+    date: "2023-09-16",
   },
   {
     title: "AR Treasure Hunt",
@@ -40,8 +42,9 @@ const events = [
     ranking: {
       first: "Team Rocket",
       second: "Treasure Hunters",
-      third: "AR Explorers"
-    }
+      third: "AR Explorers",
+    },
+    date: "2023-09-17",
   },
   {
     title: "Giant Jenga",
@@ -54,8 +57,9 @@ const events = [
     ranking: {
       first: "Jenga Masters",
       second: "Tower Builders",
-      third: "Steady Hands"
-    }
+      third: "Steady Hands",
+    },
+    date: "2023-09-18",
   },
   {
     title: "Glow-in-the-Dark Pickleball",
@@ -68,8 +72,9 @@ const events = [
     ranking: {
       first: "Night Owls",
       second: "Glow Getters",
-      third: "Pickleball Pros"
-    }
+      third: "Pickleball Pros",
+    },
+    date: "2023-09-19",
   },
   {
     title: "Laser Maze",
@@ -82,8 +87,9 @@ const events = [
     ranking: {
       first: "Laser Ninjas",
       second: "Maze Masters",
-      third: "Mission Accomplished"
-    }
+      third: "Mission Accomplished",
+    },
+    date: "2023-09-20",
   },
   {
     title: "BGMI Tournament",
@@ -96,8 +102,9 @@ const events = [
     ranking: {
       first: "Chicken Dinners",
       second: "BGMI Champs",
-      third: "Elite Squad"
-    }
+      third: "Elite Squad",
+    },
+    date: "2023-09-21",
   },
   {
     title: "Valorant Championship",
@@ -110,8 +117,9 @@ const events = [
     ranking: {
       first: "Valorant Veterans",
       second: "Tactical Titans",
-      third: "Agent Aces"
-    }
+      third: "Agent Aces",
+    },
+    date: "2023-09-22",
   },
   {
     title: "Robo Sumo",
@@ -124,8 +132,9 @@ const events = [
     ranking: {
       first: "Robo Rumble",
       second: "Sumo Stars",
-      third: "Bot Brawlers"
-    }
+      third: "Bot Brawlers",
+    },
+    date: "2023-09-23",
   },
   {
     title: "Robo Race",
@@ -138,8 +147,9 @@ const events = [
     ranking: {
       first: "Speed Demons",
       second: "Robo Racers",
-      third: "Circuit Champions"
-    }
+      third: "Circuit Champions",
+    },
+    date: "2023-09-24",
   },
   {
     title: "Cozmo Clench",
@@ -152,8 +162,9 @@ const events = [
     ranking: {
       first: "AI Aces",
       second: "Cozmo Commanders",
-      third: "Coding Crew"
-    }
+      third: "Coding Crew",
+    },
+    date: "2023-09-25",
   },
   {
     title: "Technokagaz",
@@ -166,8 +177,9 @@ const events = [
     ranking: {
       first: "Circuit Wizards",
       second: "Paper Pros",
-      third: "Technocrats"
-    }
+      third: "Technocrats",
+    },
+    date: "2023-09-26",
   },
   {
     title: "Tech Expo",
@@ -180,8 +192,9 @@ const events = [
     ranking: {
       first: "Innovation Inc.",
       second: "Tech Titans",
-      third: "Future Forward"
-    }
+      third: "Future Forward",
+    },
+    date: "2023-09-27",
   },
   {
     title: "Code of Duty",
@@ -194,8 +207,9 @@ const events = [
     ranking: {
       first: "Coding Ninjas",
       second: "Debug Masters",
-      third: "Algorithm Aces"
-    }
+      third: "Algorithm Aces",
+    },
+    date: "2023-09-28",
   },
   {
     title: "Cybersecurity Challenge",
@@ -208,8 +222,9 @@ const events = [
     ranking: {
       first: "Cyber Warriors",
       second: "Security Squad",
-      third: "Firewall Force"
-    }
+      third: "Firewall Force",
+    },
+    date: "2023-09-29",
   },
   {
     title: "FIFA Tournament",
@@ -222,8 +237,9 @@ const events = [
     ranking: {
       first: "FIFA Fanatics",
       second: "Football Fury",
-      third: "Goal Getters"
-    }
+      third: "Goal Getters",
+    },
+    date: "2023-09-30",
   },
   {
     title: "VR Room",
@@ -236,8 +252,9 @@ const events = [
     ranking: {
       first: "VR Voyagers",
       second: "Virtual Victors",
-      third: "Reality Rebels"
-    }
+      third: "Reality Rebels",
+    },
+    date: "2023-10-01",
   },
   {
     title: "Mortal Kombat Tournament",
@@ -250,8 +267,9 @@ const events = [
     ranking: {
       first: "Kombat Kings",
       second: "Fighting Force",
-      third: "Mortal Masters"
-    }
+      third: "Mortal Masters",
+    },
+    date: "2023-10-02",
   },
   {
     title: "Midtown Madness",
@@ -264,15 +282,16 @@ const events = [
     ranking: {
       first: "Street Racers",
       second: "City Slickers",
-      third: "Speed Demons"
-    }
-  }
+      third: "Speed Demons",
+    },
+    date: "2023-10-03",
+  },
 ]
 
 export function Events() {
   return (
     <div className="container mx-auto px-4 py-8 bg-gray-900">
-      <h2 className="text-2xl font-bold mb-6">Events</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">Events</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {events.map((event, index) => (
           <EventCard key={index} {...event} />

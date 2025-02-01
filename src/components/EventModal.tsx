@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { ExternalLink } from 'lucide-react'
@@ -51,7 +52,9 @@ export function EventModal({ isOpen, onClose, title, description, time, place, v
                     Watch on YouTube
                   </a>
                 </Button>
-                <Button className="flex-1">Register</Button>
+                <Link href="/aurum/registration">
+                  <Button className="flex-1">Register</Button>
+                </Link>
               </div>
             </div>
           </div>
