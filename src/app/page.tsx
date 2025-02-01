@@ -45,7 +45,7 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const targetDate = new Date('2025-12-30T00:00:00'); // 21st February 2025
+  const targetDate = new Date('2025-02-07T11:00:00'); // 21st February 2025
 
   return (
     <div className="min-h-screen">
