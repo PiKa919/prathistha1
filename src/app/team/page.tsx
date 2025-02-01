@@ -308,7 +308,7 @@ const teamsData = {
       id: 2,
       title: "Mr. Siddhant Mavani",
       subheading: "Publicity Coordinator",
-      image: "/team/publicity/sid.webp",
+      image: "/team/publicity/siddhant.webp",
       about:
         "An ambitious, detail-oriented innovator and problem-solver, constantly striving to achieve impactful results.",
       instagram: "m._.siddh",
@@ -497,7 +497,7 @@ const teamsData = {
       id: 2,
       title: "Mr. Aarush Palsamkar",
       subheading: "Extended Council",
-      image: "/team/webapp/profile-1.webp",
+      image: "/team/technical/aarush.webp",
       about: "I never wish to be easily defined  ",
       instagram: "_.aaru5h",
       linkedin: "aarush-palsamkar-62631028b",

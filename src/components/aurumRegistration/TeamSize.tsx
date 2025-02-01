@@ -5,13 +5,18 @@ import { Users } from "lucide-react"
 export default function TeamSize({
   teamSize,
   setTeamSize,
+  maxTeamSize,
 }: {
   teamSize: number
   setTeamSize: (size: number) => void
+  maxTeamSize: number
 }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Team Size</h2>
+      <h2 className="text-lg font-semibold flex items-center space-x-2">
+        <Users className="w-5 h-5" />
+        <span>Team Size</span>
+      </h2>
       <div className="space-y-2">
         <Label htmlFor="team-size" className="flex items-center space-x-2">
           <Users className="w-4 h-4" />
@@ -22,7 +27,7 @@ export default function TeamSize({
             <SelectValue placeholder="Select team size" />
           </SelectTrigger>
           <SelectContent>
-            {[...Array(10)].map((_, i) => (
+            {[...Array(maxTeamSize)].map((_, i) => (
               <SelectItem key={i + 1} value={(i + 1).toString()}>
                 {i + 1} {i === 0 ? "member" : "members"}
               </SelectItem>

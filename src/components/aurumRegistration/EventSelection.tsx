@@ -2,26 +2,32 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { Trophy } from "lucide-react"
 
-const events = [
-  { name: "Crime Scene Investigation", icon: "🕵️" },
-  { name: "Escape Room", icon: "🚪" },
-  { name: "AR Treasure Hunt", icon: "🗺️" },
-  { name: "Giant Jenga", icon: "🧱" },
-  { name: "Glow-in-the-Dark Pickleball", icon: "🏓" },
-  { name: "Laser Maze", icon: "🔦" },
-  { name: "BGMI Tournament", icon: "📱" },
-  { name: "Valorant Championship", icon: "🎮" },
-  { name: "Robo Sumo", icon: "🤖" },
-  { name: "Robo Race", icon: "🏎️" },
-  { name: "Cozmo Clench", icon: "🦾" },
-  { name: "Technokagaz", icon: "📄" },
-  { name: "Tech Expo", icon: "🔬" },
-  { name: "Code of Duty", icon: "💻" },
-  { name: "Cybersecurity Challenge", icon: "🔒" },
-  { name: "FIFA Tournament", icon: "⚽" },
-  { name: "VR Room", icon: "🥽" },
-  { name: "Mortal Kombat Tournament", icon: "🥋" },
-  { name: "Midtown Madness", icon: "🏙️" },
+export interface Event {
+  name: string
+  icon: string
+  type: "single" | "team"
+}
+
+const events: Event[] = [
+  { name: "Crime Scene Investigation", icon: "🕵️", type: "team" },
+  { name: "Escape Room", icon: "🚪", type: "team" },
+  { name: "AR Treasure Hunt", icon: "🗺️", type: "team" },
+  { name: "Giant Jenga", icon: "🧱", type: "single" },
+  { name: "Glow-in-the-Dark Pickleball", icon: "🏓", type: "single" },
+  { name: "Laser Maze", icon: "🔦", type: "single" },
+  { name: "BGMI Tournament", icon: "📱", type: "team" },
+  { name: "Valorant Championship", icon: "🎮", type: "team" },
+  { name: "Robo Sumo", icon: "🤖", type: "team" },
+  { name: "Robo Race", icon: "🏎️", type: "team" },
+  { name: "Cozmo Clench", icon: "🦾", type: "single" },
+  { name: "Technokagaz", icon: "📄", type: "single" },
+  { name: "Tech Expo", icon: "🔬", type: "single" },
+  { name: "Code of Duty", icon: "💻", type: "single" },
+  { name: "Cybersecurity Challenge", icon: "🔒", type: "single" },
+  { name: "FIFA Tournament", icon: "⚽", type: "single" },
+  { name: "VR Room", icon: "🥽", type: "single" },
+  { name: "Mortal Kombat Tournament", icon: "🥋", type: "single" },
+  { name: "Midtown Madness", icon: "🏙️", type: "team" },
 ]
 
 export default function EventSelection({
@@ -49,6 +55,7 @@ export default function EventSelection({
                 <span className="flex items-center space-x-2">
                   <span>{event.icon}</span>
                   <span>{event.name}</span>
+                  <span className="text-xs text-gray-500">({event.type})</span>
                 </span>
               </SelectItem>
             ))}

@@ -1,8 +1,9 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-// import type { Participant } from "../types/registration"
-interface Participant {
+import { User, Crown, Phone, Mail, BadgeIcon as IdCard, BookOpen, GraduationCap } from "lucide-react"
+
+export interface Participant {
   fullName: string
   prn: string
   class: string
@@ -10,7 +11,6 @@ interface Participant {
   email: string
   phoneNo: string
 }
-import { User, Crown, Phone, Mail, BadgeIcon as IdCard, BookOpen, GraduationCap } from "lucide-react"
 
 export default function ParticipantDetails({
   participants,
@@ -41,13 +41,13 @@ export default function ParticipantDetails({
     <div className="space-y-6">
       <h2 className="text-lg font-semibold flex items-center space-x-2">
         <User className="w-5 h-5" />
-        <span>Participant Details</span>
+        <span>{registrationType === "single" ? "Participant Details" : "Team Details"}</span>
       </h2>
       {[...Array(teamSize)].map((_, index) => (
         <div key={index} className="space-y-4 p-4 border rounded">
           <h3 className="font-medium flex items-center space-x-2">
             <User className="w-4 h-4" />
-            <span>Participant {index + 1}</span>
+            <span>{registrationType === "single" ? "Participant" : `Team Member ${index + 1}`}</span>
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -119,7 +119,7 @@ export default function ParticipantDetails({
               />
             </div>
           </div>
-          {registrationType === "team" && (
+          {registrationType === "team" && teamSize > 1 && (
             <div className="flex items-center space-x-2">
               <Checkbox
                 id={`leader-${index}`}

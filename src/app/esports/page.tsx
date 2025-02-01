@@ -40,7 +40,46 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <section className="container mx-auto py-16">
+        <h2 className="text-4xl font-bold text-center mb-12 text-[#FF073A] drop-shadow-[0_0_8px_#FF073A]">
+          Event Roadmap
+        </h2>
+        <div className="relative w-full max-w-4xl mx-auto">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-02%20at%2000.19.57_aac9e254.jpg-ujwq7HLtBTcq6jlJqDN1FXxqf1lWZt.jpeg"
+            alt="Tournament Roadmap"
+            width={1200}
+            height={800}
+            className="rounded-lg shadow-2xl"
+          />
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+            <div className="bg-black/50 p-6 rounded-lg border border-yellow-500/30 backdrop-blur">
+              <h3 className="text-2xl font-bold mb-4 text-yellow-500">Round 1 - Qualifiers</h3>
+              <ul className="space-y-2">
+                <li>54 Teams</li>
+                <li>3 Groups</li>
+                <li>Top 8 Qualifies for Next Round</li>
+              </ul>
+            </div>
+            <div className="bg-black/50 p-6 rounded-lg border border-yellow-500/30 backdrop-blur">
+              <h3 className="text-2xl font-bold mb-4 text-yellow-500">Round 2 - Semi Finals</h3>
+              <ul className="space-y-2">
+                <li>32 Teams</li>
+                <li>2 Groups</li>
+                <li>Top 7 Qualifies for Next Round</li>
+              </ul>
+            </div>
+            <div className="bg-black/50 p-6 rounded-lg border border-yellow-500/30 backdrop-blur">
+              <h3 className="text-2xl font-bold mb-4 text-yellow-500">Round 3 - Grand Finals</h3>
+              <ul className="space-y-2">
+                <li>18 Teams</li>
+                <li>Single Group</li>
+                <li>Top 6 Teams Will Be Rewarded</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="container mx-auto py-16">
         <h2 className="text-4xl font-bold text-center mb-6 text-[#FF073A] drop-shadow-[0_0_8px_#FF073A]">
           BGMI Tournament Brackets/Leaderboards
