@@ -602,7 +602,7 @@ interface TiltCardProps {
 }
 
 const ROTATION_RANGE = 32.5
-const HALF_ROTATION_RANGE = 32.5 / 2
+
 
 const TiltCard = ({ title, subheading, image, about, instagram, linkedin, location }: TiltCardProps) => {
   const [isLoading, setIsLoading] = useState(true)

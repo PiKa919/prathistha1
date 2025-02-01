@@ -1,9 +1,9 @@
 'use client'
 import { useState } from "react"
 import Image from "next/image"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+// import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Calendar, Link } from "lucide-react"
+
 import { EventModal } from "@/components/EventModal"
 
 interface EventCardProps {
@@ -22,23 +22,6 @@ interface EventCardProps {
   date: string
 }
 
-interface EventModalProps {
-  isOpen: boolean
-  onClose: () => void
-  title: string
-  description: string
-  time: string
-  place: string
-  videoUrl: string
-  price: string
-  imageUrl: string
-  ranking: {
-    first: string
-    second: string
-    third: string
-  }
-  date: string
-}
 
 export function EventCard({
   title,
@@ -55,17 +38,25 @@ export function EventCard({
 
   return (
     <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden relative">
-      <div className="absolute top-2 right-2 bg-primary text-primary-foreground px-2 py-1 rounded-md text-sm font-semibold flex items-center space-x-1">
-        <Calendar className="w-4 h-4" />
-        <span>{date}</span>
+      {/* Image container */}
+      <div className="relative">
+        <Image
+          src={imageUrl || "/placeholder.svg"}
+          alt={title}
+          width={300}
+          height={200}
+          className="w-full object-cover h-48"
+        />
+        {/* Date overlay */}
+        <div className="absolute top-3 right-3 bg-white text-black px-3 py-1 rounded-md text-sm font-semibold shadow-lg text-center">
+          <span className="block text-xs font-medium">
+            {new Date(date).toLocaleString('en-US', { month: 'short' }).toUpperCase()}
+          </span>
+          <span className="block text-lg font-bold">{date.split("-")[2]}</span>
+        </div>
       </div>
-      <Image
-        src={imageUrl || "/placeholder.svg"}
-        alt={title}
-        width={300}
-        height={200}
-        className="w-full object-cover h-48"
-      />
+
+      {/* Event details */}
       <div className="p-4">
         <h3 className="font-bold text-xl mb-2 text-white">{title}</h3>
         <p className="text-gray-400 mb-2">{time}</p>
@@ -78,6 +69,8 @@ export function EventCard({
           More Info
         </Button>
       </div>
+
+      {/* Modal for event details */}
       <EventModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -89,10 +82,10 @@ export function EventCard({
         price={price}
         imageUrl={imageUrl}
         ranking={ranking}
-        
       />
     </div>
   )
 }
+
 
 
