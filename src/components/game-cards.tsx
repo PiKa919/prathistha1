@@ -21,12 +21,6 @@ const games = [
     price: 1000,
     originalPrice: 1500,
     image: '/esports/valo.webp'
-  },
-  {
-    id: 'fifa',
-    title: 'FIFA',
-    price: 200,
-    image: '/placeholder.svg?height=300&width=300'
   }
 ]
 
@@ -35,23 +29,18 @@ export function GameCards() {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 max-w-5xl mx-auto">
         {games.map((game) => (
           <Card key={game.id} className="overflow-hidden">
             <CardContent className="p-0">
-              {game.id === 'fifa' ? (
-                <div className="w-full aspect-square bg-muted flex items-center justify-center">
-                  <span className="text-2xl font-bold text-gray-500">Coming Soon</span>
-                </div>
-              ) : (
+              <div className="w-full aspect-[4/5] relative bg-muted">
                 <Image
                   src={game.image}
                   alt={game.title}
-                  width={300}
-                  height={300}
-                  className="w-full aspect-square object-cover bg-muted"
+                  fill
+                  className="object-cover"
                 />
-              )}
+              </div>
               <div className="p-4 space-y-4">
                 <h3 className="text-2xl font-bold text-center">{game.title}</h3>
                 <div className="flex items-center justify-between">

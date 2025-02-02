@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -12,6 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper } from "lucide-react"
+import { database } from "@/firebaseConfig"
+import { ref, set, get } from "firebase/database"
 
 type Event = {
   name: string
@@ -63,18 +65,93 @@ export default function RegistrationForm() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [teamSize, setTeamSize] = useState(1)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       members: [{}],
+      event: "",
+      teamSize: 1,
+      paymentReferenceId: "",
+      paymentScreenshot: undefined,
     },
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
-    setShowSuccessModal(true)
-  }
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      setIsSubmitting(true)
+      console.log("Starting submission...", data);
+
+      // Test database connection first
+      const testRef = ref(database, '.info/connected');
+      const connectedRef = await get(testRef);
+      if (!connectedRef.val()) {
+        throw new Error('No database connection');
+      }
+
+      // Create the registration data
+      const registrationData = {
+        event: data.event,
+        teamSize: data.teamSize || 1,
+        members: data.members.map(member => ({
+          ...member,
+          isTeamLeader: member.isTeamLeader || false
+        })),
+        payment: {
+          referenceId: data.paymentReferenceId,
+          timestamp: new Date().toISOString(),
+          screenshot: ""
+        },
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      };
+
+      // Handle the screenshot separately
+      if (data.paymentScreenshot?.[0]) {
+        const file = data.paymentScreenshot[0];
+        const reader = new FileReader();
+        
+        const base64Screenshot = await new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        registrationData.payment.screenshot = base64Screenshot as string;
+      }
+
+      // Try to save to a specific path
+      const aurumRef = ref(database, `aurum/${Date.now()}`);
+      await set(aurumRef, registrationData);
+
+      console.log("Registration successful!");
+      setShowSuccessModal(true);
+      form.reset();
+    } catch (error) {
+      console.error("Registration failed:", error);
+      let errorMessage = 'Registration failed: ';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('PERMISSION_DENIED')) {
+          errorMessage += 'Access denied. Please try again later.';
+        } else {
+          errorMessage += error.message;
+        }
+      } else {
+        errorMessage += 'Unknown error occurred';
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleEventChange = (eventName: string) => {
     const event = events.find((e) => e.name === eventName)
@@ -87,16 +164,20 @@ export default function RegistrationForm() {
     }
   }
 
+  if (!isMounted) {
+    return null // or a loading spinner
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex flex-col lg:flex-row pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex flex-col lg:flex-row py-16 px-4">
       <div className="container mx-auto p-4 max-w-3xl">
-        <h1 className=" text-3xl font-bold mb-4">Event Registration</h1>
+        <h1 className="text-3xl mb-6 text-center lg:text-left">AURUM Event Registration</h1>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 md:space-y-8 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-8 shadow-2xl border border-white/20"
+            className="space-y-4 md:space-y-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-2xl border border-white/20"
           >
-            <div className="space-y-4 md:space-y-6 p-4 md:p-6 bg-black/30 rounded-xl">
+            <div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <FormField
                 control={form.control}
                 name="event"
@@ -165,9 +246,10 @@ export default function RegistrationForm() {
                 />
               )}
             </div>
+
             {Array.from({ length: teamSize }).map((_, index) => (
-              <div key={index} className="space-y-4 md:space-y-6 p-4 md:p-6 bg-black/30 rounded-xl">
-                <h3 className="text-xl font-semibold">
+              <div key={index} className="space-y-4 p-4 bg-black/30 rounded-xl">
+                <h3 className="text-xl mb-4">
                   <User className="inline mr-2" /> Personal Details - Member {index + 1}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -284,14 +366,20 @@ export default function RegistrationForm() {
               </div>
             ))}
 
-            <div className="space-y-4 md:space-y-6 p-4 md:p-6 bg-black/30 rounded-xl">
-              <h3 className="text-xl font-semibold">
+            <div className="space-y-4 p-4 bg-black/30 rounded-xl">
+              <h3 className="text-xl mb-4">
                 <CreditCard className="inline mr-2" /> Payment
               </h3>
-              <div className="flex justify-center mb-4">
-                <Image src="/placeholder.svg" alt="Payment QR Code" width={200} height={200} />
+              <div className="flex flex-col items-center gap-4 mb-6">
+                <Image 
+                  src="/payment/qr-code.webp" 
+                  alt="Payment QR Code" 
+                  width={200} 
+                  height={200}
+                  className="w-48 h-48 md:w-52 md:h-52" 
+                />
+                <p className="text-center">UPI ID: example@upi</p>
               </div>
-              <p className="text-center mb-4">UPI ID: example@upi</p>
               <FormField
                 control={form.control}
                 name="paymentReferenceId"
@@ -310,13 +398,24 @@ export default function RegistrationForm() {
               <FormField
                 control={form.control}
                 name="paymentScreenshot"
-                render={({ field }) => (
+                render={({ field: { value, onChange, ...field } }) => (
                   <FormItem>
                     <FormLabel>
                       <Camera className="inline mr-2" /> Payment Screenshot
                     </FormLabel>
                     <FormControl>
-                      <Input type="file" accept="image/*" onChange={(e) => field.onChange(e.target.files)} />
+                      <Input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => {
+                          const files = e.target.files
+                          if (files?.length) {
+                            onChange(files)
+                          }
+                        }}
+                        {...field}
+                        value={value?.fileName}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -324,34 +423,31 @@ export default function RegistrationForm() {
               />
             </div>
 
-            <Button
-              type="button"
-              onClick={() => {
-                form.handleSubmit((data) => {
-                  console.log(data)
-                  setShowSuccessModal(true)
-                })()
-                if (!form.formState.isValid) {
-                  setShowSuccessModal(true)
-                }
-              }}
-            >
-              Submit Registration
-            </Button>
+            <div className="flex justify-center mt-6">
+              <Button
+                type="submit"  // Changed from "button" to "submit"
+                disabled={isSubmitting}
+                className="w-full md:w-auto px-8"
+              >
+                {isSubmitting ? "Submitting..." : "Submit Registration"}
+              </Button>
+            </div>
           </form>
         </Form>
 
         <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>
-                <PartyPopper className="inline mr-2" /> Registration Successful!
+              <DialogTitle className="flex items-center gap-2">
+                <PartyPopper /> Registration Successful!
               </DialogTitle>
               <DialogDescription>
                 Your registration has been submitted successfully. Thank you for participating!
               </DialogDescription>
             </DialogHeader>
-            <Button onClick={() => setShowSuccessModal(false)}>Close</Button>
+            <div className="flex justify-center">
+              <Button onClick={() => setShowSuccessModal(false)}>Close</Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>

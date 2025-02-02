@@ -7,6 +7,8 @@ const menuItems = [
   { label: 'Aurum', path: '/aurum' },
   { label: 'Olympus', path: '/sports' },
   { label: 'Verve', path: '/verve' },
+  { label: 'Esports', path: '/esports' },
+  
   {
     label: 'Teams',
     path: '/team',
@@ -17,7 +19,7 @@ const menuItems = [
     ]
   },
   { label: 'Sponsors', path: '/sponsors/2024' },
-  { label: 'Contact Us', path: '/contact' }
+  { label: 'Marathon', path: '/marathon' }
 ];
 
 interface MenuItem {
