@@ -1,20 +1,13 @@
 "use client"
 
-import { useState, useEffect, useMemo } from 'react'
-import { database } from '@/firebaseConfig'
+import { useState, useEffect, useMemo } from "react"
+import { database } from "@/firebaseConfig"
 import { ref, onValue, update, remove } from "firebase/database"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import * as XLSX from 'xlsx'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import * as XLSX from "xlsx"
 
 interface TeamMember {
   fullName: string
@@ -43,25 +36,27 @@ interface EventRegistration {
 export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState("")
   const [loginAttempts, setLoginAttempts] = useState(0)
   const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
   const [registrations, setRegistrations] = useState<Record<string, EventRegistration>>({})
-  const [filter, setFilter] = useState({ event: '', search: '' })
+  const [filter, setFilter] = useState({ event: "", search: "" })
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [editMode, setEditMode] = useState<Record<string, boolean>>({})
   const [editedData, setEditedData] = useState<Record<string, Partial<EventRegistration>>>({})
+  const [selectedTeam, setSelectedTeam] = useState<TeamMember[] | null>(null)
+  const [editingCell, setEditingCell] = useState<{ key: string; field: keyof EventRegistration } | null>(null)
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+    const adminPassword = process.env.NEXT_PUBLIC_AURUM_PASSWORD
     const now = Date.now()
 
     if (lockoutUntil && now < lockoutUntil) {
       alert(`Too many failed attempts. Please try again later.`)
       return
     }
-    
+
     if (password === adminPassword) {
       setIsAuthenticated(true)
       setLoginAttempts(0)
@@ -69,11 +64,11 @@ export default function AdminPage() {
     } else {
       const newAttempts = loginAttempts + 1
       setLoginAttempts(newAttempts)
-      
+
       if (newAttempts >= 5) {
-        const lockoutTime = now + (15 * 60 * 1000) // 15 minutes lockout
+        const lockoutTime = now + 15 * 60 * 1000 // 15 minutes lockout
         setLockoutUntil(lockoutTime)
-        alert('Too many failed attempts. Please try again in 15 minutes.')
+        alert("Too many failed attempts. Please try again in 15 minutes.")
       } else {
         alert(`Invalid password. ${5 - newAttempts} attempts remaining.`)
       }
@@ -81,26 +76,35 @@ export default function AdminPage() {
   }
 
   const fetchData = () => {
-    const aurumRef = ref(database, 'aurum')
-    onValue(aurumRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val()
-        const sortedData = Object.entries(data)
-          .sort(([, a], [, b]) => (b as EventRegistration).createdAt.localeCompare((a as EventRegistration).createdAt))
-          .reduce((acc, [key, value]) => ({
-            ...acc,
-            [key]: value
-          }), {})
-        setRegistrations(sortedData)
-      } else {
-        setRegistrations({})
-      }
-      setIsLoading(false)
-    }, (error) => {
-      console.error("Error fetching data:", error)
-      alert(`Error fetching data: ${error.message}`)
-      setIsLoading(false)
-    })
+    const aurumRef = ref(database, "aurum")
+    onValue(
+      aurumRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val()
+          const sortedData = Object.entries(data)
+            .sort(([, a], [, b]) =>
+              (b as EventRegistration).createdAt.localeCompare((a as EventRegistration).createdAt),
+            )
+            .reduce(
+              (acc, [key, value]) => ({
+                ...acc,
+                [key]: value,
+              }),
+              {},
+            )
+          setRegistrations(sortedData)
+        } else {
+          setRegistrations({})
+        }
+        setIsLoading(false)
+      },
+      (error) => {
+        console.error("Error fetching data:", error)
+        alert(`Error fetching data: ${error.message}`)
+        setIsLoading(false)
+      },
+    )
   }
 
   useEffect(() => {
@@ -108,65 +112,64 @@ export default function AdminPage() {
   }, [])
 
   const getTeamLeader = (members: TeamMember[]): TeamMember => {
-    return members.find(member => member.isTeamLeader) || members[0]
+    return members.find((member) => member.isTeamLeader) || members[0]
   }
 
   const filteredRegistrations = useMemo(() => {
-    return Object.entries(registrations)
-      .filter(([, registration]) => {
-        const teamLeader = getTeamLeader(registration.members)
-        return (
-          (!filter.event || registration.event === filter.event) &&
-          (!filter.search || 
-            teamLeader.fullName.toLowerCase().includes(filter.search.toLowerCase()) ||
-            teamLeader.prn.toLowerCase().includes(filter.search.toLowerCase())
-          )
-        )
-      })
+    return Object.entries(registrations).filter(([, registration]) => {
+      const teamLeader = getTeamLeader(registration.members)
+      return (
+        (!filter.event || registration.event === filter.event) &&
+        (!filter.search ||
+          teamLeader.fullName.toLowerCase().includes(filter.search.toLowerCase()) ||
+          teamLeader.prn.toLowerCase().includes(filter.search.toLowerCase()))
+      )
+    })
   }, [registrations, filter, getTeamLeader])
 
-  const updateStatus = async (key: string, status: string) => {
-    try {
-      await update(ref(database, `aurum/${key}`), { status })
-    } catch (error) {
-      console.error('Error updating status:', error)
-      alert('Failed to update status')
-    }
-  }
-
-  // const handleEditChange = (key: string, field: keyof EventRegistration, value: any) => {
-  //   setEditedData(prev => ({
-  //     ...prev,
-  //     [key]: {
-  //       ...prev[key],
-  //       [field]: value
-  //     }
-  //   }))
+  // const updateStatus = async (key: string, status: string) => {
+  //   try {
+  //     await update(ref(database, `aurum/${key}`), { status })
+  //   } catch (error) {
+  //     console.error("Error updating status:", error)
+  //     alert("Failed to update status")
+  //   }
   // }
+
+  const handleEditChange = (key: string, field: keyof EventRegistration, value: string | number) => {
+    setEditedData((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        [field]: value,
+      },
+    }))
+  }
 
   const saveChanges = async (key: string) => {
     try {
       await update(ref(database, `aurum/${key}`), editedData[key])
-      setEditMode(prev => ({ ...prev, [key]: false }))
-      setEditedData(prev => ({ ...prev, [key]: {} }))
+      setEditMode((prev) => ({ ...prev, [key]: false }))
+      setEditedData((prev) => ({ ...prev, [key]: {} }))
+      setEditingCell(null)
     } catch (error) {
-      console.error('Error saving changes:', error)
-      alert('Failed to save changes')
+      console.error("Error saving changes:", error)
+      alert("Failed to save changes")
     }
   }
 
   const deleteRegistration = async (key: string) => {
-    if (window.confirm('Are you sure you want to delete this registration?')) {
+    if (window.confirm("Are you sure you want to delete this registration?")) {
       try {
         await remove(ref(database, `aurum/${key}`))
-        setRegistrations(prev => {
+        setRegistrations((prev) => {
           const updated = { ...prev }
           delete updated[key]
           return updated
         })
       } catch (error) {
-        console.error('Error deleting registration:', error)
-        alert('Failed to delete registration')
+        console.error("Error deleting registration:", error)
+        alert("Failed to delete registration")
       }
     }
   }
@@ -175,29 +178,29 @@ export default function AdminPage() {
     const dataToExport = filteredRegistrations.map(([, registration], index) => {
       const teamLeader = getTeamLeader(registration.members)
       return {
-        'Sr. No.': index + 1,
-        'Event': registration.event,
-        'Team Size': registration.teamSize,
-        'Team Leader': teamLeader.fullName,
-        'Email': teamLeader.email,
-        'Phone': teamLeader.phone,
-        'PRN': teamLeader.prn,
-        'Class': teamLeader.class,
-        'Branch': teamLeader.branch,
-        'Status': registration.status,
-        'Payment Reference ID': registration.payment.referenceId,
-        'Payment Screenshot': registration.payment.screenshot || 'No screenshot',
-        'Registration Date': new Date(registration.createdAt).toLocaleString(),
+        "Sr. No.": index + 1,
+        Event: registration.event,
+        "Team Size": registration.teamSize,
+        "Team Leader": teamLeader.fullName,
+        Email: teamLeader.email,
+        Phone: teamLeader.phone,
+        PRN: teamLeader.prn,
+        Class: teamLeader.class,
+        Branch: teamLeader.branch,
+        Status: registration.status,
+        "Payment Reference ID": registration.payment.referenceId,
+        "Payment Screenshot": registration.payment.screenshot || "No screenshot",
+        "Registration Date": new Date(registration.createdAt).toLocaleString(),
       }
     })
 
     const ws = XLSX.utils.json_to_sheet(dataToExport)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Event Registrations')
-    
-    const date = new Date().toISOString().split('T')[0]
+    XLSX.utils.book_append_sheet(wb, ws, "Event Registrations")
+
+    const date = new Date().toISOString().split("T")[0]
     const fileName = `event_registrations_${date}.xlsx`
-    
+
     XLSX.writeFile(wb, fileName)
   }
 
@@ -230,11 +233,7 @@ export default function AdminPage() {
               />
             </div>
           )}
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={lockoutUntil !== null && Date.now() < lockoutUntil}
-          >
+          <Button type="submit" className="w-full" disabled={lockoutUntil !== null && Date.now() < lockoutUntil}>
             Login
           </Button>
         </form>
@@ -254,24 +253,16 @@ export default function AdminPage() {
           </DialogContent>
         </Dialog>
       )}
-      
+
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">Event Registrations</h1>
           <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-400">
-              Total Registrations: {filteredRegistrations.length}
-            </div>
-            <Button 
-              onClick={exportToExcel}
-              className="bg-green-600 hover:bg-green-700"
-            >
+            <div className="text-sm text-gray-400">Total Registrations: {filteredRegistrations.length}</div>
+            <Button onClick={exportToExcel} className="bg-green-600 hover:bg-green-700">
               Export to Excel
             </Button>
-            <Button 
-              onClick={() => setIsAuthenticated(false)}
-              className="bg-red-600 hover:bg-red-700"
-            >
+            <Button onClick={() => setIsAuthenticated(false)} className="bg-red-600 hover:bg-red-700">
               Logout
             </Button>
           </div>
@@ -281,17 +272,19 @@ export default function AdminPage() {
           <Input
             placeholder="Search by name or PRN"
             value={filter.search}
-            onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
+            onChange={(e) => setFilter((prev) => ({ ...prev, search: e.target.value }))}
             className="bg-gray-800 border-gray-700"
           />
           <select
             value={filter.event}
-            onChange={(e) => setFilter(prev => ({ ...prev, event: e.target.value }))}
+            onChange={(e) => setFilter((prev) => ({ ...prev, event: e.target.value }))}
             className="bg-gray-800 border-gray-700 rounded-md p-2"
           >
             <option value="">All Events</option>
-            {Array.from(new Set(Object.values(registrations).map(r => r.event))).map(event => (
-              <option key={event} value={event}>{event}</option>
+            {Array.from(new Set(Object.values(registrations).map((r) => r.event))).map((event) => (
+              <option key={event} value={event}>
+                {event}
+              </option>
             ))}
           </select>
         </div>
@@ -311,6 +304,7 @@ export default function AdminPage() {
                 <TableHead>Branch</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Payment</TableHead>
+                <TableHead>Team Detail</TableHead>
                 <TableHead>Registration Date</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -319,29 +313,50 @@ export default function AdminPage() {
               {filteredRegistrations.map(([key, registration], index) => {
                 const teamLeader = getTeamLeader(registration.members)
                 return (
-                  <TableRow 
-                    key={key}
-                    className={index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}
-                  >
+                  <TableRow key={key} className={index % 2 === 0 ? "bg-gray-800/50" : "bg-gray-900/50"}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{registration.event}</TableCell>
-                    <TableCell>{registration.teamSize}</TableCell>
+                    <TableCell onClick={() => editMode[key] && setEditingCell({ key, field: "event" })}>
+                      {editMode[key] && editingCell?.key === key && editingCell?.field === "event" ? (
+                        <Input
+                          value={editedData[key]?.event || registration.event}
+                          onChange={(e) => handleEditChange(key, "event", e.target.value)}
+                          onBlur={() => setEditingCell(null)}
+                          autoFocus
+                        />
+                      ) : (
+                        registration.event
+                      )}
+                    </TableCell>
+                    <TableCell onClick={() => editMode[key] && setEditingCell({ key, field: "teamSize" })}>
+                      {editMode[key] && editingCell?.key === key && editingCell?.field === "teamSize" ? (
+                        <Input
+                          type="number"
+                          value={editedData[key]?.teamSize || registration.teamSize}
+                          onChange={(e) => handleEditChange(key, "teamSize", Number.parseInt(e.target.value))}
+                          onBlur={() => setEditingCell(null)}
+                          autoFocus
+                        />
+                      ) : (
+                        registration.teamSize
+                      )}
+                    </TableCell>
                     <TableCell>{teamLeader.fullName}</TableCell>
                     <TableCell>{teamLeader.email}</TableCell>
                     <TableCell>{teamLeader.phone}</TableCell>
                     <TableCell>{teamLeader.prn}</TableCell>
                     <TableCell>{teamLeader.class}</TableCell>
                     <TableCell>{teamLeader.branch}</TableCell>
-                    <TableCell>
-                      <select
-                        value={registration.status}
-                        onChange={(e) => updateStatus(key, e.target.value)}
-                        className="bg-gray-800 border-gray-700 rounded-md p-2"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                      </select>
+                    <TableCell onClick={() => editMode[key] && setEditingCell({ key, field: "status" })}>
+                      {editMode[key] && editingCell?.key === key && editingCell?.field === "status" ? (
+                        <Input
+                          value={editedData[key]?.status || registration.status}
+                          onChange={(e) => handleEditChange(key, "status", e.target.value)}
+                          onBlur={() => setEditingCell(null)}
+                          autoFocus
+                        />
+                      ) : (
+                        registration.status
+                      )}
                     </TableCell>
                     <TableCell>
                       <Button
@@ -352,33 +367,35 @@ export default function AdminPage() {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      {new Date(registration.createdAt).toLocaleDateString()} 
+                      <Button
+                        onClick={() => setSelectedTeam(registration.members)}
+                        className="bg-purple-600 hover:bg-purple-700 ml-2"
+                      >
+                        View Team
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(registration.createdAt).toLocaleDateString()}
                       {new Date(registration.createdAt).toLocaleTimeString()}
                     </TableCell>
                     <TableCell>
-                      {editMode[key] ? (
-                        <Button
-                          onClick={() => saveChanges(key)}
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          Save
-                        </Button>
-                      ) : (
-                        <div className="flex gap-2">
+                      <div className="flex gap-2">
+                        {editMode[key] ? (
+                          <Button onClick={() => saveChanges(key)} className="bg-green-600 hover:bg-green-700">
+                            Save
+                          </Button>
+                        ) : (
                           <Button
-                            onClick={() => setEditMode(prev => ({ ...prev, [key]: true }))}
+                            onClick={() => setEditMode((prev) => ({ ...prev, [key]: true }))}
                             className="bg-yellow-600 hover:bg-yellow-700"
                           >
                             Edit
                           </Button>
-                          <Button
-                            onClick={() => deleteRegistration(key)}
-                            className="bg-red-600 hover:bg-red-700"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      )}
+                        )}
+                        <Button onClick={() => deleteRegistration(key)} className="bg-red-600 hover:bg-red-700">
+                          Delete
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )
@@ -387,6 +404,44 @@ export default function AdminPage() {
           </Table>
         </div>
       </div>
+      {selectedTeam && (
+        <Dialog open={!!selectedTeam} onOpenChange={() => setSelectedTeam(null)}>
+          <DialogContent className="max-w-3xl">
+            <DialogHeader>
+              <DialogTitle>Team Members</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Full Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>PRN</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead>Branch</TableHead>
+                    <TableHead>Role</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {selectedTeam.map((member, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{member.fullName}</TableCell>
+                      <TableCell>{member.email}</TableCell>
+                      <TableCell>{member.phone}</TableCell>
+                      <TableCell>{member.prn}</TableCell>
+                      <TableCell>{member.class}</TableCell>
+                      <TableCell>{member.branch}</TableCell>
+                      <TableCell>{member.isTeamLeader ? "Team Leader" : "Member"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }
+

@@ -67,6 +67,7 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [teamLeaderIndex, setTeamLeaderIndex] = useState<number | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -133,6 +134,9 @@ export default function RegistrationForm() {
       console.log("Registration successful!");
       setShowSuccessModal(true);
       form.reset();
+
+      
+
     } catch (error) {
       console.error("Registration failed:", error);
       let errorMessage = 'Registration failed: ';
@@ -345,27 +349,118 @@ export default function RegistrationForm() {
                   />
                 </div>
                 {selectedEvent?.type === "team" && (
-                  <FormField
-                    control={form.control}
-                    name={`members.${index}.isTeamLeader`}
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>
-                            <Crown className="inline mr-2" /> Team Leader
-                          </FormLabel>
-                          <FormDescription>Is this member the team leader?</FormDescription>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                )}
+      <FormField
+      control={form.control}
+      name={`members.${index}.isTeamLeader`}
+      render={({  }) => (
+        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+          <FormControl>
+            <Checkbox
+              checked={teamLeaderIndex === index}
+              onCheckedChange={() => {
+                // Update the team leader index
+                setTeamLeaderIndex(index);
+    
+                // Update the team leader field for all members
+                const updatedMembers = form.getValues("members").map((member, i) => {
+                  return i === index
+                    ? { ...member, isTeamLeader: true }
+                    : { ...member, isTeamLeader: false };
+                });
+                form.setValue("members", updatedMembers);
+              }}
+            />
+          </FormControl>
+          <div className="space-y-1 leading-none">
+            <FormLabel>
+              <Crown className="inline mr-2" /> Team Leader
+            </FormLabel>
+            <FormDescription>Only one team leader can be selected.</FormDescription>
+          </div>
+        </FormItem>
+      )}
+    />
+    )}
               </div>
             ))}
 
+{/* {Array.from({ length: teamSize }).map((_, index) => (
+  <div key={index} className="space-y-4 p-4 bg-black/30 rounded-xl">
+    <h3 className="text-xl mb-4">
+      <User className="inline mr-2" /> Personal Details - Member {index + 1}
+    </h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <FormField
+        control={form.control}
+        name={`members.${index}.fullName`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              <User className="inline mr-2" /> Full Name
+            </FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`members.${index}.email`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              <Mail className="inline mr-2" /> Email
+            </FormLabel>
+            <FormControl>
+              <Input {...field} type="email" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`members.${index}.phone`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              <Phone className="inline mr-2" /> Phone Number
+            </FormLabel>
+            <FormControl>
+              <Input {...field} type="tel" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
+
+    {selectedEvent?.type === "team" && (
+      <FormField
+        control={form.control}
+        name={`members.${index}.isTeamLeader`}
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            <FormControl>
+              <Checkbox
+                checked={teamLeaderIndex === index}
+                onCheckedChange={() => setTeamLeaderIndex(index)}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel>
+                <Crown className="inline mr-2" /> Team Leader
+              </FormLabel>
+              <FormDescription>Only one team leader can be selected.</FormDescription>
+            </div>
+          </FormItem>
+        )}
+      />
+    )}
+  </div>
+))} */}
             <div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <h3 className="text-xl mb-4">
                 <CreditCard className="inline mr-2" /> Payment

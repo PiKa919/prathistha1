@@ -79,7 +79,7 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'OLYMPUS9965';
+    const adminPassword = process.env.NEXT_PUBLIC_OLYMPUS_PASSWORD ;
     const now = Date.now();
 
     if (lockoutUntil && now < lockoutUntil) {

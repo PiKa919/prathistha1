@@ -11,7 +11,7 @@ export default function AurumPage() {
           <h1 className="text-4xl font-bold">Aurum: Tech Fest Extravaganza</h1>
         </div>
       </header> */}
-      <main className="space-y-12 py-12">
+      <main className="space-y-12 py-20 px-4">
         <Leaderboard />
         <Events />
         {/* <Hackathon /> */}

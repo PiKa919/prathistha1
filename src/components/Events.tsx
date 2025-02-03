@@ -224,7 +224,7 @@ const events = [
 
 export function Events() {
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-900">
+    <div className="container mx-auto px-4 py-8 bg-gray-900 rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-white">Events</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {events.map((event, index) => (

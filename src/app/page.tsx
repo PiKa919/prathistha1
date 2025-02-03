@@ -12,6 +12,7 @@ import "swiper/css/pagination";
 import './styles.css';
 import CountdownTimer from '@/components/ui/count-down';
 import FestivalPhases from '@/components/Festivephases';
+import ContactSection from '@/components/map';
 
 // function BroadcastButton() {
 //   const [isGlowing, setIsGlowing] = useState(false);
@@ -89,6 +90,7 @@ export default function Home() {
             </div>
             <FestivalPhases />
             <ScrollGallery />
+            <ContactSection/>
           </div>
         </div>
       )}
