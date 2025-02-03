@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper } from "lucide-react"
 import { database } from "@/firebaseConfig"
-import { ref, set, get } from "firebase/database"
+import { ref, set } from "firebase/database"
 
 type Event = {
   name: string
@@ -89,11 +89,11 @@ export default function RegistrationForm() {
       console.log("Starting submission...", data);
 
       // Test database connection first
-      const testRef = ref(database, '.info/connected');
-      const connectedRef = await get(testRef);
-      if (!connectedRef.val()) {
-        throw new Error('No database connection');
-      }
+      // const testRef = ref(database, '.info/connected');
+      // const connectedRef = await get(testRef);
+      // if (!connectedRef.val()) {
+      //   throw new Error('No database connection');
+      // }
 
       // Create the registration data
       const registrationData = {

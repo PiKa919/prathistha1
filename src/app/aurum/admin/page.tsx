@@ -1,102 +1,392 @@
 "use client"
-import { useState } from 'react';
 
-interface EventRanking {
-    first: string;
-    second: string;
-    third: string;
+import { useState, useEffect, useMemo } from 'react'
+import { database } from '@/firebaseConfig'
+import { ref, onValue, update, remove } from "firebase/database"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import * as XLSX from 'xlsx'
+
+interface TeamMember {
+  fullName: string
+  email: string
+  phone: string
+  prn: string
+  class: string
+  branch: string
+  isTeamLeader: boolean
 }
 
-interface Event {
-    id: number;
-    title: string;
-    description: string;
-    time: string;
-    place: string;
-    videoUrl: string;
-    imageUrl: string;
-    price: string;
-    ranking: EventRanking;
+interface EventRegistration {
+  id: string
+  event: string
+  teamSize: number
+  members: TeamMember[]
+  payment: {
+    referenceId: string
+    timestamp: string
+    screenshot: string
+  }
+  status: string
+  createdAt: string
 }
-
-const initialEvents: Event[] = [
-    // ...existing events array with an added 'id' field for each event...
-    {
-        id: 1,
-        title: "Crime Scene Investigation",
-        description: "Put your detective skills to the test in this thrilling crime scene investigation challenge.",
-        time: "10:00 AM - 12:00 PM",
-        place: "Forensic Lab",
-        videoUrl: "https://www.youtube.com/live/q_JsgpiuY98?si=GkrEnp70QbssXf55",
-        imageUrl: "/placeholder.svg?height=200&width=300",
-        price: "₹200",
-        ranking: {
-            first: "Team Sherlock",
-            second: "CSI Masters",
-            third: "Detective Squad"
-        }
-    },
-    // ...other events...
-];
 
 export default function AdminPage() {
-  const [events, setEvents] = useState(initialEvents);
+  const [isLoading, setIsLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [password, setPassword] = useState('')
+  const [loginAttempts, setLoginAttempts] = useState(0)
+  const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
+  const [registrations, setRegistrations] = useState<Record<string, EventRegistration>>({})
+  const [filter, setFilter] = useState({ event: '', search: '' })
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [editMode, setEditMode] = useState<Record<string, boolean>>({})
+  const [editedData, setEditedData] = useState<Record<string, Partial<EventRegistration>>>({})
 
-const handleInputChange = (id: number, field: keyof Event, value: string) => {
-    setEvents(events.map(event => 
-        event.id === id ? { ...event, [field]: value } : event
-    ));
-};
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+    const now = Date.now()
+
+    if (lockoutUntil && now < lockoutUntil) {
+      alert(`Too many failed attempts. Please try again later.`)
+      return
+    }
+    
+    if (password === adminPassword) {
+      setIsAuthenticated(true)
+      setLoginAttempts(0)
+      fetchData()
+    } else {
+      const newAttempts = loginAttempts + 1
+      setLoginAttempts(newAttempts)
+      
+      if (newAttempts >= 5) {
+        const lockoutTime = now + (15 * 60 * 1000) // 15 minutes lockout
+        setLockoutUntil(lockoutTime)
+        alert('Too many failed attempts. Please try again in 15 minutes.')
+      } else {
+        alert(`Invalid password. ${5 - newAttempts} attempts remaining.`)
+      }
+    }
+  }
+
+  const fetchData = () => {
+    const aurumRef = ref(database, 'aurum')
+    onValue(aurumRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val()
+        const sortedData = Object.entries(data)
+          .sort(([, a], [, b]) => (b as EventRegistration).createdAt.localeCompare((a as EventRegistration).createdAt))
+          .reduce((acc, [key, value]) => ({
+            ...acc,
+            [key]: value
+          }), {})
+        setRegistrations(sortedData)
+      } else {
+        setRegistrations({})
+      }
+      setIsLoading(false)
+    }, (error) => {
+      console.error("Error fetching data:", error)
+      alert(`Error fetching data: ${error.message}`)
+      setIsLoading(false)
+    })
+  }
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [])
+
+  const getTeamLeader = (members: TeamMember[]): TeamMember => {
+    return members.find(member => member.isTeamLeader) || members[0]
+  }
+
+  const filteredRegistrations = useMemo(() => {
+    return Object.entries(registrations)
+      .filter(([, registration]) => {
+        const teamLeader = getTeamLeader(registration.members)
+        return (
+          (!filter.event || registration.event === filter.event) &&
+          (!filter.search || 
+            teamLeader.fullName.toLowerCase().includes(filter.search.toLowerCase()) ||
+            teamLeader.prn.toLowerCase().includes(filter.search.toLowerCase())
+          )
+        )
+      })
+  }, [registrations, filter, getTeamLeader])
+
+  const updateStatus = async (key: string, status: string) => {
+    try {
+      await update(ref(database, `aurum/${key}`), { status })
+    } catch (error) {
+      console.error('Error updating status:', error)
+      alert('Failed to update status')
+    }
+  }
+
+  // const handleEditChange = (key: string, field: keyof EventRegistration, value: any) => {
+  //   setEditedData(prev => ({
+  //     ...prev,
+  //     [key]: {
+  //       ...prev[key],
+  //       [field]: value
+  //     }
+  //   }))
+  // }
+
+  const saveChanges = async (key: string) => {
+    try {
+      await update(ref(database, `aurum/${key}`), editedData[key])
+      setEditMode(prev => ({ ...prev, [key]: false }))
+      setEditedData(prev => ({ ...prev, [key]: {} }))
+    } catch (error) {
+      console.error('Error saving changes:', error)
+      alert('Failed to save changes')
+    }
+  }
+
+  const deleteRegistration = async (key: string) => {
+    if (window.confirm('Are you sure you want to delete this registration?')) {
+      try {
+        await remove(ref(database, `aurum/${key}`))
+        setRegistrations(prev => {
+          const updated = { ...prev }
+          delete updated[key]
+          return updated
+        })
+      } catch (error) {
+        console.error('Error deleting registration:', error)
+        alert('Failed to delete registration')
+      }
+    }
+  }
+
+  const exportToExcel = () => {
+    const dataToExport = filteredRegistrations.map(([, registration], index) => {
+      const teamLeader = getTeamLeader(registration.members)
+      return {
+        'Sr. No.': index + 1,
+        'Event': registration.event,
+        'Team Size': registration.teamSize,
+        'Team Leader': teamLeader.fullName,
+        'Email': teamLeader.email,
+        'Phone': teamLeader.phone,
+        'PRN': teamLeader.prn,
+        'Class': teamLeader.class,
+        'Branch': teamLeader.branch,
+        'Status': registration.status,
+        'Payment Reference ID': registration.payment.referenceId,
+        'Payment Screenshot': registration.payment.screenshot || 'No screenshot',
+        'Registration Date': new Date(registration.createdAt).toLocaleString(),
+      }
+    })
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Event Registrations')
+    
+    const date = new Date().toISOString().split('T')[0]
+    const fileName = `event_registrations_${date}.xlsx`
+    
+    XLSX.writeFile(wb, fileName)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center pt-20">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center pt-20">
+        <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md p-8 bg-gray-900 rounded-lg">
+          <h1 className="text-2xl font-bold text-center mb-6">Admin Access</h1>
+          {lockoutUntil && Date.now() < lockoutUntil ? (
+            <div className="text-red-500 text-center mb-4">
+              Account locked. Try again in {Math.ceil((lockoutUntil - Date.now()) / 60000)} minutes.
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Input
+                type="password"
+                placeholder="Enter admin password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-gray-800 border-gray-700"
+                disabled={lockoutUntil !== null && Date.now() < lockoutUntil}
+              />
+            </div>
+          )}
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={lockoutUntil !== null && Date.now() < lockoutUntil}
+          >
+            Login
+          </Button>
+        </form>
+      </div>
+    )
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-900 mt-20">
-      <h2 className="text-2xl font-bold mb-6">Admin: Manage Events</h2>
-      {events.map(event => (
-        <div key={event.id} className="mb-4 p-4 bg-gray-800 rounded">
-          <input
-            type="text"
-            value={event.title}
-            onChange={(e) => handleInputChange(event.id, 'title', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          <textarea
-            value={event.description}
-            onChange={(e) => handleInputChange(event.id, 'description', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          <input
-            type="text"
-            value={event.time}
-            onChange={(e) => handleInputChange(event.id, 'time', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          <input
-            type="text"
-            value={event.place}
-            onChange={(e) => handleInputChange(event.id, 'place', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          <input
-            type="text"
-            value={event.videoUrl}
-            onChange={(e) => handleInputChange(event.id, 'videoUrl', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          <input
-            type="text"
-            value={event.imageUrl}
-            onChange={(e) => handleInputChange(event.id, 'imageUrl', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          <input
-            type="text"
-            value={event.price}
-            onChange={(e) => handleInputChange(event.id, 'price', e.target.value)}
-            className="block w-full mb-2 p-2 bg-gray-700 text-white"
-          />
-          {/* Add more fields as necessary */}
+    <div className="min-h-screen bg-black text-white p-8 pt-20">
+      {selectedImage && (
+        <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+          <DialogContent className="max-w-3xl">
+            <DialogHeader>
+              <DialogTitle>Payment Screenshot</DialogTitle>
+            </DialogHeader>
+            <img src={selectedImage || "/placeholder.svg"} alt="Payment Screenshot" className="w-full h-auto" />
+          </DialogContent>
+        </Dialog>
+      )}
+      
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Event Registrations</h1>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-400">
+              Total Registrations: {filteredRegistrations.length}
+            </div>
+            <Button 
+              onClick={exportToExcel}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Export to Excel
+            </Button>
+            <Button 
+              onClick={() => setIsAuthenticated(false)}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Logout
+            </Button>
+          </div>
         </div>
-      ))}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <Input
+            placeholder="Search by name or PRN"
+            value={filter.search}
+            onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
+            className="bg-gray-800 border-gray-700"
+          />
+          <select
+            value={filter.event}
+            onChange={(e) => setFilter(prev => ({ ...prev, event: e.target.value }))}
+            className="bg-gray-800 border-gray-700 rounded-md p-2"
+          >
+            <option value="">All Events</option>
+            {Array.from(new Set(Object.values(registrations).map(r => r.event))).map(event => (
+              <option key={event} value={event}>{event}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="bg-gray-900 rounded-lg overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Sr. No.</TableHead>
+                <TableHead>Event</TableHead>
+                <TableHead>Team Size</TableHead>
+                <TableHead>Team Leader</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>PRN</TableHead>
+                <TableHead>Class</TableHead>
+                <TableHead>Branch</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Payment</TableHead>
+                <TableHead>Registration Date</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredRegistrations.map(([key, registration], index) => {
+                const teamLeader = getTeamLeader(registration.members)
+                return (
+                  <TableRow 
+                    key={key}
+                    className={index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50'}
+                  >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{registration.event}</TableCell>
+                    <TableCell>{registration.teamSize}</TableCell>
+                    <TableCell>{teamLeader.fullName}</TableCell>
+                    <TableCell>{teamLeader.email}</TableCell>
+                    <TableCell>{teamLeader.phone}</TableCell>
+                    <TableCell>{teamLeader.prn}</TableCell>
+                    <TableCell>{teamLeader.class}</TableCell>
+                    <TableCell>{teamLeader.branch}</TableCell>
+                    <TableCell>
+                      <select
+                        value={registration.status}
+                        onChange={(e) => updateStatus(key, e.target.value)}
+                        className="bg-gray-800 border-gray-700 rounded-md p-2"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => setSelectedImage(registration.payment.screenshot)}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        View Screenshot
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(registration.createdAt).toLocaleDateString()} 
+                      {new Date(registration.createdAt).toLocaleTimeString()}
+                    </TableCell>
+                    <TableCell>
+                      {editMode[key] ? (
+                        <Button
+                          onClick={() => saveChanges(key)}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          Save
+                        </Button>
+                      ) : (
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => setEditMode(prev => ({ ...prev, [key]: true }))}
+                            className="bg-yellow-600 hover:bg-yellow-700"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            onClick={() => deleteRegistration(key)}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
