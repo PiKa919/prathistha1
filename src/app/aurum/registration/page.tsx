@@ -14,6 +14,7 @@ import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
+import { REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
 
 type Event = {
   name: string
@@ -86,77 +87,97 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
       console.log("Starting submission...", data);
-
-      // Test database connection first
-      // const testRef = ref(database, '.info/connected');
-      // const connectedRef = await get(testRef);
-      // if (!connectedRef.val()) {
-      //   throw new Error('No database connection');
-      // }
-
+  
       // Create the registration data
       const registrationData = {
         event: data.event,
         teamSize: data.teamSize || 1,
-        members: data.members.map(member => ({
+        members: data.members.map((member) => ({
           ...member,
-          isTeamLeader: member.isTeamLeader || false
+          isTeamLeader: member.isTeamLeader || false,
         })),
         payment: {
           referenceId: data.paymentReferenceId,
           timestamp: new Date().toISOString(),
-          screenshot: ""
+          screenshot: "",
         },
-        status: 'pending',
-        createdAt: new Date().toISOString()
+        status: "pending",
+        createdAt: new Date().toISOString(),
       };
-
+  
       // Handle the screenshot separately
       if (data.paymentScreenshot?.[0]) {
         const file = data.paymentScreenshot[0];
         const reader = new FileReader();
-        
+  
         const base64Screenshot = await new Promise((resolve, reject) => {
           reader.onload = () => resolve(reader.result);
           reader.onerror = reject;
           reader.readAsDataURL(file);
         });
-
+  
         registrationData.payment.screenshot = base64Screenshot as string;
       }
-
-      // Try to save to a specific path
+  
+      // Save to Firebase
       const aurumRef = ref(database, `aurum/${Date.now()}`);
       await set(aurumRef, registrationData);
-
+  
       console.log("Registration successful!");
+  
+      // Find the team leader's email
+      const teamLeader = data.members.find((member) => member.isTeamLeader);
+      if (teamLeader || selectedEvent?.type === "single") {
+        // Generate the email content using the template
+        const emailContent = REGISTRATION_CONFIRMATION_TEMPLATE(
+          data.event,
+          data.teamSize || 1,
+          data.paymentReferenceId,
+          data.members.map(member => ({ ...member, isTeamLeader: member.isTeamLeader ?? false })),
+        );
+  
+        // Send confirmation email to the team leader
+        const emailResponse = await fetch("/api/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: teamLeader?.email || data.members[0].email,
+            subject: "AURUM Event Registration Confirmation",
+            text: `Dear ${teamLeader?.fullName || data.members[0].fullName},\n\nThank you for registering for the ${data.event} event. Your registration has been successfully submitted.\n\nBest regards,\nAURUM Event Team`,
+            html: emailContent,
+          }),
+        });
+  
+        if (!emailResponse.ok) {
+          throw new Error("Failed to send confirmation email");
+        }
+      }
+  
       setShowSuccessModal(true);
       form.reset();
-
-      
-
     } catch (error) {
       console.error("Registration failed:", error);
-      let errorMessage = 'Registration failed: ';
-      
+      let errorMessage = "Registration failed: ";
+  
       if (error instanceof Error) {
-        if (error.message.includes('PERMISSION_DENIED')) {
-          errorMessage += 'Access denied. Please try again later.';
+        if (error.message.includes("PERMISSION_DENIED")) {
+          errorMessage += "Access denied. Please try again later.";
         } else {
           errorMessage += error.message;
         }
       } else {
-        errorMessage += 'Unknown error occurred';
+        errorMessage += "Unknown error occurred";
       }
-      
+  
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   };
-
   const handleEventChange = (eventName: string) => {
     const event = events.find((e) => e.name === eventName)
     setSelectedEvent(event || null)
