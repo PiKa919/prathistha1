@@ -132,10 +132,9 @@ export const REGISTRATION_CONFIRMATION_TEMPLATE = (
               <p><strong>Class:</strong> ${data.class}</p>
               <p><strong>Branch:</strong> ${data.branch}</p>
               <p><strong>Payment Reference ID:</strong> ${data.payment.referenceId}</p>
-              <p><strong>Payment Screenshot:</strong> [Attached]</p>
             </div>
   
-            <p>Your registration status is <strong>${data.status}</strong> and will be reviewed shortly.</p>
+            <P>Join the WhatsApp group for further updates: <a href="https://chat.whatsapp.com/IcfNOgRmtbbFi9hZX9ycXv">Join Group</a></p>
             <p>If you have any queries, feel free to contact the event coordinators.</p>
   
             <p>Best Regards,</p>

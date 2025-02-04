@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   // Define email options
   const mailOptions = {
-    from: `"PRATISTHA" <${process.env.EMAIL_USER}>`, // Sender address
+    from: `"PRATISTHA Web & App Team" <${process.env.EMAIL_USER}>`, // Sender address
     to, // Recipient address (team leader's email)
     subject, // Email subject
     text, // Plain text body
