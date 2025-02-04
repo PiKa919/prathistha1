@@ -59,7 +59,6 @@ const CLASSES = [
 ] as const;
 
 export default function RegistrationForm() {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(events[0]) // Initialize with ABCD event
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
@@ -188,12 +187,7 @@ export default function RegistrationForm() {
                     <FormLabel>
                       <User className="inline mr-2" /> Event
                     </FormLabel>
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value)
-                        setSelectedEvent(events.find((e) => e.name === value) || null)
-                      }}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select an event" />
@@ -225,7 +219,7 @@ export default function RegistrationForm() {
                   />
                 </div>
                 <h2 className="text-center font-bold text-xl mb-4">🌟 PRATISHTHA 2025🌟</h2>
-                <p className="text-center">Shah and Anchor Kutchhi Engineering College's Annual Cultural Symposium</p>
+                <p className="text-center">Shah and Anchor Kutchhi Engineering College&apos;s Annual Cultural Symposium</p>
                 
                 <p className="text-center font-semibold mt-4">🎭 VERVE🎬 presents</p>
                 
@@ -245,7 +239,7 @@ export default function RegistrationForm() {
                   <p>📍 Venue: 7th Floor Auditorium</p>
                 </div>
                 
-                <p className="text-center font-bold mt-4">It's time to set the stage on fire! Don't miss out!</p>
+                <p className="text-center font-bold mt-4">It&apos;s time to set the stage on fire! Don&apos;t miss out!</p>
                 
                 <div className="mt-4">
                   <p className="font-semibold">For more information contact:</p>

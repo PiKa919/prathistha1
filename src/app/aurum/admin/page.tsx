@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { database } from "@/firebaseConfig"
 import { ref, onValue, update, remove } from "firebase/database"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import * as XLSX from "xlsx"
+import Image from "next/image"
 
 interface TeamMember {
   fullName: string
@@ -111,9 +112,9 @@ export default function AdminPage() {
     setIsLoading(false)
   }, [])
 
-  const getTeamLeader = (members: TeamMember[]): TeamMember => {
+  const getTeamLeader = useCallback((members: TeamMember[]): TeamMember => {
     return members.find((member) => member.isTeamLeader) || members[0]
-  }
+  }, [])
 
   const filteredRegistrations = useMemo(() => {
     return Object.entries(registrations).filter(([, registration]) => {
@@ -249,7 +250,15 @@ export default function AdminPage() {
             <DialogHeader>
               <DialogTitle>Payment Screenshot</DialogTitle>
             </DialogHeader>
-            <img src={selectedImage || "/placeholder.svg"} alt="Payment Screenshot" className="w-full h-auto" />
+            <div className="relative w-full h-[600px]">
+              <Image
+                src={selectedImage || "/placeholder.svg"}
+                alt="Payment Screenshot"
+                fill
+                style={{ objectFit: 'contain' }}
+                sizes="(max-width: 768px) 100vw, 800px"
+              />
+            </div>
           </DialogContent>
         </Dialog>
       )}
