@@ -13,7 +13,6 @@ import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, CreditCard, Camera, PartyPopper } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
-import { REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
 
 type Event = {
   name: string
@@ -85,13 +84,20 @@ export default function RegistrationForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsSubmitting(true);
-      console.log("Form values:", values); // Debug log
 
       if (!values.paymentScreenshot?.[0]) {
         throw new Error("Payment screenshot is required");
       }
 
-      // Create the registration data
+      const file = values.paymentScreenshot[0];
+      const reader = new FileReader();
+
+      const base64Screenshot = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
       const registrationData = {
         event: values.event,
         fullName: values.fullName,
@@ -103,57 +109,15 @@ export default function RegistrationForm() {
         payment: {
           referenceId: values.paymentReferenceId,
           timestamp: new Date().toISOString(),
-          screenshot: "",
+          screenshot: base64Screenshot,
         },
         status: "pending",
         createdAt: new Date().toISOString(),
       };
 
-      // Handle the screenshot separately
-      if (values.paymentScreenshot?.[0]) {
-        const file = values.paymentScreenshot[0];
-        const reader = new FileReader();
-
-        const base64Screenshot = await new Promise((resolve, reject) => {
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-
-        registrationData.payment.screenshot = base64Screenshot as string;
-      }
-
-      // Save to Firebase - Changed from aurum to verve
+      // Save to Firebase
       const verveRef = ref(database, `verve/${Date.now()}`);
       await set(verveRef, registrationData);
-
-      console.log("Registration successful!");
-
-      // Generate the email content using the template
-      const emailContent = REGISTRATION_CONFIRMATION_TEMPLATE(
-        values.event,
-        1,
-        values.paymentReferenceId,
-        [{ ...values, isTeamLeader: true }],
-      );
-
-      // Send confirmation email
-      const emailResponse = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: values.email,
-          subject: "VERVE Event Registration Confirmation", // Updated email subject
-          text: `Dear ${values.fullName},\n\nThank you for registering for the ${values.event} event. Your registration has been successfully submitted.\n\nBest regards,\nVERVE Event Team`,
-          html: emailContent,
-        }),
-      });
-
-      if (!emailResponse.ok) {
-        throw new Error("Failed to send confirmation email");
-      }
 
       setShowSuccessModal(true);
       form.reset();
@@ -235,7 +199,7 @@ export default function RegistrationForm() {
                 
                 <div className="mt-4 space-y-1">
                   <p>📅 Date: 8th February 2025</p>
-                  <p>⏰ Time: 2:00 PM – 5:00 PM</p>
+                  <p>⏰ Time: 11:00 AM – 1:00 PM</p>
                   <p>📍 Venue: 7th Floor Auditorium</p>
                 </div>
                 
