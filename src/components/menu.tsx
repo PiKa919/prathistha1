@@ -15,7 +15,7 @@ const menuItems = [
     submenu: [
       { label: 'Student Council', path: '/team' },
       { label: 'Extended Teams', path: '/team/extended' },
-      { label: 'Faculty', path: '/team/faculty' }
+      { label: "Developer's", path: '/team/developers' }
     ]
   },
   { label: 'Sponsors', path: '/sponsors/2024' },
