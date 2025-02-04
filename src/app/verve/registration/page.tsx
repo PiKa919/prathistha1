@@ -13,15 +13,16 @@ import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, CreditCard, Camera, PartyPopper } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
+import { generateEmailContent } from "@/utils/emailTemplates"
 
 type Event = {
   name: string
   icon: string
-  type: "single"
+  type: "single" | "team"
 }
 
 const events: Event[] = [
-  { name: "ABCD: Anybody Can Dance", icon: "💃", type: "single" },
+  { name: "ABCD: Anybody Can Dance", icon: "💃", type: "team" },
 ]
 
 const formSchema = z.object({
@@ -84,20 +85,20 @@ export default function RegistrationForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsSubmitting(true);
-
+  
       if (!values.paymentScreenshot?.[0]) {
         throw new Error("Payment screenshot is required");
       }
-
+  
       const file = values.paymentScreenshot[0];
       const reader = new FileReader();
-
+  
       const base64Screenshot = await new Promise((resolve, reject) => {
         reader.onload = () => resolve(reader.result);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
-
+  
       const registrationData = {
         event: values.event,
         fullName: values.fullName,
@@ -114,11 +115,32 @@ export default function RegistrationForm() {
         status: "pending",
         createdAt: new Date().toISOString(),
       };
-
+  
       // Save to Firebase
       const verveRef = ref(database, `verve/${Date.now()}`);
       await set(verveRef, registrationData);
-
+  
+      // Create email content
+      const emailContent = generateEmailContent(registrationData);
+  
+      // Send confirmation email
+      const emailResponse = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: values.email, // Send email to the user's email
+          subject: "VERVE Event Registration Confirmation",
+          text: "Your registration has been confirmed for the event.",
+          html: emailContent, // HTML formatted email content
+        }),
+      });
+  
+      if (!emailResponse.ok) {
+        throw new Error("Failed to send confirmation email");
+      }
+  
       setShowSuccessModal(true);
       form.reset();
     } catch (error) {
@@ -128,6 +150,7 @@ export default function RegistrationForm() {
       setIsSubmitting(false);
     }
   };
+  
 
   if (!isMounted) {
     return null // or a loading spinner
@@ -394,7 +417,7 @@ export default function RegistrationForm() {
             <div className="flex justify-center mt-6">
               <Button
                 type="submit"
-                disabled={isSubmitting || !form.formState.isValid}
+                disabled={isSubmitting }
                 className="w-full md:w-auto px-8"
               >
                 {isSubmitting ? (

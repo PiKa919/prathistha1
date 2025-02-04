@@ -1,79 +1,54 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import RegistrationForm from "../page"
+import { useState, useEffect } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import RegistrationForm from "../page";
+import { useEventStore } from "@/store/useEventStore";
 
-const events = [
-  { name: "Crime Scene Investigation", icon: "🕵️" },
-  { name: "Escape Room", icon: "🚪" },
-  { name: "AR Treasure Hunt", icon: "🗺️" },
-  { name: "Giant Jenga", icon: "🧱" },
-  { name: "Glow-in-the-Dark Pickleball", icon: "🏓" },
-  { name: "Laser Maze", icon: "🔦" },
-  { name: "BGMI Tournament", icon: "📱" },
-  { name: "Valorant Championship", icon: "🎮" },
-  { name: "Robo Sumo", icon: "🤖" },
-  { name: "Robo Race", icon: "🏎️" },
-  { name: "Cozmo Clench", icon: "🦾" },
-  { name: "Technokagaz", icon: "📄" },
-  { name: "Tech Expo", icon: "🔬" },
-  { name: "Code of Duty", icon: "💻" },
-  { name: "Cybersecurity Challenge", icon: "🔒" },
-  { name: "FIFA Tournament", icon: "⚽" },
-  { name: "VR Room", icon: "🥽" },
-  { name: "Mortal Kombat Tournament", icon: "🥋" },
-  { name: "Midtown Madness", icon: "🏙️" },
-]
 
 export default function EventRegistrationManager() {
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([])
-  const [showForm, setShowForm] = useState(true)
+  const { events, setEvents } = useEventStore();
+  const [showForm, setShowForm] = useState(true);
+  const [tempEvents, setTempEvents] = useState(events); // Temporary state for toggling
 
-  // Load selected events from local storage on component mount
+  // Sync tempEvents with Zustand store on initial load and when store updates
   useEffect(() => {
-    const savedEvents = localStorage.getItem("selectedEvents")
-    if (savedEvents) {
-      setSelectedEvents(JSON.parse(savedEvents))
-    }
-  }, [])
+    setTempEvents(events);
+  }, [events]);
 
-  // Save selected events to local storage whenever they change
-  useEffect(() => {
-    localStorage.setItem("selectedEvents", JSON.stringify(selectedEvents))
-  }, [selectedEvents])
-
-  const toggleEvent = (eventName: string) => {
-    setSelectedEvents((prev) =>
-      prev.includes(eventName) ? prev.filter((e) => e !== eventName) : [...prev, eventName]
-    )
-  }
-
+  // Toggle all events locally
   const toggleAllEvents = () => {
-    setSelectedEvents((prev) => (prev.length === events.length ? [] : events.map((e) => e.name)))
-  }
+    const allEnabled = tempEvents.every((e) => e.enabled);
+    setTempEvents(tempEvents.map((event) => ({ ...event, enabled: !allEnabled })));
+  };
+
+  // Save changes to Zustand store when "Save Changes" is clicked
+  const handleSave = () => {
+    setEvents(tempEvents);
+    console.log("Saved Events:", tempEvents); // Log the saved state
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Event Registration Manager</h1>
 
+        {/* Toggle All Events */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <Label htmlFor="master-toggle" className="text-xl">
-              Toggle All Events
-            </Label>
+            <Label htmlFor="master-toggle" className="text-xl">Toggle All Events</Label>
             <Switch
               id="master-toggle"
-              checked={selectedEvents.length === events.length}
+              checked={tempEvents.every((e) => e.enabled)}
               onCheckedChange={toggleAllEvents}
             />
           </div>
 
+          {/* Individual Event Toggles */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {events.map((event) => (
+            {tempEvents.map((event) => (
               <div key={event.name} className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
                 <Label htmlFor={`toggle-${event.name}`} className="flex items-center">
                   <span className="mr-2">{event.icon}</span>
@@ -81,22 +56,37 @@ export default function EventRegistrationManager() {
                 </Label>
                 <Switch
                   id={`toggle-${event.name}`}
-                  checked={selectedEvents.includes(event.name)}
-                  onCheckedChange={() => toggleEvent(event.name)}
+                  checked={event.enabled}
+                  onCheckedChange={() =>
+                    setTempEvents(tempEvents.map((e) =>
+                      e.name === event.name ? { ...e, enabled: !e.enabled } : e
+                    ))
+                  }
                 />
               </div>
             ))}
           </div>
         </div>
 
+        {/* Save and Reset Buttons */}
+        <div className="mb-6 flex gap-4">
+          <Button onClick={handleSave} >
+            Save Changes
+          </Button>
+          <Button onClick={() => setTempEvents(events)} variant="outline">
+            Reset
+          </Button>
+        </div>
+
+        {/* Show/Hide Registration Form */}
         <div className="mb-6">
           <Button onClick={() => setShowForm(!showForm)} variant="outline">
             {showForm ? "Hide Registration Form" : "Show Registration Form"}
           </Button>
         </div>
 
-        <RegistrationForm  />
+        {showForm && <RegistrationForm />}
       </div>
     </div>
-  )
+  );
 }

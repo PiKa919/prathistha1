@@ -15,6 +15,8 @@ import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, 
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
 import { REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
+import { useEventStore } from "@/store/useEventStore"
+
 
 type Event = {
   name: string
@@ -22,27 +24,27 @@ type Event = {
   type: "single" | "team"
 }
 
-const events: Event[] = [
-  { name: "Crime Scene Investigation", icon: "🕵️", type: "team" },
-  { name: "Escape Room", icon: "🚪", type: "team" },
-  { name: "AR Treasure Hunt", icon: "🗺️", type: "team" },
-  { name: "Giant Jenga", icon: "🧱", type: "single" },
-  { name: "Glow-in-the-Dark Pickleball", icon: "🏓", type: "single" },
-  { name: "Laser Maze", icon: "🔦", type: "single" },
-  { name: "BGMI Tournament", icon: "📱", type: "team" },
-  { name: "Valorant Championship", icon: "🎮", type: "team" },
-  { name: "Robo Sumo", icon: "🤖", type: "team" },
-  { name: "Robo Race", icon: "🏎️", type: "team" },
-  { name: "Cozmo Clench", icon: "🦾", type: "single" },
-  { name: "Technokagaz", icon: "📄", type: "single" },
-  { name: "Tech Expo", icon: "🔬", type: "single" },
-  { name: "Code of Duty", icon: "💻", type: "single" },
-  { name: "Cybersecurity Challenge", icon: "🔒", type: "single" },
-  { name: "FIFA Tournament", icon: "⚽", type: "single" },
-  { name: "VR Room", icon: "🥽", type: "single" },
-  { name: "Mortal Kombat Tournament", icon: "🥋", type: "single" },
-  { name: "Midtown Madness", icon: "🏙️", type: "team" },
-]
+// const events: Event[] = [
+//   { name: "Crime Scene Investigation", icon: "🕵️", type: "team" },
+//   { name: "Escape Room", icon: "🚪", type: "team" },
+//   { name: "AR Treasure Hunt", icon: "🗺️", type: "team" },
+//   { name: "Giant Jenga", icon: "🧱", type: "single" },
+//   { name: "Glow-in-the-Dark Pickleball", icon: "🏓", type: "single" },
+//   { name: "Laser Maze", icon: "🔦", type: "single" },
+//   { name: "BGMI Tournament", icon: "📱", type: "team" },
+//   { name: "Valorant Championship", icon: "🎮", type: "team" },
+//   { name: "Robo Sumo", icon: "🤖", type: "team" },
+//   { name: "Robo Race", icon: "🏎️", type: "team" },
+//   { name: "Cozmo Clench", icon: "🦾", type: "single" },
+//   { name: "Technokagaz", icon: "📄", type: "single" },
+//   { name: "Tech Expo", icon: "🔬", type: "single" },
+//   { name: "Code of Duty", icon: "💻", type: "single" },
+//   { name: "Cybersecurity Challenge", icon: "🔒", type: "single" },
+//   { name: "FIFA Tournament", icon: "⚽", type: "single" },
+//   { name: "VR Room", icon: "🥽", type: "single" },
+//   { name: "Mortal Kombat Tournament", icon: "🥋", type: "single" },
+//   { name: "Midtown Madness", icon: "🏙️", type: "team" },
+// ]
 
 const memberSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -69,6 +71,10 @@ export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [teamLeaderIndex, setTeamLeaderIndex] = useState<number | null>(null);
+
+  const { events } = useEventStore();
+
+  const enabledEvents = events.filter((event) => event.enabled);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -147,7 +153,7 @@ export default function RegistrationForm() {
           body: JSON.stringify({
             to: teamLeader?.email || data.members[0].email,
             subject: "AURUM Event Registration Confirmation",
-            text: `Dear ${teamLeader?.fullName || data.members[0].fullName},\n\nThank you for registering for the ${data.event} event. Your registration has been successfully submitted.\n\nBest regards,\nAURUM Event Team`,
+            text: ``,
             html: emailContent,
           }),
         });
@@ -178,6 +184,7 @@ export default function RegistrationForm() {
       setIsSubmitting(false);
     }
   };
+
   const handleEventChange = (eventName: string) => {
     const event = events.find((e) => e.name === eventName)
     setSelectedEvent(event || null)
@@ -194,6 +201,8 @@ export default function RegistrationForm() {
   }
 
   return (
+    
+
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex flex-col lg:flex-row py-16 px-4">
       <div className="container mx-auto p-4 max-w-3xl">
         <h1 className="text-3xl mb-6 text-center lg:text-left">AURUM Event Registration</h1>
@@ -222,15 +231,21 @@ export default function RegistrationForm() {
                           <SelectValue placeholder="Select an event" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
-                        {events.map((event) => (
-                          <SelectItem key={event.name} value={event.name}>
-                            <span className="mr-2">{event.icon}</span>
-                            {event.name}
-                            <span className="ml-2 text-muted-foreground text-sm">({event.type})</span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
+                      
+      <SelectContent>
+        {enabledEvents.length > 0 ? (
+          enabledEvents.map((event) => (
+            <SelectItem key={event.name} value={event.name}>
+              <span className="mr-2">{event.icon}</span>
+              {event.name}
+              <span className="ml-2 text-muted-foreground text-sm">({event.type})</span>
+            </SelectItem>
+          ))
+        ) : (
+          <div className="text-center p-2 text-gray-500">No events available</div>
+        )}
+      </SelectContent>
+   
                     </Select>
                     <FormMessage />
                   </FormItem>
@@ -404,84 +419,7 @@ export default function RegistrationForm() {
     )}
               </div>
             ))}
-
-{/* {Array.from({ length: teamSize }).map((_, index) => (
-  <div key={index} className="space-y-4 p-4 bg-black/30 rounded-xl">
-    <h3 className="text-xl mb-4">
-      <User className="inline mr-2" /> Personal Details - Member {index + 1}
-    </h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <FormField
-        control={form.control}
-        name={`members.${index}.fullName`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>
-              <User className="inline mr-2" /> Full Name
-            </FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name={`members.${index}.email`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>
-              <Mail className="inline mr-2" /> Email
-            </FormLabel>
-            <FormControl>
-              <Input {...field} type="email" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name={`members.${index}.phone`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>
-              <Phone className="inline mr-2" /> Phone Number
-            </FormLabel>
-            <FormControl>
-              <Input {...field} type="tel" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
-
-    {selectedEvent?.type === "team" && (
-      <FormField
-        control={form.control}
-        name={`members.${index}.isTeamLeader`}
-        render={({ field }) => (
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-            <FormControl>
-              <Checkbox
-                checked={teamLeaderIndex === index}
-                onCheckedChange={() => setTeamLeaderIndex(index)}
-              />
-            </FormControl>
-            <div className="space-y-1 leading-none">
-              <FormLabel>
-                <Crown className="inline mr-2" /> Team Leader
-              </FormLabel>
-              <FormDescription>Only one team leader can be selected.</FormDescription>
-            </div>
-          </FormItem>
-        )}
-      />
-    )}
-  </div>
-))} */}
+            
             <div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <h3 className="text-xl mb-4">
                 <CreditCard className="inline mr-2" /> Payment
@@ -568,6 +506,6 @@ export default function RegistrationForm() {
         </Dialog>
       </div>
     </div>
+   
   )
 }
-
