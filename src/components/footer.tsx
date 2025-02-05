@@ -73,7 +73,17 @@ export default function Footer() {
       </div>
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-4 py-4">
+          {/* <p className="text-center text-gray-400 text-sm">
+          Made with <span className="heart">❤️</span> by 
+            <Link href="/team/developers">
+              <span className="developer-link"> PIKA, Deep and Dilipkumar</span>
+            </Link>.
+          </p> */}
           <p className="text-center text-gray-400 text-sm">
+          Made with <span className="heart">❤️</span> by 
+            <Link href="/team/developers">
+              <span className="developer-link"> PIKA, Deep and Dilipkumar</span>
+            </Link>.           
             &copy; {new Date().getFullYear()} Pratishtha. All rights reserved.
           </p>
         </div>

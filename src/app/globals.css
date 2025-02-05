@@ -229,3 +229,33 @@ html, body {
 .font-neue-montreal {
   font-family: 'Neue Montreal', sans-serif;
 }
+
+
+.heart {
+  display: inline-block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.heart:hover {
+  animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+.developer-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.developer-link:hover {
+  color: #ffffff; /* Change to the desired highlight color */
+  text-decoration: underline;
+}
