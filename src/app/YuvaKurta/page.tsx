@@ -29,6 +29,7 @@ interface FormData {
   transactionId: string;
   paymentScreenshot: string;
   phoneNumber: string; // Added phone number
+  // Removed number from interface
 }
 
 // Remove this unused interface since we're not using it anymore
@@ -338,19 +339,7 @@ export default function KurtaRegistration() {
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="number" className="text-lg md:text-xl font-medium">Jersey Number *</Label>
-                  <Input 
-                    id="number" 
-                    type="number" 
-                    placeholder="Choose your jersey number (0-999)"
-                    min="0"
-                    max="999"
-                    className={`w-full text-lg md:text-xl h-10 md:h-12 bg-black/50 text-white border-gray-700 focus:ring-2 focus:ring-white/50 transition-all`}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                {/* Removed jersey number input field */}
 
                 <div className="space-y-2">
                   <Label htmlFor="department" className="text-lg md:text-xl font-medium">Department *</Label>
