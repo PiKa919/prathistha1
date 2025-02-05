@@ -22,7 +22,8 @@ type Event = {
 }
 
 const events: Event[] = [
-  { name: "ABCD: Anybody Can Dance", icon: "💃", type: "team" },
+  { name: "ABCD: Anybody Can Dance", icon: "💃", type: "single" },
+  { name: "Pratishtha's Got Talent", icon: "🎭", type: "single" },
 ]
 
 const formSchema = z.object({
@@ -195,7 +196,7 @@ export default function RegistrationForm() {
                 )}
               />
 
-              <div className="mt-4 p-4 bg-black/20 rounded-lg text-sm space-y-2">
+              {/* <div className="mt-4 p-4 bg-black/20 rounded-lg text-sm space-y-2">
                 <div className="flex justify-center mb-4">
                   <Image 
                     src="/verve/ABCD/ABCD.webp" 
@@ -233,8 +234,8 @@ export default function RegistrationForm() {
                   <p>Vedika Katarkar - 9324694492</p>
                   <p>Shivam Shinde - 79775 35959</p>
                 </div>
-              </div>
-            </div>
+              </div>*/}
+            </div> 
 
             <div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <FormField

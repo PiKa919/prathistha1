@@ -134,7 +134,7 @@ export const REGISTRATION_CONFIRMATION_TEMPLATE = (
               <p><strong>Payment Reference ID:</strong> ${data.payment.referenceId}</p>
             </div>
   
-            <P>Join the WhatsApp group for further updates: <a href="https://chat.whatsapp.com/IcfNOgRmtbbFi9hZX9ycXv">Join Group</a></p>
+           
             <p>If you have any queries, feel free to contact the event coordinators.</p>
   
             <p>Best Regards,</p>

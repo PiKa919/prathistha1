@@ -22,6 +22,7 @@ interface EventCardProps {
   eventHeadContact?: string
   eventCoHead?: string
   eventCoHeadContact?: string
+  festName?:string
 }
 
 export function EventCard({
@@ -38,6 +39,7 @@ export function EventCard({
   eventHeadContact,
   eventCoHead,
   eventCoHeadContact,
+  festName,
 }: EventCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -126,6 +128,7 @@ export function EventCard({
         price={price}
         imageUrl={imageUrl}
         ranking={ranking}
+        festName={festName}
       />
     </div>
   )

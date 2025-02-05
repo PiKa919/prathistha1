@@ -1,5 +1,7 @@
 import { EventCard } from "./EventCard"
 
+const festName= "aurum"
+
 const events = [
   {
     title: "Crime Scene Investigation",
@@ -7,14 +9,14 @@ const events = [
     time: "10:00 AM - 12:00 PM",
     place: "CR - 33",
     videoUrl: "https://www.youtube.com/live/q_JsgpiuY98?si=GkrEnp70QbssXf55",
-    imageUrl: "/placeholder.svg?height=200&width=300",
+    imageUrl: "/verve/ABCD.webp",
     price: "₹49",
     ranking: {
       first: "Team Sherlock",
       second: "CSI Masters",
       third: "Detective Squad",
     },
-    date: "2023-09-15",
+    date: "2025-02-10",
     eventHead: "Sanidha Panda",
     eventHeadContact: "9987201676",
     eventCoHead: "Siddesh Sharma",
@@ -33,7 +35,7 @@ const events = [
       second: "Puzzle Breakers",
       third: "Time Benders",
     },
-    date: "2023-09-16",
+    date: "2025-02-16",
     eventHead: "Krisha Ebrahimpurkar",
     eventHeadContact: "9324292922",
     eventCoHead: "Ayaan Fakir",
@@ -52,7 +54,7 @@ const events = [
       second: "Treasure Hunters",
       third: "AR Explorers",
     },
-    date: "2023-09-17",
+    date: "2025-02-10",
     eventHead: "Tanish Shah",
     eventHeadContact: "8291285782",
     eventCoHead: "Tanishq Gohil",
@@ -71,7 +73,7 @@ const events = [
       second: "Tower Builders",
       third: "Steady Hands",
     },
-    date: "2023-09-18",
+    date: "2025-02-10",
     eventHead: "Nikhil Gohil",
     eventHeadContact: "9372618528",
     eventCoHead: "Zain P",
@@ -90,7 +92,7 @@ const events = [
       second: "Glow Getters",
       third: "Pickleball Pros",
     },
-    date: "2023-09-19",
+    date: "2025-02-10",
     eventHead: "Harsh",
     eventHeadContact: "9372829908",
     eventCoHead: "Monarch",
@@ -109,7 +111,7 @@ const events = [
       second: "Maze Masters",
       third: "Mission Accomplished",
     },
-    date: "2023-09-20",
+    date: "2025-02-11",
     eventHead: "Nikhil E",
     eventHeadContact: "8260753244",
     eventCoHead: "Khushiya P",
@@ -128,7 +130,7 @@ const events = [
       second: "Virtual Victors",
       third: "Reality Rebels",
     },
-    date: "2023-10-01",
+    date: "2025-02-10",
   },
   {
     title: "FIFA",
@@ -143,7 +145,7 @@ const events = [
       second: "Football Fury",
       third: "Goal Getters",
     },
-    date: "2023-09-30",
+    date: "2025-02-10",
   },
   {
     title: "Mortal Kombat",
@@ -158,7 +160,7 @@ const events = [
       second: "Fighting Force",
       third: "Mortal Masters",
     },
-    date: "2023-10-02",
+    date: "2025-02-10",
   },
   {
     title: "F1",
@@ -173,7 +175,7 @@ const events = [
       second: "City Slickers",
       third: "Speed Demons",
     },
-    date: "2023-10-03",
+    date: "2025-02-10",
   },
   {
     title: "1V1 PC's",
@@ -188,7 +190,7 @@ const events = [
       second: "BGMI Champs",
       third: "Elite Squad",
     },
-    date: "2023-09-21",
+    date: "2025-02-10",
   },
   {
     title: "Getting Over It",
@@ -203,7 +205,7 @@ const events = [
       second: "Tactical Titans",
       third: "Agent Aces",
     },
-    date: "2023-09-22",
+    date: "2025-02-10",
   },
   {
     title: "RC Car Race",
@@ -218,7 +220,7 @@ const events = [
       second: "Robo Racers",
       third: "Circuit Champions",
     },
-    date: "2023-09-24",
+    date: "2025-02-10",
   },
 ]
 
@@ -228,7 +230,7 @@ export function Events() {
       <h2 className="text-2xl font-bold mb-6 text-white">Events</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {events.map((event, index) => (
-          <EventCard key={index} {...event} />
+          <EventCard key={index} {...event} festName={festName}/>
         ))}
       </div>
     </div>

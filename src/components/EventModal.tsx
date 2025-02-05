@@ -19,9 +19,10 @@ interface EventModalProps {
     second: string
     third: string
   }
+  festName?: string
 }
 
-export function EventModal({ isOpen, onClose, title, description, time, place, videoUrl, price, imageUrl, ranking }: EventModalProps) {
+export function EventModal({ isOpen, onClose, title, description, time, place, videoUrl, price, imageUrl, ranking,festName }: EventModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[900px] p-0 overflow-hidden">
@@ -52,7 +53,7 @@ export function EventModal({ isOpen, onClose, title, description, time, place, v
                     Watch on YouTube
                   </a>
                 </Button>
-                <Link href="/aurum/registration">
+                <Link href={`${festName}/registeration`}>
                   <Button className="flex-1">Register</Button>
                 </Link>
               </div>
