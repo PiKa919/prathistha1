@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ScrollProgress } from './ui/scroll-progress';
 
 const menuItems = [
   { label: 'Aurum', path: '/aurum' },
@@ -201,6 +202,7 @@ const Menu = () => {
         </div>
       </nav>
 
+<ScrollProgress />
       <style jsx>{`
         @font-face {
           font-family: 'MAEL';

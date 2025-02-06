@@ -10,7 +10,6 @@ import Menu from "@/components/menu";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster"
 import { CustomCursor } from "@/components/CustomCursor"
-import { ScrollProgress } from '@/components/ui/scroll-progress';
 
 config.autoAddCss = false
 
@@ -67,7 +66,6 @@ export default function RootLayout({
         </Suspense>
         <div className="content">
           <main style={{ height: 'calc(100% - 60px)' }}>{children}</main>
-        <ScrollProgress />
           <Toaster/>
           <Analytics />
           <SpeedInsights />
