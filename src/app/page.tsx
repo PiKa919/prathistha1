@@ -96,25 +96,34 @@ export default function Home() {
             </div>
             {/* <SingerReveal /> */}
             {/* <WavyBackground className="max-w-4xl  pt-96"> */}
-              <main className="flex justify-center items-center min-h-screen bg-black-100  gap-6">
-                <Image
-                  src="/assets/banner/YuvaBanner.png"
-                  alt="Event Banner"
-                  width={500} // Set equal width
-                  height={600} // Set equal height
-                  className="rounded-lg object-cover shadow-lg"
-                />
-                <div className="max-w-md text-center text-white">
-                  <h2 className="text-2xl font-bold">Experience the Magic!</h2>
-                  <p className="mt-2 text-lg">
-                    Join us for an unforgettable musical journey featuring top artists and mesmerizing performances.
-                  </p>
-                </div>
-                <main className="flex items-center justify-center min-h-screen bg-black-100 p-4">
-                  <SingerReveal />
-                </main>
-                
-              </main>
+            <main className="flex flex-col md:flex-row justify-center items-center min-h-screen bg-black-100 p-4 gap-6">
+  {/* YuvaBanner Image */}
+  <div className="w-[50%] md:w-[45%] flex justify-center">
+    <Image
+      src="/assets/banner/YuvaBanner.png"
+      alt="Event Banner"
+      width={500}  // Fixed width for large screens
+      height={600} // Fixed height for large screens
+      className="w-full h-auto max-w-[500px] md:max-w-[500px] rounded-lg object-cover shadow-lg"
+    />
+  </div>
+
+  {/* Description in the Middle */}
+  <div className="max-w-md text-center text-white px-4">
+    <h2 className="text-2xl font-bold">Experience the Magic!</h2>
+    <p className="mt-2 text-lg">
+      Join us for an unforgettable musical journey featuring top artists and mesmerizing performances.
+    </p>
+  </div>
+
+  {/* Singer Reveal Section */}
+  <div className="w-[90%] md:w-[45%] flex justify-center">
+    <SingerReveal />
+  </div>
+</main>
+
+
+
             {/* </WavyBackground> */}
             <FestivalPhases />
             <ScrollGallery />
