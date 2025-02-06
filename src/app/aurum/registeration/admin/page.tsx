@@ -63,7 +63,7 @@ export default function EventRegistrationManager() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-20">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Event Registration Manager</h1>
 
