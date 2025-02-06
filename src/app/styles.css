@@ -426,3 +426,17 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
 }
+
+@media (max-width: 768px) {
+  .banner-with-celebrity {
+    height: auto;
+  }
+
+  .banner-with-celebrity > div {
+    flex-direction: column;
+  }
+
+  .banner-with-celebrity > div > div {
+    width: 100%;
+  }
+}

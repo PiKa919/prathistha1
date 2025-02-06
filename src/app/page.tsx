@@ -13,6 +13,10 @@ import './styles.css';
 import CountdownTimer from '@/components/ui/count-down';
 import FestivalPhases from '@/components/Festivephases';
 import ContactSection from '@/components/map';
+import SingerReveal from '@/components/SingerSection';
+// import { WavyBackground } from '@/components/wavy-background';
+// import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin';
+// import ScratchToReveal from "@/components/scratchtoreveal";
 
 // function BroadcastButton() {
 //   const [isGlowing, setIsGlowing] = useState(false);
@@ -85,9 +89,33 @@ export default function Home() {
             <div className="spline-container">
               <Spline scene="https://prod.spline.design/GfOUfu42ul3wEdHu/scene.splinecode" />
             </div>
+
+            {/* Image Section Below Countdown (Side by Side in a Single Div) */}
             <div className="countdown-timer">
               <CountdownTimer targetDate={targetDate} />
             </div>
+            {/* <SingerReveal /> */}
+            {/* <WavyBackground className="max-w-4xl  pt-96"> */}
+              <main className="flex justify-center items-center min-h-screen bg-black-100  gap-6">
+                <Image
+                  src="/assets/banner/YuvaBanner.png"
+                  alt="Event Banner"
+                  width={500} // Set equal width
+                  height={600} // Set equal height
+                  className="rounded-lg object-cover shadow-lg"
+                />
+                <div className="max-w-md text-center text-white">
+                  <h2 className="text-2xl font-bold">Experience the Magic!</h2>
+                  <p className="mt-2 text-lg">
+                    Join us for an unforgettable musical journey featuring top artists and mesmerizing performances.
+                  </p>
+                </div>
+                <main className="flex items-center justify-center min-h-screen bg-black-100 p-4">
+                  <SingerReveal />
+                </main>
+                
+              </main>
+            {/* </WavyBackground> */}
             <FestivalPhases />
             <ScrollGallery />
             <ContactSection/>
