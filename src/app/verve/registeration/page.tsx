@@ -1,3 +1,7 @@
+
+
+
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -14,17 +18,16 @@ import { User, Mail, Phone, Hash, School, GitBranch, CreditCard, Camera, PartyPo
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
 import { generateEmailContent } from "@/utils/emailTemplates"
+import axios from "axios"
 
-type Event = {
-  name: string
-  icon: string
-  type: "single" | "team"
+interface IEvent {
+  name: string;
+  icon: string;
+  type: "single" | "team";
+  event: "aurum" | "verve";
+  enabled: boolean;
 }
 
-const events: Event[] = [
-  { name: "ABCD: Anybody Can Dance", icon: "💃", type: "single" },
-  { name: "Pratishtha's Got Talent", icon: "🎭", type: "single" },
-]
 
 const formSchema = z.object({
   event: z.string().min(1, "Please select an event"),
@@ -63,11 +66,11 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-
+const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      event: "ABCD: Anybody Can Dance", // Set default event
+      event: "",
       fullName: "",
       email: "",
       phone: "",
@@ -81,7 +84,18 @@ export default function RegistrationForm() {
 
   useEffect(() => {
     setIsMounted(true)
+    fetchEvents()
   }, [])
+
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get("/api/events");
+      const filteredEvents = response.data.filter((event: IEvent) => event.event === "verve" && event.enabled);
+      setEnabledEvents(filteredEvents);
+    } catch (error) {
+      console.error("Failed to fetch events", error);
+    }
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -151,7 +165,6 @@ export default function RegistrationForm() {
       setIsSubmitting(false);
     }
   };
-  
 
   if (!isMounted) {
     return null // or a loading spinner
@@ -182,7 +195,7 @@ export default function RegistrationForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {events.map((event) => (
+                        {enabledEvents.map((event) => (
                           <SelectItem key={event.name} value={event.name}>
                             <span className="mr-2">{event.icon}</span>
                             {event.name}
@@ -195,49 +208,11 @@ export default function RegistrationForm() {
                   </FormItem>
                 )}
               />
-
-              {/* <div className="mt-4 p-4 bg-black/20 rounded-lg text-sm space-y-2">
-                <div className="flex justify-center mb-4">
-                  <Image 
-                    src="/verve/ABCD/ABCD.webp" 
-                    alt="Event Image" 
-                    width={300} 
-                    height={300} 
-                    className="rounded-lg"
-                  />
-                </div>
-                <h2 className="text-center font-bold text-xl mb-4">🌟 PRATISHTHA 2025🌟</h2>
-                <p className="text-center">Shah and Anchor Kutchhi Engineering College&apos;s Annual Cultural Symposium</p>
-                
-                <p className="text-center font-semibold mt-4">🎭 VERVE🎬 presents</p>
-                
-                <p className="text-center font-bold text-lg">💃 ABCD: Any Body Can Dance💃</p>
-                <p className="text-center italic">An electrifying intra-college solo dance competition!</p>
-                
-                <div className="space-y-1 mt-4">
-                  <p>🔥 Showcase your best moves</p>
-                  <p>🔥 Experience a dazzling mix of dance styles</p>
-                  <p>🔥 Win exciting prizes</p>
-                  <p>🔥 Own the stage and make it your moment!</p>
-                </div>
-                
-                <div className="mt-4 space-y-1">
-                  <p>📅 Date: 8th February 2025</p>
-                  <p>⏰ Time: 11:00 AM – 1:00 PM</p>
-                  <p>📍 Venue: 7th Floor Auditorium</p>
-                </div>
-                
-                <p className="text-center font-bold mt-4">It&apos;s time to set the stage on fire! Don&apos;t miss out!</p>
-                
-                <div className="mt-4">
-                  <p className="font-semibold">For more information contact:</p>
-                  <p>Vedika Katarkar - 9324694492</p>
-                  <p>Shivam Shinde - 79775 35959</p>
-                </div>
-              </div>*/}
             </div> 
 
-            <div className="space-y-4 p-4 bg-black/30 rounded-xl">
+            {/* Other form fields remain unchanged */}
+            
+<div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <FormField
                 control={form.control}
                 name="fullName"
@@ -414,6 +389,8 @@ export default function RegistrationForm() {
                 )}
               />
             </div>
+
+            {/* ... */}
 
             <div className="flex justify-center mt-6">
               <Button

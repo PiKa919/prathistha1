@@ -90,6 +90,10 @@ html, body {
   cursor: none;
 }
 
+.element::-webkit-scrollbar {
+  display: none;
+}
+
 .stars-container {
   perspective: 500px;
   animation: rotate 100s linear infinite;

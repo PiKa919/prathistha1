@@ -16,35 +16,82 @@ import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
 import { REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
 import { useEventStore } from "@/store/useEventStore"
+import axios from "axios";
 
-
-type Event = {
-  name: string
-  icon: string
-  type: "single" | "team"
+interface IEvent {
+  name: string;
+  icon: string;
+  type: "single" | "team";
+  event: "aurum" | "verve";
+  enabled: boolean;
 }
 
-// const events: Event[] = [
-//   { name: "Crime Scene Investigation", icon: "🕵️", type: "team" },
-//   { name: "Escape Room", icon: "🚪", type: "team" },
-//   { name: "AR Treasure Hunt", icon: "🗺️", type: "team" },
-//   { name: "Giant Jenga", icon: "🧱", type: "single" },
-//   { name: "Glow-in-the-Dark Pickleball", icon: "🏓", type: "single" },
-//   { name: "Laser Maze", icon: "🔦", type: "single" },
-//   { name: "BGMI Tournament", icon: "📱", type: "team" },
-//   { name: "Valorant Championship", icon: "🎮", type: "team" },
-//   { name: "Robo Sumo", icon: "🤖", type: "team" },
-//   { name: "Robo Race", icon: "🏎️", type: "team" },
-//   { name: "Cozmo Clench", icon: "🦾", type: "single" },
-//   { name: "Technokagaz", icon: "📄", type: "single" },
-//   { name: "Tech Expo", icon: "🔬", type: "single" },
-//   { name: "Code of Duty", icon: "💻", type: "single" },
-//   { name: "Cybersecurity Challenge", icon: "🔒", type: "single" },
-//   { name: "FIFA Tournament", icon: "⚽", type: "single" },
-//   { name: "VR Room", icon: "🥽", type: "single" },
-//   { name: "Mortal Kombat Tournament", icon: "🥋", type: "single" },
-//   { name: "Midtown Madness", icon: "🏙️", type: "team" },
-// ]
+import { UseFormReturn } from "react-hook-form";
+
+interface RegistrationPageProps {
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+  handleEventChange: (value: string) => void;
+}
+
+const RegistrationPage = ({ form, handleEventChange }: RegistrationPageProps) => {
+  const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get("/api/events");
+        const filteredEvents = response.data.filter((event: IEvent) => event.event === "aurum" && event.enabled);
+        setEnabledEvents(filteredEvents);
+      } catch (error) {
+        console.error("Failed to fetch events", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  return (
+    <div className="">
+      <div className="space-y-4 p-4 bg-black/30 rounded-xl">
+        <FormField
+          control={form.control}
+          name="event"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                <User className="inline mr-2" /> Event
+              </FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  handleEventChange(value);
+                }}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an event" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {enabledEvents.length > 0 ? (
+                    enabledEvents.map((event) => (
+                      <SelectItem key={event.name} value={event.name}>
+                        <span className="mr-2">{event.icon}</span>
+                        {event.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    "No events available"
+                  )}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+      </div>
+    </div>
+  );
+};
 
 const memberSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -65,7 +112,7 @@ const formSchema = z.object({
 })
 
 export default function RegistrationForm() {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null)
   const [teamSize, setTeamSize] = useState(1)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -74,7 +121,6 @@ export default function RegistrationForm() {
 
   const { events } = useEventStore();
 
-  const enabledEvents = events.filter((event) => event.enabled);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -186,7 +232,7 @@ export default function RegistrationForm() {
   };
 
   const handleEventChange = (eventName: string) => {
-    const event = events.find((e) => e.name === eventName)
+    const event = events.find((e) => e.name === eventName) as IEvent | undefined
     setSelectedEvent(event || null)
     if (event?.type === "single") {
       setTeamSize(1)
@@ -211,46 +257,7 @@ export default function RegistrationForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 md:space-y-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-2xl border border-white/20"
           >
-            <div className="space-y-4 p-4 bg-black/30 rounded-xl">
-              <FormField
-                control={form.control}
-                name="event"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <User className="inline mr-2" /> Event
-                    </FormLabel>
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value)
-                        handleEventChange(value)
-                      }}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an event" />
-                        </SelectTrigger>
-                      </FormControl>
-                      
-      <SelectContent>
-        {enabledEvents.length > 0 ? (
-          enabledEvents.map((event) => (
-            <SelectItem key={event.name} value={event.name}>
-              <span className="mr-2">{event.icon}</span>
-              {event.name}
-              <span className="ml-2 text-muted-foreground text-sm">({event.type})</span>
-            </SelectItem>
-          ))
-        ) : (
-          <div className="text-center p-2 text-gray-500">No events available</div>
-        )}
-      </SelectContent>
-   
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <RegistrationPage form={form} handleEventChange={handleEventChange} />
 
               {selectedEvent?.type === "team" && (
                 <FormField
@@ -285,7 +292,6 @@ export default function RegistrationForm() {
                   )}
                 />
               )}
-            </div>
 
             {Array.from({ length: teamSize }).map((_, index) => (
               <div key={index} className="space-y-4 p-4 bg-black/30 rounded-xl">
