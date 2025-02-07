@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { EffectFade, Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import Spline from '@splinetool/react-spline';
 import ScrollGallery from '@/components/scroll-gallery';
 import "swiper/css";
@@ -14,30 +12,6 @@ import CountdownTimer from '@/components/ui/count-down';
 import FestivalPhases from '@/components/Festivephases';
 import ContactSection from '@/components/map';
 import SingerReveal from '@/components/SingerSection';
-// import { WavyBackground } from '@/components/wavy-background';
-// import ScrambleTextPlugin from 'gsap/ScrambleTextPlugin';
-// import ScratchToReveal from "@/components/scratchtoreveal";
-
-// function BroadcastButton() {
-//   const [isGlowing, setIsGlowing] = useState(false);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setIsGlowing((prev) => !prev);
-//     }, 1500);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   return (
-//     <div className="broadcast-button-container">
-//       <div className="broadcast-button-wrapper">
-//         <button className={`broadcast-button ${isGlowing ? 'glowing' : ''}`}>
-//           Join the Broadcast Channel
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -54,77 +28,61 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {isLoading ? (
-        null
-      ) : (
+      {isLoading ? null : (
         <div className="flex flex-col min-h-screen backdrop-blur-sm bg-transparent">
           <div className="flex-grow">
-            <div className="content">
-              <Swiper
-                spaceBetween={30}
-                effect={'fade'}
-                navigation={true}
-                pagination={{
-                  clickable: true,
-                }}
-                modules={[EffectFade, Navigation, Pagination]}
-                className="mySwiper"
-              >
-                <SwiperSlide>
-                  <Image src="/assets/banner/homepage.webp" alt="Banner 1" width={400} height={300} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Image src="/assets/banner/homepage.webp" alt="Banner 2" width={400} height={300} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Image src="/assets/banner/homepage.webp" alt="Banner 3" width={400} height={300}/>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Image src="/assets/banner/homepage.webp" alt="Banner 4" width={400} height={300} />
-                </SwiperSlide>
-              </Swiper>
+            <div className="relative w-full aspect-video max-h-[100vh]">
+              <div className="absolute inset-0 bg-black">
+                <video 
+                  autoPlay 
+                  muted 
+                  loop={true}
+                  playsInline
+                  poster="/assets/banner/homepage.webp"
+                  className="w-full h-full object-cover"
+                  preload="auto"
+                  onCanPlay={(e) => {
+                    const video = e.target as HTMLVideoElement;
+                    video.play().catch(error => console.log("Autoplay prevented:", error));
+                  }}
+                >
+                  <source src="/assets/hero.mp4" type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 bg-black/30" />
+              </div>
             </div>
-            {/* <BroadcastButton /> */}
-            {/* Replacing BroadcastButton with Spline */}
+
             <div className="spline-container">
               <Spline scene="https://prod.spline.design/GfOUfu42ul3wEdHu/scene.splinecode" />
             </div>
 
-            {/* Image Section Below Countdown (Side by Side in a Single Div) */}
             <div className="countdown-timer">
               <CountdownTimer targetDate={targetDate} />
             </div>
-            {/* <SingerReveal /> */}
-            {/* <WavyBackground className="max-w-4xl  pt-96"> */}
+
             <main className="flex flex-col md:flex-row justify-center items-center min-h-screen bg-black-100 p-4 gap-6">
-  {/* YuvaBanner Image */}
-  <div className="w-[50%] md:w-[45%] flex justify-center">
-    <Image
-      src="/assets/banner/YuvaBanner.png"
-      alt="Event Banner"
-      width={500}  // Fixed width for large screens
-      height={600} // Fixed height for large screens
-      className="w-full h-auto max-w-[500px] md:max-w-[500px] rounded-lg object-cover shadow-lg"
-    />
-  </div>
+              <div className="w-[50%] md:w-[45%] flex justify-center">
+                <Image
+                  src="/assets/banner/YuvaBanner.png"
+                  alt="Event Banner"
+                  width={500}
+                  height={600}
+                  className="w-full h-auto max-w-[500px] md:max-w-[500px] rounded-lg object-cover shadow-lg"
+                />
+              </div>
 
-  {/* Description in the Middle */}
-  <div className="max-w-md text-center text-white px-4">
-    <h2 className="text-2xl font-bold">Experience the Magic!</h2>
-    <p className="mt-2 text-lg">
-      Join us for an unforgettable musical journey featuring top artists and mesmerizing performances.
-    </p>
-  </div>
+              <div className="max-w-md text-center text-white px-4">
+                <h2 className="text-2xl font-bold">Experience the Magic!</h2>
+                <p className="mt-2 text-lg">
+                  Join us for an unforgettable musical journey featuring top artists and mesmerizing performances.
+                </p>
+              </div>
 
-  {/* Singer Reveal Section */}
-  <div className="w-[90%] md:w-[45%] flex justify-center">
-    <SingerReveal />
-  </div>
-</main>
+              <div className="w-[90%] md:w-[45%] flex justify-center">
+                <SingerReveal />
+              </div>
+            </main>
 
-
-
-            {/* </WavyBackground> */}
             <FestivalPhases />
             <ScrollGallery />
             <ContactSection/>
