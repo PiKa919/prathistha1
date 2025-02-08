@@ -1,7 +1,3 @@
-
-
-
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -17,7 +13,7 @@ import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, CreditCard, Camera, PartyPopper } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
-import { generateEmailContent } from "@/utils/emailTemplates"
+import { VERVE_REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
 import axios from "axios"
 
 interface IEvent {
@@ -25,6 +21,7 @@ interface IEvent {
   icon: string;
   type: "single" | "team";
   event: "aurum" | "verve";
+  price: number;
   enabled: boolean;
 }
 
@@ -66,7 +63,7 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
+  const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -100,20 +97,20 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsSubmitting(true);
-  
+
       if (!values.paymentScreenshot?.[0]) {
         throw new Error("Payment screenshot is required");
       }
-  
+
       const file = values.paymentScreenshot[0];
       const reader = new FileReader();
-  
+
       const base64Screenshot = await new Promise((resolve, reject) => {
         reader.onload = () => resolve(reader.result);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
-  
+
       const registrationData = {
         event: values.event,
         fullName: values.fullName,
@@ -130,14 +127,26 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
         status: "pending",
         createdAt: new Date().toISOString(),
       };
-  
+
       // Save to Firebase
       const verveRef = ref(database, `verve/${Date.now()}`);
       await set(verveRef, registrationData);
-  
+
       // Create email content
-      const emailContent = generateEmailContent(registrationData);
-  
+      const emailContent = VERVE_REGISTRATION_CONFIRMATION_TEMPLATE(
+        registrationData.event,
+        registrationData.fullName || '',
+        registrationData.email,               // Added
+        registrationData.phone,               // Added
+        registrationData.payment.referenceId,
+        registrationData.payment.timestamp,
+        registrationData.createdAt,
+        registrationData.prn,
+        registrationData.class,               // Renamed to `className` if you changed it in the object
+        registrationData.branch
+      );
+      
+
       // Send confirmation email
       const emailResponse = await fetch("/api/sendEmail", {
         method: "POST",
@@ -151,11 +160,11 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
           html: emailContent, // HTML formatted email content
         }),
       });
-  
+
       if (!emailResponse.ok) {
         throw new Error("Failed to send confirmation email");
       }
-  
+
       setShowSuccessModal(true);
       form.reset();
     } catch (error) {
@@ -208,11 +217,11 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
                   </FormItem>
                 )}
               />
-            </div> 
+            </div>
 
             {/* Other form fields remain unchanged */}
-            
-<div className="space-y-4 p-4 bg-black/30 rounded-xl">
+
+            <div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <FormField
                 control={form.control}
                 name="fullName"
@@ -338,14 +347,14 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
                 <CreditCard className="inline mr-2" /> Payment
               </h3>
               <div className="flex flex-col items-center gap-4 mb-6">
-                <Image 
-                  src="/payment/qr-code.webp" 
-                  alt="Payment QR Code" 
-                  width={200} 
+                <Image
+                  src="/payment/qr-code.webp"
+                  alt="Payment QR Code"
+                  width={200}
                   height={200}
-                  className="w-48 h-48 md:w-52 md:h-52" 
+                  className="w-48 h-48 md:w-52 md:h-52"
                 />
-                <p className="text-center">Fees: Rs. 100</p>
+                <p className="text-center">{`Fees: Rs.${enabledEvents.find(e => e.name === form.getValues().event)?.price || 0}`}</p>
               </div>
               <FormField
                 control={form.control}
@@ -371,9 +380,9 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
                       <Camera className="inline mr-2" /> Payment Screenshot
                     </FormLabel>
                     <FormControl>
-                      <Input 
-                        type="file" 
-                        accept="image/*" 
+                      <Input
+                        type="file"
+                        accept="image/*"
                         onChange={(e) => {
                           const files = e.target.files
                           if (files?.length) {
@@ -395,12 +404,12 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
             <div className="flex justify-center mt-6">
               <Button
                 type="submit"
-                disabled={isSubmitting }
+                disabled={isSubmitting}
                 className="w-full md:w-auto px-8"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
-                    <span className="animate-spin">⌛</span> 
+                    <span className="animate-spin">⌛</span>
                     Submitting...
                   </span>
                 ) : (
@@ -418,7 +427,7 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
                 <PartyPopper /> Registration Successful!
               </DialogTitle>
               <DialogDescription>
-                Your registration has been submitted successfully. Thank you for participating!
+                Your registration has been submitted successfully & A registration mail is sent to you. Thank you for participating!
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-center">
@@ -430,4 +439,5 @@ const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
     </div>
   )
 }
+
 

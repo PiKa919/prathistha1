@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     await connectDB();
-    const { name, icon, type, event, enabled } = await req.json();
+    const { name, icon, type, event, enabled, price } = await req.json();
 
     // Validate event type
     if (!["single", "team"].includes(type)) {
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid event category" }, { status: 400 });
     }
 
-    const newEvent = new Event({ name, icon, type, event, enabled });
+    const newEvent = new Event({ name, icon, type, event, enabled,price });
     await newEvent.save();
 
     return NextResponse.json(newEvent, { status: 201 });
