@@ -29,7 +29,7 @@ export default function EventRegistrationManager() {
       const fetchEvents = async () => {
         try {
           const response = await axios.get("/api/events");
-          const aurumEvents = response.data.filter((event: IEvent) => event.event === "aurum");
+          const aurumEvents = response.data.filter((event: IEvent) => event.event === "verve");
           setTempEvents(aurumEvents);
         } catch (error) {
           console.error("Failed to fetch events", error);
