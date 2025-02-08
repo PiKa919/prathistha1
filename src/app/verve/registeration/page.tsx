@@ -354,7 +354,7 @@ export default function RegistrationForm() {
                   height={200}
                   className="w-48 h-48 md:w-52 md:h-52"
                 />
-                <p className="text-center">{`Fees: Rs.${enabledEvents.find(e => e.name === form.getValues().event)?.price || 0}`}</p>
+                {/* <p className="text-center">{`Fees: Rs.${enabledEvents.find(e => e.name === form.getValues().event)?.price || 0}`}</p> */}
               </div>
               <FormField
                 control={form.control}
