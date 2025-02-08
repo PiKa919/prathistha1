@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 
 interface IEvent {
@@ -15,39 +16,55 @@ interface IEvent {
 }
 
 export default function EventRegistrationManager() {
-  const [tempEvents, setTempEvents] = useState<IEvent[]>([]); // Temporary state for toggling
+  const [tempEvents, setTempEvents] = useState<IEvent[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [attemptsLeft, setAttemptsLeft] = useState(5);
 
-  // Fetch events from the API
+  const correctPassword = process.env.NEXT_PUBLIC_TOGGLEEVENTS_PASSWORD;
+
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get("/api/events");
-        const aurumEvents = response.data.filter((event: IEvent) => event.event === "verve");
-        setTempEvents(aurumEvents);
-      } catch (error) {
-        console.error("Failed to fetch events", error);
-      }
-    };
+    if (isAuthenticated) {
+      const fetchEvents = async () => {
+        try {
+          const response = await axios.get("/api/events");
+          const aurumEvents = response.data.filter((event: IEvent) => event.event === "aurum");
+          setTempEvents(aurumEvents);
+        } catch (error) {
+          console.error("Failed to fetch events", error);
+        }
+      };
+      fetchEvents();
+    }
+  }, [isAuthenticated]);
 
-    fetchEvents();
-  }, []);
+  const handleLogin = () => {
+    if (password === correctPassword) {
+      setIsAuthenticated(true);
+    } else {
+      setAttemptsLeft((prev) => prev - 1);
+      alert(`Incorrect password. Attempts left: ${attemptsLeft - 1}`);
+    }
+  };
 
-  // Sync tempEvents with Zustand store on initial load and when store updates
-  
-  // Toggle all events locally
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   const toggleAllEvents = () => {
     const allEnabled = tempEvents.every((e) => e.enabled);
     setTempEvents(tempEvents.map((event) => ({ ...event, enabled: !allEnabled })));
   };
 
-  // Toggle individual event
   const toggleEvent = (eventName: string) => {
     setTempEvents(tempEvents.map((event) =>
       event.name === eventName ? { ...event, enabled: !event.enabled } : event
     ));
   };
 
-  // Save changes to Zustand store when "Save Changes" is clicked
   const saveChanges = async () => {
     try {
       await axios.put("/api/update-events", { events: tempEvents });
@@ -58,12 +75,40 @@ export default function EventRegistrationManager() {
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+        <div className="p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+          <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
+          <div className="relative flex items-center">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="p-2 border rounded bg-gray-900 text-white w-full pr-10"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={attemptsLeft === 0}
+            />
+            <button
+              type="button"
+              className="absolute right-3 text-gray-400"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+            </button>
+          </div>
+          <Button className="mt-4" onClick={handleLogin} disabled={attemptsLeft === 0}>Login</Button>
+          {attemptsLeft === 0 && <p className="text-red-500 mt-2">Too many failed attempts.</p>}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white p-20">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Event Registration Manager</h1>
-
-        {/* Toggle All Events */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <Label htmlFor="master-toggle" className="text-xl">Toggle All Events</Label>
@@ -73,8 +118,6 @@ export default function EventRegistrationManager() {
               onCheckedChange={toggleAllEvents}
             />
           </div>
-
-          {/* Individual Event Toggles */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {tempEvents.map((event) => (
               <div key={event.name} className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
@@ -91,23 +134,9 @@ export default function EventRegistrationManager() {
             ))}
           </div>
         </div>
-
-        {/* Save and Reset Buttons */}
         <div className="mb-6 flex gap-4">
-          <Button onClick={saveChanges} >
-            Save Changes
-          </Button>
-          
+          <Button onClick={saveChanges}>Save Changes</Button>
         </div>
-
-        {/* Show/Hide Registration Form */}
-        {/* <div className="mb-6">
-          <Button onClick={() => setShowForm(!showForm)} variant="outline">
-            {showForm ? "Hide Registration Form" : "Show Registration Form"}
-          </Button>
-        </div> */}
-
-        {/* {showForm && <RegistrationForm />} */}
       </div>
     </div>
   );
