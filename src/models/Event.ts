@@ -6,7 +6,7 @@ export interface IEvent extends Document {
   type: "single" | "team"; // Restrict to these values
   event: "aurum" | "verve"; // Restrict to these values
   enabled: boolean;
-  price: number; // Added price field
+  price: string; // Added price field
 }
 
 const EventSchema: Schema<IEvent> = new Schema(
@@ -16,7 +16,7 @@ const EventSchema: Schema<IEvent> = new Schema(
     type: { type: String, enum: ["single", "team"], required: true },
     event: { type: String, enum: ["aurum", "verve"], required: true },
     enabled: { type: Boolean, default: true },
-    price: { type: Number, required: true }, // Added price field
+    price: { type: String, required: true }, // Added price field
   },
   { timestamps: true } // Adds createdAt and updatedAt
 );
