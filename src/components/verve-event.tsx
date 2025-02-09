@@ -151,7 +151,7 @@ const events = [
     videoUrl: "",
     imageUrl: "/verve/ABCD.webp",
     price: "₹100",
-    ranking: {first: "", second: "", third: ""},
+    ranking: {first: "AARYA MHATRE", second: "PRAPTEE PANCHAL", third: "DRASHTI DOSHI"}, 
     eventHead: "Vedika Katarkar",
     eventHeadContact: "9324694492",
     eventCoHead: "Shivam Shinde",

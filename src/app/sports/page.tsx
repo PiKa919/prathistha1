@@ -416,7 +416,15 @@ export default function MultistepFormPage(): JSX.Element {
   }, []);
   
 
-  const sortedBranches = branches.sort((a, b) => b.points - a.points);
+  const sortedBranches = branches.sort((a, b) => {
+    // First compare points
+    if (b.points !== a.points) {
+      return b.points - a.points;
+    }
+    // If points are equal, compare years in descending order
+    return b.year - a.year;
+  });
+
   const displayedBranches = showAll ? sortedBranches : sortedBranches.slice(0, 5);
   const getRankIcon = (index: number) => {
     switch (index) {

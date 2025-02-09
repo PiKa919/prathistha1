@@ -81,7 +81,7 @@ const FestivalPhases = () => {
                 <h3 className="text-2xl font-bold text-white">{phase.name}</h3>
               </div>
               
-              <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
+              <div className="relative w-full mb-4 rounded-lg overflow-hidden" style={{ paddingTop: '56.25%' }}>
                 <Image
                   src={phase.imagePath}
                   alt={`${phase.name} phase`}

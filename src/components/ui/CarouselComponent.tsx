@@ -8,10 +8,10 @@ const Carousel = () => {
   const [isLoading, setIsLoading] = useState(true);
   
   const slides = [
+    "/phases/olympus.webp",
+    "/phases/olympus.webp",
     "/assets/banner/olympus/slide1.webp",
-    "/assets/banner/olympus/slide1.webp",
-    "/assets/banner/olympus/slide1.webp",
-    "/assets/banner/olympus/slide1.webp",
+    "/phases/olympus.webp",
   ];
 
   useEffect(() => {
