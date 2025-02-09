@@ -9,11 +9,13 @@ interface Participant {
 }
 
 type SportType = "indoor" | "outdoor"
+type CategoryType = "single" | "double" | "team"
 
 interface SportData {
   gender: "boys" | "girls" | "mixed";
   icon: string
   type: SportType
+  category: CategoryType
   winner: Participant
   runnerUp: Participant
 }
@@ -28,7 +30,7 @@ export function WinnerSection({ sportsData = {} }: WinnerSectionProps) {
   return (
     <Card className="mt-12">
       <CardHeader>
-        <CardTitle>🏆 Winners & Runners-Up 🥈</CardTitle>
+        <CardTitle>🏆 Winners & Runners-Up 🧈</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="outdoor" className="w-full">
@@ -83,7 +85,8 @@ function WinnerCard({ data }: WinnerCardProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-xl">
         <span className="text-2xl">{data.icon}</span>
-        {data.name} ({winnerGender.icon} ){ isTeamGame ? (
+        {data.name} ({winnerGender.icon}) - <strong>{data.category}</strong>
+        {isTeamGame ? (
             <p>🤝 <strong>Team</strong></p>
           ) : <p><strong>Single</strong></p>}
         </CardTitle>
@@ -116,7 +119,7 @@ function WinnerCard({ data }: WinnerCardProps) {
 
           <hr className="my-2 border-dashed" />
 
-          <p className="font-bold text-blue-500">🥈 Runner-Up</p>
+          <p className="font-bold text-blue-500">🧈 Runner-Up</p>
           {isTeamGame ? (
             <>
               <p>

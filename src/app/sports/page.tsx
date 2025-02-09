@@ -182,9 +182,12 @@ interface SportData {
   gender: "boys" | "girls" | "mixed";
   icon: string
   type: "indoor" | "outdoor"
+  category: "single" | "double" | "team"
   winner: Participant
   runnerUp: Participant
 }
+
+
 
 // const sportsData: Record<string, SportData> = {
 //   Cricket: {
