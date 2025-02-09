@@ -11,7 +11,7 @@ interface Game {
   name: string;
   icon: string;
   type: "indoor" | "outdoor";
-  eventType: "single" | "team";
+  category: "single" | "double" | "team";
 }
 
 interface Participant {
@@ -24,19 +24,29 @@ interface FormData {
   name: string;
   type: string;
   icon: string;
-  eventType: string;
+  category: "single" | "double" | "team" | "";
   gender: "boys" | "girls" | "mixed" | "";
   winner: Participant;
   runnerUp: Participant;
 }
 
 const games: Game[] = [
-  { name: "Cricket", icon: "🏏", type: "outdoor", eventType: "team" },
-  { name: "Football", icon: "⚽", type: "outdoor", eventType: "team" },
-  { name: "Chess", icon: "♟", type: "indoor", eventType: "single" },
-  { name: "Table Tennis", icon: "🏓", type: "indoor", eventType: "single" },
-  { name: "Volleyball", icon: "🏐", type: "outdoor", eventType: "team" },
-  { name: "Badminton", icon: "🎽", type: "indoor", eventType: "single" }
+  { name: "Cricket", icon: "🏏", type: "outdoor", category: "team" },
+  { name: "Football", icon: "⚽", type: "outdoor", category: "team" },
+  { name: "Chess", icon: "♟", type: "indoor", category: "single" },
+  { name: "Table Tennis", icon: "🏓", type: "indoor", category: "single" },
+  { name: "Volleyball", icon: "🏐", type: "outdoor", category: "team" },
+  { name: "Badminton", icon: "🎽", type: "indoor", category: "double" },
+  { name: "Throwball", icon: "🏐", type: "outdoor", category: "team" },
+  { name: "Box Cricket", icon: "🏏", type: "outdoor", category: "team" },
+  { name: "Kabbaddi", icon: "🤼", type: "outdoor", category: "team" },
+  { name: "Tug of War", icon: "🤼‍♂️", type: "outdoor", category: "team" },
+  { name: "Speed Cubing", icon: "🧊", type: "indoor", category: "single" },
+  { name: "Snooker", icon: "🎱", type: "indoor", category: "single" },
+  { name: "Pool", icon: "🎱", type: "indoor", category: "single" },
+  { name: "Basketball", icon: "🏀", type: "outdoor", category: "team" },
+  { name: "Carrom", icon: "🎯", type: "indoor", category: "double" },
+  { name: "Dodgeball", icon: "🤾", type: "outdoor", category: "team" }
 ];
 
 const branches = [
@@ -57,8 +67,9 @@ const genders = [
   { value: "mixed", label: "Mixed" }
 ];
 
-const eventTypes = [
+const categories = [
   { value: "single", label: "Single" },
+  { value: "double", label: "Double" },
   { value: "team", label: "Team" }
 ];
 
@@ -69,7 +80,7 @@ export default function GameForm() {
     name: "",
     type: "",
     icon: "",
-    eventType: "",
+    category: "",
     gender: "",
     winner: { name: "", branch: "", year: "" },
     runnerUp: { name: "", branch: "", year: "" }
@@ -83,12 +94,13 @@ export default function GameForm() {
         ...prev,
         name: game.name,
         type: game.type,
-        icon: game.icon
+        icon: game.icon,
+        category: game.category
       }));
     }
   };
 
-  const handleChange = (field: string, value: string, section: "winner" | "runnerUp" | null = null) => {
+  const handleChange = (field: string, value: string | number, section: "winner" | "runnerUp" | null = null) => {
     if (section) {
       setFormData(prev => ({
         ...prev,
@@ -115,20 +127,18 @@ export default function GameForm() {
         throw new Error("Failed to save sports data");
       }
 
-      const result = await response.json();
-      console.log("Saved successfully:", result);
+      
 
       setFormData({
         name: "",
         type: "",
         icon: "",
-        eventType: "",
+        category: "",
         gender: "",
         winner: { name: "", branch: "", year: "" },
         runnerUp: { name: "", branch: "", year: "" }
       });
       setSelectedGame(null);
-
       alert("Sports data saved successfully!");
     } catch (error) {
       console.error("Error saving sports data:", error);
@@ -158,15 +168,13 @@ export default function GameForm() {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={value => handleChange("eventType", value)}>
+          <Select onValueChange={value => handleChange("category", value)} value={formData.category}>
             <SelectTrigger>
-              <SelectValue placeholder="Select Event Type" />
+              <SelectValue placeholder="Select Category" />
             </SelectTrigger>
             <SelectContent>
-              {eventTypes.map(type => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
+              {categories.map(cat => (
+                <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -177,9 +185,7 @@ export default function GameForm() {
             </SelectTrigger>
             <SelectContent>
               {genders.map(gender => (
-                <SelectItem key={gender.value} value={gender.value}>
-                  {gender.label}
-                </SelectItem>
+                <SelectItem key={gender.value} value={gender.value}>{gender.label}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -188,11 +194,11 @@ export default function GameForm() {
             <div key={role} className="space-y-2">
               <h3 className="font-semibold">{role === "winner" ? "Winner" : "Runner-Up"}</h3>
 
-              {formData.eventType === "single" && (
+              {(formData.category === "single" || formData.category === "double") && (
                 <Input
                   placeholder="Participant Name"
-                  value={formData[role as 'winner' | 'runnerUp'].name}
-                      onChange={(e) => handleChange("name", e.target.value, role as "winner" | "runnerUp")}
+                  value={formData[role as "winner" | "runnerUp"].name}
+                  onChange={(e) => handleChange("name", e.target.value, role as "winner" | "runnerUp")}
                 />
               )}
 
@@ -207,7 +213,7 @@ export default function GameForm() {
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={value => handleChange("year", value, role as "winner" | "runnerUp")}>
+              <Select onValueChange={value => handleChange("year", Number(value), role as "winner" | "runnerUp")}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Year" />
                 </SelectTrigger>

@@ -179,14 +179,14 @@ interface Participant {
 }
 
 interface SportData {
+  name: string;
+  icon: string;
+  type: "indoor" | "outdoor";
   gender: "boys" | "girls" | "mixed";
-  icon: string
-  type: "indoor" | "outdoor"
-  category: "single" | "double" | "team"
-  winner: Participant
-  runnerUp: Participant
+  category: "single" | "double" | "team";
+  winner: Participant;
+  runnerUp: Participant;
 }
-
 
 
 // const sportsData: Record<string, SportData> = {
@@ -366,8 +366,8 @@ export default function MultistepFormPage(): JSX.Element {
         if (!pointsMap[winner.branch]) pointsMap[winner.branch] = {};
         if (!pointsMap[runnerUp.branch]) pointsMap[runnerUp.branch] = {};
 
-        pointsMap[winner.branch][winner.year] = (pointsMap[winner.branch][winner.year] || 0) + 1;
-        pointsMap[runnerUp.branch][runnerUp.year] = (pointsMap[runnerUp.branch][runnerUp.year] || 0) + 0.5;
+        pointsMap[winner.branch][winner.year] = (pointsMap[winner.branch][winner.year] || 0) + 2;
+        pointsMap[runnerUp.branch][runnerUp.year] = (pointsMap[runnerUp.branch][runnerUp.year] || 0) + 1;
       });
 
       const leaderboard = Object.entries(pointsMap).flatMap(([branch, years]) =>
@@ -386,37 +386,35 @@ export default function MultistepFormPage(): JSX.Element {
 
 
 
-  useEffect(() => {
-    const fetchSports = async () => {
-      try {
-        const res = await fetch("/api/sports");
-        if (!res.ok) throw new Error("Network response was not ok");
-  
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          const formattedData = data.reduce((acc, sport) => {
-            const key = `${sport.name}-${sport.gender}- ${sport.winner.name}`; // Unique key using name and gender
-            acc[key] = {
-              icon: sport.icon,
-              type: sport.type,
-              gender: sport.gender,
-              winner: sport.winner,
-              runnerUp: sport.runnerUp,
-            };
-            return acc;
-          }, {});
-  
-          setSportsData(formattedData);
-        } else {
-          console.warn("Unexpected data format:", data);
-        }
-      } catch (error) {
-        console.error("Fetch error:", error);
+ 
+// Update the useEffect for fetching sports data
+useEffect(() => {
+  const fetchSports = async () => {
+    try {
+      const res = await fetch("/api/sports");
+      if (!res.ok) throw new Error("Network response was not ok");
+
+      const data: SportData[] = await res.json();
+      if (Array.isArray(data)) {
+        const formattedData = data.reduce<Record<string, SportData>>((acc, sport) => {
+          // Create a unique key using name, gender, and category
+          const key = `${sport.name}-${sport.gender}-${sport.category}`;
+          acc[key] = sport;
+          return acc;
+        }, {});
+
+        setSportsData(formattedData);
+      } else {
+        console.warn("Unexpected data format:", data);
       }
-    };
-  
-    fetchSports();
-  }, []);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+
+  fetchSports();
+}, []);
+
   
 
   const sortedBranches = branches.sort((a, b) => {

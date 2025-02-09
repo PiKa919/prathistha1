@@ -86,9 +86,7 @@ function WinnerCard({ data }: WinnerCardProps) {
         <CardTitle className="flex items-center gap-2 text-xl">
         <span className="text-2xl">{data.icon}</span>
         {data.name} ({winnerGender.icon}) - <strong>{data.category}</strong>
-        {isTeamGame ? (
-            <p>🤝 <strong>Team</strong></p>
-          ) : <p><strong>Single</strong></p>}
+        
         </CardTitle>
       </CardHeader>
       <CardContent>
