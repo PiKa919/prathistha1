@@ -1,4 +1,4 @@
-import { Leaderboard } from '@/components/Leaderboardaurum'
+// import { Leaderboard } from '@/components/Leaderboardaurum'
 import { Events } from '@/components/Events'
 // import { Hackathon } from '@/components/Hackathon'
 import '../globals.css'
@@ -12,7 +12,7 @@ export default function AurumPage() {
         </div>
       </header> */}
       <main className="space-y-12 py-20 px-4">
-        <Leaderboard />
+        {/* <Leaderboard /> */}
         <Events />
         {/* <Hackathon /> */}
       </main>
