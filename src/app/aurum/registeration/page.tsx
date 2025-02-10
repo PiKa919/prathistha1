@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import Image from "next/image"
-import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper } from "lucide-react"
+import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper, Loader2 } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
 import axios from "axios"
@@ -71,6 +71,7 @@ export default function AurumPage() {
   const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([])
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null)
   const [teamSize, setTeamSize] = useState(1)
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,14 +90,17 @@ export default function AurumPage() {
   }, [])
 
   const fetchEvents = async () => {
-    try {
-      const response = await axios.get("/api/events")
-      const filteredEvents = response.data.filter((event: IEvent) => event.event === "aurum" && event.enabled)
-      setEnabledEvents(filteredEvents)
-    } catch (error) {
-      console.error("Failed to fetch events", error)
-    }
+  setIsLoading(true);
+  try {
+    const response = await axios.get("/api/events");
+    const filteredEvents = response.data.filter((event: IEvent) => event.event === "aurum" && event.enabled);
+    setEnabledEvents(filteredEvents);
+  } catch (error) {
+    console.error("Failed to fetch events", error);
+  } finally {
+    setIsLoading(false);
   }
+};
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -183,6 +187,23 @@ export default function AurumPage() {
     return null // or a loading spinner
   }
 
+  // Add this check after isMounted
+  if (!isLoading && enabledEvents.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex items-center justify-center py-16 px-4">
+        <div className="text-center space-y-4 bg-white/10 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-2xl border border-white/20 max-w-2xl">
+          <h1 className="text-3xl font-bold mb-4">AURUM Event Registration</h1>
+          <div className="text-6xl mb-6">🎮</div>
+          <p className="text-xl text-gray-300">
+            Registration forms will be opened soon. Please check back later!
+          </p>
+          <p className="text-gray-400">
+            Stay tuned for exciting events and competitions.
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex flex-col lg:flex-row py-16 px-4">
       <div className="container mx-auto p-4 max-w-3xl">
@@ -193,7 +214,8 @@ export default function AurumPage() {
             className="space-y-4 md:space-y-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-2xl border border-white/20"
           >
             <div className="space-y-4 p-4 bg-black/30 rounded-xl">
-              <FormField
+              
+            <FormField
                 control={form.control}
                 name="event"
                 render={({ field }) => (
@@ -203,23 +225,33 @@ export default function AurumPage() {
                     </FormLabel>
                     <Select
                       onValueChange={(value) => {
-                        field.onChange(value)
-                        handleEventChange(value)
+                        field.onChange(value);
+                        handleEventChange(value);
                       }}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an event" />
+                          <SelectValue placeholder={isLoading ? "Loading events..." : "Select an event"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {enabledEvents.map((event) => (
-                          <SelectItem key={event.name} value={event.name}>
-                            <span className="mr-2">{event.icon}</span>
-                            {event.name}
-                            <span className="ml-2 text-muted-foreground text-sm">({event.type})</span>
+                        {isLoading ? (
+                          <div className="flex items-center justify-center p-4">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="ml-2">Loading events...</span>
+                          </div>
+                        ) : enabledEvents.length > 0 ? (
+                          enabledEvents.map((event) => (
+                            <SelectItem key={event.name} value={event.name}>
+                              <span className="mr-2">{event.icon}</span>
+                              {event.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem disabled value="">
+                            No events available
                           </SelectItem>
-                        ))}
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />

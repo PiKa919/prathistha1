@@ -8,38 +8,22 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import Image from "next/image"
-import { User, Mail, Phone, Hash, School, GitBranch, CreditCard, Camera, PartyPopper } from "lucide-react"
+import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper, Loader2 } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
-import { VERVE_REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
 import axios from "axios"
 
 interface IEvent {
-  name: string;
-  icon: string;
-  type: "single" | "team";
-  event: "aurum" | "verve";
-  price: string;
-  enabled: boolean;
+  name: string
+  icon: string
+  type: "single" | "team"
+  event: "verve"
+  price: string
+  enabled: boolean
 }
-
-
-const formSchema = z.object({
-  event: z.string().min(1, "Please select an event"),
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string()
-    .email("Invalid email address")
-    .regex(/^[a-zA-Z0-9._%+-]+@sakec\.ac\.in$/, "Email must end with @sakec.ac.in"),
-  phone: z.string()
-    .regex(/^[6-9]\d{9}$/, "Phone number must be 10 digits and start with 6-9"),
-  prn: z.string().min(1, "PRN is required"),
-  class: z.string().min(1, "Class is required"),
-  branch: z.string().min(1, "Branch is required"),
-  paymentReferenceId: z.string().min(1, "Payment reference ID is required"),
-  paymentScreenshot: z.any().optional(),
-})
 
 const BRANCHES = [
   { value: "CM", label: "Computer Engineering" },
@@ -57,23 +41,44 @@ const CLASSES = [
   { value: "SE", label: "Second Year" },
   { value: "TE", label: "Third Year" },
   { value: "BE", label: "Fourth Year" },
-] as const;
+] as const
 
-export default function RegistrationForm() {
+const memberSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .regex(/^[a-zA-Z0-9._%+-]+@sakec\.ac\.in$/, "Email must end with @sakec.ac.in"),
+  phone: z.string().regex(/^[6-9]\d{9}$/, "Phone number must be 10 digits and start with 6-9"),
+  prn: z.string().min(1, "PRN is required"),
+  class: z.string().min(1, "Class is required"),
+  branch: z.string().min(1, "Branch is required"),
+  isTeamLeader: z.boolean().optional(),
+})
+
+const formSchema = z.object({
+  event: z.string().min(1, "Please select an event"),
+  teamSize: z.number().min(1).max(5),
+  members: z.array(memberSchema).min(1, "At least one member is required"),
+  paymentReferenceId: z.string().min(1, "Payment reference ID is required"),
+  paymentScreenshot: z.any().refine((files) => files?.length > 0, "Payment screenshot is required"),
+})
+
+export default function VervePage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-  const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([]);
+  const [enabledEvents, setEnabledEvents] = useState<IEvent[]>([])
+  const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null)
+  const [teamSize, setTeamSize] = useState(1)
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       event: "",
-      fullName: "",
-      email: "",
-      phone: "",
-      prn: "",
-      class: "",
-      branch: "",
+      teamSize: 1,
+      members: [{ fullName: "", email: "", phone: "", prn: "", class: "", branch: "", isTeamLeader: false }],
       paymentReferenceId: "",
       paymentScreenshot: undefined,
     },
@@ -85,40 +90,56 @@ export default function RegistrationForm() {
   }, [])
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get("/api/events");
       const filteredEvents = response.data.filter((event: IEvent) => event.event === "verve" && event.enabled);
       setEnabledEvents(filteredEvents);
     } catch (error) {
       console.error("Failed to fetch events", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setIsSubmitting(true);
+      setIsSubmitting(true)
 
-      if (!values.paymentScreenshot?.[0]) {
-        throw new Error("Payment screenshot is required");
+      // Basic validation
+      if (!values.event) {
+        throw new Error("Please select an event")
       }
 
-      const file = values.paymentScreenshot[0];
-      const reader = new FileReader();
+      if (!values.members?.[0]?.fullName) {
+        throw new Error("Member details are required")
+      }
+
+      if (!values.paymentReferenceId) {
+        throw new Error("Payment reference ID is required")
+      }
+
+      if (!values.paymentScreenshot?.[0]) {
+        throw new Error("Payment screenshot is required")
+      }
+
+      const file = values.paymentScreenshot[0]
+      const reader = new FileReader()
 
       const base64Screenshot = await new Promise((resolve, reject) => {
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
 
       const registrationData = {
+        id: Date.now().toString(),
         event: values.event,
-        fullName: values.fullName,
-        email: values.email,
-        phone: values.phone,
-        prn: values.prn,
-        class: values.class,
-        branch: values.branch,
+        teamSize: values.teamSize || 1,
+        members: values.members.map(member => ({
+          ...member,
+          isTeamLeader: member.isTeamLeader || false
+        })),
         payment: {
           referenceId: values.paymentReferenceId,
           timestamp: new Date().toISOString(),
@@ -126,57 +147,62 @@ export default function RegistrationForm() {
         },
         status: "pending",
         createdAt: new Date().toISOString(),
-      };
-
-      // Save to Firebase
-      const verveRef = ref(database, `verve/${Date.now()}`);
-      await set(verveRef, registrationData);
-
-      // Create email content
-      const emailContent = VERVE_REGISTRATION_CONFIRMATION_TEMPLATE(
-        registrationData.event,
-        registrationData.fullName || '',
-        registrationData.email,               // Added
-        registrationData.phone,               // Added
-        registrationData.payment.referenceId,
-        registrationData.payment.timestamp,
-        registrationData.createdAt,
-        registrationData.prn,
-        registrationData.class,               // Renamed to `className` if you changed it in the object
-        registrationData.branch
-      );
-      
-
-      // Send confirmation email
-      const emailResponse = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: values.email, // Send email to the user's email
-          subject: "VERVE Event Registration Confirmation",
-          text: "Your registration has been confirmed for the event.",
-          html: emailContent, // HTML formatted email content
-        }),
-      });
-
-      if (!emailResponse.ok) {
-        throw new Error("Failed to send confirmation email");
       }
 
-      setShowSuccessModal(true);
-      form.reset();
+      // Save to Firebase
+      const verveRef = ref(database, `verve/${registrationData.id}`)
+      await set(verveRef, registrationData)
+
+      setShowSuccessModal(true)
+      form.reset()
+      setIsSubmitting(false)
     } catch (error) {
-      console.error("Form submission error:", error);
-      alert(error instanceof Error ? error.message : "An error occurred during submission");
-    } finally {
-      setIsSubmitting(false);
+      console.error("Form submission error:", error)
+      alert(error instanceof Error ? error.message : "An error occurred during submission")
+      setIsSubmitting(false)
     }
-  };
+  }
+
+  const handleEventChange = (eventName: string) => {
+    const event = enabledEvents.find((e) => e.name === eventName)
+    setSelectedEvent(event || null)
+
+    // Special handling for FIFA and Pratishtha's Got Talent
+    if (event?.name === "Pratishtha's Got Talent") {
+      setTeamSize(1)
+      form.setValue("teamSize", 1)
+    } else if (event?.name === "FIFA") {
+      setTeamSize(2)
+      form.setValue("teamSize", 2)
+    } else if (event?.type === "single") {
+      setTeamSize(1)
+      form.setValue("teamSize", 1)
+    } else {
+      setTeamSize(2)
+      form.setValue("teamSize", 2)
+    }
+  }
 
   if (!isMounted) {
-    return null // or a loading spinner
+    return null;
+  }
+
+  // Add this check after isMounted
+  if (!isLoading && enabledEvents.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white flex items-center justify-center py-16 px-4">
+        <div className="text-center space-y-4 bg-white/10 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-2xl border border-white/20 max-w-2xl">
+          <h1 className="text-3xl font-bold mb-4">VERVE Event Registration</h1>
+          <div className="text-6xl mb-6">🎭</div>
+          <p className="text-xl text-gray-300">
+            Registration forms will be opened soon. Please check back later!
+          </p>
+          <p className="text-gray-400">
+            Stay tuned for exciting events and competitions.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -189,6 +215,7 @@ export default function RegistrationForm() {
             className="space-y-4 md:space-y-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-2xl border border-white/20"
           >
             <div className="space-y-4 p-4 bg-black/30 rounded-xl">
+
               <FormField
                 control={form.control}
                 name="event"
@@ -197,20 +224,35 @@ export default function RegistrationForm() {
                     <FormLabel>
                       <User className="inline mr-2" /> Event
                     </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        handleEventChange(value);
+                      }}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an event" />
+                          <SelectValue placeholder={isLoading ? "Loading events..." : "Select an event"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {enabledEvents.map((event) => (
-                          <SelectItem key={event.name} value={event.name}>
-                            <span className="mr-2">{event.icon}</span>
-                            {event.name}
-                            <span className="ml-2 text-muted-foreground text-sm">({event.type})</span>
+                        {isLoading ? (
+                          <div className="flex items-center justify-center p-4">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="ml-2">Loading events...</span>
+                          </div>
+                        ) : enabledEvents.length > 0 ? (
+                          enabledEvents.map((event) => (
+                            <SelectItem key={event.name} value={event.name}>
+                              <span className="mr-2">{event.icon}</span>
+                              {event.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem disabled value="">
+                            No events available
                           </SelectItem>
-                        ))}
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -219,128 +261,234 @@ export default function RegistrationForm() {
               />
             </div>
 
-            {/* Other form fields remain unchanged */}
+            {(selectedEvent?.type === "team" || selectedEvent?.name === "Pratishtha's Got Talent") && (
+              <div className="space-y-4 p-4 bg-black/30 rounded-xl">
+                <FormField
+                  control={form.control}
+                  name="teamSize"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        <User className="inline mr-2" />
+                        {selectedEvent.name === "Pratishtha's Got Talent" ? "Select Mode" : "Number of Team Members"}
+                      </FormLabel>
+                      <Select
+                        onValueChange={(value) => {
+                          const size = Number.parseInt(value)
+                          field.onChange(size)
+                          setTeamSize(size)
+                          // Update the members array
+                          const currentMembers = form.getValues("members")
+                          if (size > currentMembers.length) {
+                            form.setValue("members", [
+                              ...currentMembers,
+                              ...Array(size - currentMembers.length).fill({}),
+                            ])
+                          } else if (size < currentMembers.length) {
+                            form.setValue("members", currentMembers.slice(0, size))
+                          }
+                        }}
+                        disabled={selectedEvent.name === "FIFA"}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={
+                              selectedEvent.name === "Pratishtha's Got Talent"
+                                ? "Select single or team mode"
+                                : selectedEvent.name === "FIFA"
+                                  ? "Team of 2 only"
+                                  : "Select team size"
+                            } />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {selectedEvent.name === "FIFA" ? (
+                            <SelectItem value="2">2 Players Team</SelectItem>
+                          ) : selectedEvent.name === "Pratishtha's Got Talent" ? (
+                            <>
+                              <SelectItem value="1">Single Player</SelectItem>
+                              {[2, 3, 4, 5].map((size) => (
+                                <SelectItem key={size} value={size.toString()}>
+                                  {size} Players Team
+                                </SelectItem>
+                              ))}
+                            </>
+                          ) : (
+                            [2, 3, 4, 5].map((size) => (
+                              <SelectItem key={size} value={size.toString()}>
+                                {size}
+                              </SelectItem>
+                            ))
+                          )}
+                        </SelectContent>
+                      </Select>
+                      {selectedEvent.name === "FIFA" && (
+                        <FormDescription>FIFA registrations are restricted to teams of 2 players only.</FormDescription>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
-            <div className="space-y-4 p-4 bg-black/30 rounded-xl">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <User className="inline mr-2" /> Full Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>Enter your full name as per college records</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+            {Array.from({ length: teamSize }).map((_, index) => (
+              <div key={index} className="space-y-4 p-4 bg-black/30 rounded-xl">
+                <h3 className="text-xl mb-4">
+                  <User className="inline mr-2" /> Personal Details - Member {index + 1}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.fullName`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <User className="inline mr-2" /> Full Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormDescription>Enter your full name as per college records</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.email`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Mail className="inline mr-2" /> Email
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} type="email" />
+                        </FormControl>
+                        <FormDescription>Use your college email id ending with sakec.ac.in</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.phone`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Phone className="inline mr-2" /> Phone Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} type="tel" />
+                        </FormControl>
+                        <FormDescription>Enter 10-digit mobile number without country code</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.prn`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Hash className="inline mr-2" /> PRN
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormDescription>FEs enter PRN124BTCM1071, rest enter 14 digit PRN</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.class`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <School className="inline mr-2" /> Class
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your class" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {CLASSES.map((classOption) => (
+                              <SelectItem key={classOption.value} value={classOption.value}>
+                                {classOption.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>Select your current year and division</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.branch`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <GitBranch className="inline mr-2" /> Branch
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your branch" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {BRANCHES.map((branch) => (
+                              <SelectItem key={branch.value} value={branch.value}>
+                                {branch.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>Select your engineering branch</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {selectedEvent?.type === "team" && (
+                  <FormField
+                    control={form.control}
+                    name={`members.${index}.isTeamLeader`}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked)
+                              // Uncheck other team leaders
+                              const updatedMembers = form.getValues("members").map((member, i) => ({
+                                ...member,
+                                isTeamLeader: i === index ? checked === true : false,
+                              }))
+                              form.setValue("members", updatedMembers)
+                            }}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>
+                            <Crown className="inline mr-2" /> Team Leader
+                          </FormLabel>
+                          <FormDescription>Only one team leader can be selected.</FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Mail className="inline mr-2" /> Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} type="email" />
-                    </FormControl>
-                    <FormDescription>Use your college email id ending with sakec.ac.in</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Phone className="inline mr-2" /> Phone Number
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} type="tel" />
-                    </FormControl>
-                    <FormDescription>Enter 10-digit mobile number without country code</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="prn"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Hash className="inline mr-2" /> PRN
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>FEs enter PRN124BTCM1071, rest enter 14 digit PRN</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="class"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <School className="inline mr-2" /> Class
-                    </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your class" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {CLASSES.map((classOption) => (
-                          <SelectItem key={classOption.value} value={classOption.value}>
-                            {classOption.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>Select your current year and division</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="branch"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <GitBranch className="inline mr-2" /> Branch
-                    </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your branch" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {BRANCHES.map((branch) => (
-                          <SelectItem key={branch.value} value={branch.value}>
-                            {branch.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>Select your engineering branch</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+              </div>
+            ))}
 
             <div className="space-y-4 p-4 bg-black/30 rounded-xl">
               <h3 className="text-xl mb-4">
@@ -354,7 +502,7 @@ export default function RegistrationForm() {
                   height={200}
                   className="w-48 h-48 md:w-52 md:h-52"
                 />
-                <p className="text-center">{`Fees: Rs.${enabledEvents.find(e => e.name === form.getValues().event)?.price || 0}`}</p>
+                <p className="text-center">{`Fees: Rs.${selectedEvent?.price || 0}`}</p>
               </div>
               <FormField
                 control={form.control}
@@ -399,8 +547,6 @@ export default function RegistrationForm() {
               />
             </div>
 
-            {/* ... */}
-
             <div className="flex justify-center mt-6">
               <Button
                 type="submit"
@@ -417,6 +563,7 @@ export default function RegistrationForm() {
                 )}
               </Button>
             </div>
+
           </form>
         </Form>
 
@@ -427,7 +574,7 @@ export default function RegistrationForm() {
                 <PartyPopper /> Registration Successful!
               </DialogTitle>
               <DialogDescription>
-                Your registration has been submitted successfully & A registration mail is sent to you. Thank you for participating!
+                Your registration has been submitted successfully & A confirmation mail is sent you. Thank you for participating!
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-center">
@@ -439,5 +586,4 @@ export default function RegistrationForm() {
     </div>
   )
 }
-
 

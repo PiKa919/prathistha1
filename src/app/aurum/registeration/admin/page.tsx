@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
+
 
 interface IEvent {
   name: string;
@@ -21,6 +23,7 @@ export default function EventRegistrationManager() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [attemptsLeft, setAttemptsLeft] = useState(5);
+  const [isSaving, setIsSaving] = useState(false);
 
   const correctPassword = process.env.NEXT_PUBLIC_TOGGLEEVENTS_PASSWORD;
 
@@ -66,12 +69,15 @@ export default function EventRegistrationManager() {
   };
 
   const saveChanges = async () => {
+    setIsSaving(true);
     try {
       await axios.put("/api/update-events", { events: tempEvents });
       alert("Changes saved successfully");
     } catch (error) {
       console.error("Failed to save changes", error);
       alert("Failed to save changes");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -135,7 +141,16 @@ export default function EventRegistrationManager() {
           </div>
         </div>
         <div className="mb-6 flex gap-4">
-          <Button onClick={saveChanges}>Save Changes</Button>
+          <Button onClick={saveChanges} disabled={isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              'Save Changes'
+            )}
+          </Button>
         </div>
       </div>
     </div>
