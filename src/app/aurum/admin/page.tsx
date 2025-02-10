@@ -403,6 +403,7 @@ AURUM Event Team`,
                 <TableHead>Class</TableHead>
                 <TableHead>Branch</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Transaction ID</TableHead>
                 <TableHead>Payment</TableHead>
                 <TableHead>Team Detail</TableHead>
                 <TableHead>Registration Date</TableHead>
@@ -461,6 +462,7 @@ AURUM Event Team`,
                         <option value="rejected">Rejected</option>
                       </select>
                     </TableCell>
+                    <TableCell>{registration.payment.referenceId}</TableCell>
                     <TableCell>
                       <Button
                         onClick={() => setSelectedImage(registration.payment.screenshot)}
