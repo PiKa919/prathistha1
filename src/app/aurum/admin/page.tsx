@@ -253,10 +253,15 @@ export default function AdminPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="bg-gray-800 border-gray-700"
                 disabled={lockoutUntil !== null && Date.now() < lockoutUntil}
+                required
               />
             </div>
           )}
-          <Button type="submit" className="w-full" disabled={lockoutUntil !== null && Date.now() < lockoutUntil}>
+          <Button 
+            type="submit" 
+            className="w-full" 
+            disabled={lockoutUntil !== null && Date.now() < lockoutUntil || !password}
+          >
             Login
           </Button>
         </form>
