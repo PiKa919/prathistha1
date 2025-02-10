@@ -132,20 +132,84 @@ export default function AdminPage() {
     try {
       await update(ref(database, `aurum/${key}`), { status })
       
-      // Send email only when status is changed to "approved"
       if (status === "approved") {
         const registration = registrations[key]
         const teamLeader = getTeamLeader(registration.members)
         
-        const response = await fetch('/api/send-approval', {
+        const teamMembersTable = `
+          <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+            <tr style="background-color: #f3f4f6;">
+              <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">Email</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">Phone</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">PRN</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">Class</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">Branch</th>
+            </tr>
+            ${registration.members.map(member => `
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">${member.fullName}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${member.email}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${member.phone}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${member.prn}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${member.class}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${member.branch}</td>
+              </tr>
+            `).join('')}
+          </table>
+        `;
+
+        const response = await fetch('/api/sendEmail', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: teamLeader.email,
-            event: registration.event,
-            name: teamLeader.fullName,
+            to: teamLeader.email,
+            subject: `AURUM - ${registration.event} Registration Approved`,
+            text: `Hello, Team Leader!
+
+Thank you for registering for the ${registration.event} event. Here are your registration details:
+
+Event Details
+Event Name: ${registration.event}
+Team Size: ${registration.teamSize}
+Payment Reference ID: ${registration.payment.referenceId}
+Payment Timestamp: ${new Date(registration.payment.timestamp).toLocaleString()}
+Registration Date: ${new Date(registration.createdAt).toLocaleString()}
+
+Team Members
+${registration.members.map(member => 
+  `${member.fullName}\t${member.email}\t${member.phone}\t${member.prn}\t${member.class}\t${member.branch}`
+).join('\n')}
+
+We look forward to seeing you at the event! If you have any questions, feel free to contact us.
+
+Best regards,
+AURUM Event Team`,
+            html: `
+              <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #2563eb;">Hello, Team Leader!</h2>
+                
+                <p>Thank you for registering for the <strong>${registration.event}</strong> event. Here are your registration details:</p>
+                
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                  <h3 style="margin-top: 0;">Event Details</h3>
+                  <p><strong>Event Name:</strong> ${registration.event}</p>
+                  <p><strong>Team Size:</strong> ${registration.teamSize}</p>
+                  <p><strong>Payment Reference ID:</strong> ${registration.payment.referenceId}</p>
+                  <p><strong>Payment Timestamp:</strong> ${new Date(registration.payment.timestamp).toLocaleString()}</p>
+                  <p><strong>Registration Date:</strong> ${new Date(registration.createdAt).toLocaleString()}</p>
+                </div>
+
+                <h3>Team Members</h3>
+                ${teamMembersTable}
+
+                <p style="margin-top: 20px;">We look forward to seeing you at the event! If you have any questions, feel free to contact us.</p>
+                
+                <p style="margin-top: 20px;">Best regards,<br>AURUM Event Team</p>
+              </div>
+            `
           }),
         })
 

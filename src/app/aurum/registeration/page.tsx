@@ -14,7 +14,6 @@ import Image from "next/image"
 import { User, Mail, Phone, Hash, School, GitBranch, Crown, CreditCard, Camera, PartyPopper } from "lucide-react"
 import { database } from "@/firebaseConfig"
 import { ref, set } from "firebase/database"
-import { REGISTRATION_CONFIRMATION_TEMPLATE } from "@/utils/emailTemplates"
 import axios from "axios"
 
 interface IEvent {
@@ -59,11 +58,10 @@ const memberSchema = z.object({
 
 const formSchema = z.object({
   event: z.string().min(1, "Please select an event"),
-  teamName: z.string().min(1, "Team name is required").optional(),
-  teamSize: z.number().min(1).max(5).optional(),
+  teamSize: z.number().min(1).max(5),
   members: z.array(memberSchema).min(1, "At least one member is required"),
   paymentReferenceId: z.string().min(1, "Payment reference ID is required"),
-  paymentScreenshot: z.any().optional(), // Make this optional for now
+  paymentScreenshot: z.any().refine((files) => files?.length > 0, "Payment screenshot is required"),
 })
 
 export default function AurumPage() {
@@ -78,9 +76,8 @@ export default function AurumPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       event: "",
-      teamName: "",
       teamSize: 1,
-      members: [{}],
+      members: [{ fullName: "", email: "", phone: "", prn: "", class: "", branch: "", isTeamLeader: false }],
       paymentReferenceId: "",
       paymentScreenshot: undefined,
     },
@@ -105,18 +102,13 @@ export default function AurumPage() {
     try {
       setIsSubmitting(true)
       
-      // Validate form data
+      // Basic validation
       if (!values.event) {
         throw new Error("Please select an event")
       }
 
-      if (!values.members || values.members.length === 0) {
-        throw new Error("At least one member is required")
-      }
-
-      // For team events, validate team leader
-      if (selectedEvent?.type === "team" && !values.members.some(member => member.isTeamLeader)) {
-        throw new Error("Please select a team leader")
+      if (!values.members?.[0]?.fullName) {
+        throw new Error("Member details are required")
       }
 
       if (!values.paymentReferenceId) {
@@ -137,10 +129,13 @@ export default function AurumPage() {
       })
 
       const registrationData = {
+        id: Date.now().toString(),
         event: values.event,
-        teamName: values.teamName,
-        teamSize: values.teamSize,
-        members: values.members,
+        teamSize: values.teamSize || 1,
+        members: values.members.map(member => ({
+          ...member,
+          isTeamLeader: member.isTeamLeader || false
+        })),
         payment: {
           referenceId: values.paymentReferenceId,
           timestamp: new Date().toISOString(),
@@ -151,56 +146,33 @@ export default function AurumPage() {
       }
 
       // Save to Firebase
-      const aurumRef = ref(database, `aurum/${Date.now()}`)
+      const aurumRef = ref(database, `aurum/${registrationData.id}`)
       await set(aurumRef, registrationData)
-
-      // Create email content
-      const emailContent = REGISTRATION_CONFIRMATION_TEMPLATE(
-        registrationData.event,
-        registrationData.teamName || '',
-        registrationData.teamSize || 1,
-        registrationData.payment.referenceId,
-        registrationData.payment.timestamp,
-        registrationData.createdAt,
-        registrationData.members,
-        // registrationData.payment.screenshot // Optional
-      );
-      // Send confirmation email
-      const emailResponse = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: registrationData.members.find(member => member.isTeamLeader)?.email || registrationData.members[0].email,
-          subject: "AURUM Event Registration Confirmation",
-          text: "Your registration has been confirmed for the event.",
-          html: emailContent,
-        }),
-      });
-
-      if (!emailResponse.ok) {
-        throw new Error("Failed to send confirmation email")
-      }
 
       setShowSuccessModal(true)
       form.reset()
+      setIsSubmitting(false)
     } catch (error) {
       console.error("Form submission error:", error)
       alert(error instanceof Error ? error.message : "An error occurred during submission")
       setIsSubmitting(false)
-      return
     }
   }
 
   const handleEventChange = (eventName: string) => {
     const event = enabledEvents.find((e) => e.name === eventName)
     setSelectedEvent(event || null)
-    if (event?.type === "single") {
+    
+    // Special handling for Laser Maze
+    if (event?.name === "Laser Maze") {
+      setTeamSize(1) // Default to single player
+      form.setValue("teamSize", 1)
+    } else if (event?.type === "single") {
       setTeamSize(1)
       form.setValue("teamSize", 1)
     } else {
-      form.setValue("teamSize", undefined)
+      setTeamSize(2)
+      form.setValue("teamSize", 2)
     }
   }
 
@@ -253,30 +225,16 @@ export default function AurumPage() {
               />
             </div>
 
-            {selectedEvent?.type === "team" && (
+            {(selectedEvent?.type === "team" || selectedEvent?.name === "Laser Maze") && (
               <div className="space-y-4 p-4 bg-black/30 rounded-xl">
-                <FormField
-                  control={form.control}
-                  name="teamName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        <Crown className="inline mr-2" /> Team Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Enter your team name" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="teamSize"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <User className="inline mr-2" /> Number of Team Members
+                        <User className="inline mr-2" /> 
+                        {selectedEvent.name === "Laser Maze" ? "Select Mode" : "Number of Team Members"}
                       </FormLabel>
                       <Select
                         onValueChange={(value) => {
@@ -297,15 +255,30 @@ export default function AurumPage() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select team size" />
+                            <SelectValue placeholder={
+                              selectedEvent.name === "Laser Maze" 
+                                ? "Select single or team mode" 
+                                : "Select team size"
+                            } />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {[2, 3, 4, 5].map((size) => (
-                            <SelectItem key={size} value={size.toString()}>
-                              {size}
-                            </SelectItem>
-                          ))}
+                          {selectedEvent.name === "Laser Maze" ? (
+                            <>
+                              <SelectItem value="1">Single Player</SelectItem>
+                              {[2, 3, 4, 5].map((size) => (
+                                <SelectItem key={size} value={size.toString()}>
+                                  {size} Players Team
+                                </SelectItem>
+                              ))}
+                            </>
+                          ) : (
+                            [2, 3, 4, 5].map((size) => (
+                              <SelectItem key={size} value={size.toString()}>
+                                {size}
+                              </SelectItem>
+                            ))
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />
