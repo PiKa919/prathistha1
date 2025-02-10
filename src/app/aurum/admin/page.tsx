@@ -128,14 +128,36 @@ export default function AdminPage() {
     })
   }, [registrations, filter, getTeamLeader])
 
-  // const updateStatus = async (key: string, status: string) => {
-  //   try {
-  //     await update(ref(database, `aurum/${key}`), { status })
-  //   } catch (error) {
-  //     console.error("Error updating status:", error)
-  //     alert("Failed to update status")
-  //   }
-  // }
+  const updateStatus = async (key: string, status: string) => {
+    try {
+      await update(ref(database, `aurum/${key}`), { status })
+      
+      // Send email only when status is changed to "approved"
+      if (status === "approved") {
+        const registration = registrations[key]
+        const teamLeader = getTeamLeader(registration.members)
+        
+        const response = await fetch('/api/send-approval', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: teamLeader.email,
+            event: registration.event,
+            name: teamLeader.fullName,
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to send approval email')
+        }
+      }
+    } catch (error) {
+      console.error("Error updating status:", error)
+      alert(error instanceof Error ? error.message : "Failed to update status")
+    }
+  }
 
   const handleEditChange = (key: string, field: keyof EventRegistration, value: string | number) => {
     setEditedData((prev) => ({
@@ -355,17 +377,20 @@ export default function AdminPage() {
                     <TableCell>{teamLeader.prn}</TableCell>
                     <TableCell>{teamLeader.class}</TableCell>
                     <TableCell>{teamLeader.branch}</TableCell>
-                    <TableCell onClick={() => editMode[key] && setEditingCell({ key, field: "status" })}>
-                      {editMode[key] && editingCell?.key === key && editingCell?.field === "status" ? (
-                        <Input
-                          value={editedData[key]?.status || registration.status}
-                          onChange={(e) => handleEditChange(key, "status", e.target.value)}
-                          onBlur={() => setEditingCell(null)}
-                          autoFocus
-                        />
-                      ) : (
-                        registration.status
-                      )}
+                    <TableCell>
+                      <select
+                        value={registration.status}
+                        onChange={(e) => updateStatus(key, e.target.value)}
+                        className={`bg-gray-800 border-gray-700 rounded-md p-2 ${
+                          registration.status === 'approved' ? 'text-green-500' :
+                          registration.status === 'rejected' ? 'text-red-500' :
+                          'text-yellow-500'
+                        }`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
                     </TableCell>
                     <TableCell>
                       <Button

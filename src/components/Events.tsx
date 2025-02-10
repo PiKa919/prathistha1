@@ -4,7 +4,7 @@ const festName = "aurum";
 
 const events = [
   {
-    title: "F1 Racing",
+    title: "Midtown Madness",
     description: "Experience the thrill of high-speed racing in this F1 simulation.",
     time: "10th & 11th Feb",
     place: "Foyer",
@@ -46,7 +46,7 @@ const events = [
     description: "Show off your virtual football skills in this exciting FIFA tournament.",
     time: "10th & 11th Feb",
     place: "Foyer",
-    price: "₹70 for 1, ₹100 for 2",
+    price: "₹70 solo, ₹100 duo",
     videoUrl: "https://www.youtube.com/live/f1_race",    
     imageUrl: "/aurum/FIFA.webp",     
     ranking: {       
@@ -179,7 +179,7 @@ const events = [
     description: "Embark on a high-tech treasure hunt using augmented reality.",
     time: "10th & 11th Feb",
     place: "CR-14",
-    price: "₹200 for 3-5 people",
+    price: "₹150 for 3 people, ₹200 for 4-5 people",
     videoUrl: "https://www.youtube.com/live/f1_race",    
      imageUrl: "/aurum/ArTeasureHunt.webp",     
      ranking: {       
@@ -214,7 +214,7 @@ const events = [
   },
   {
     title: "Arcadia GameZone",
-    description: "Dive into immersive virtual reality experiences!",
+    description: "Play the story and spin the wheel to win prizes!",
     time: "10th & 11th Feb",
     place: "Foyer",
     price: "₹70",
