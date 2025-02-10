@@ -104,7 +104,24 @@ export default function AurumPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsSubmitting(true)
-      console.log("Form values:", values)
+      
+      // Validate form data
+      if (!values.event) {
+        throw new Error("Please select an event")
+      }
+
+      if (!values.members || values.members.length === 0) {
+        throw new Error("At least one member is required")
+      }
+
+      // For team events, validate team leader
+      if (selectedEvent?.type === "team" && !values.members.some(member => member.isTeamLeader)) {
+        throw new Error("Please select a team leader")
+      }
+
+      if (!values.paymentReferenceId) {
+        throw new Error("Payment reference ID is required")
+      }
 
       if (!values.paymentScreenshot?.[0]) {
         throw new Error("Payment screenshot is required")
@@ -170,12 +187,9 @@ export default function AurumPage() {
       form.reset()
     } catch (error) {
       console.error("Form submission error:", error)
-      if (error instanceof z.ZodError) {
-        console.log("Validation errors:", error.errors)
-      }
       alert(error instanceof Error ? error.message : "An error occurred during submission")
-    } finally {
       setIsSubmitting(false)
+      return
     }
   }
 
@@ -521,11 +535,6 @@ export default function AurumPage() {
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full md:w-auto px-8"
-                onClick={() => {
-                  const result = form.trigger()
-                  console.log("Form validation result:", result)
-                  console.log("Form errors:", form.formState.errors)
-                }}
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
