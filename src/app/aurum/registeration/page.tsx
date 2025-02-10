@@ -163,10 +163,13 @@ export default function AurumPage() {
     const event = enabledEvents.find((e) => e.name === eventName)
     setSelectedEvent(event || null)
     
-    // Special handling for Laser Maze
+    // Special handling for FIFA and Laser Maze
     if (event?.name === "Laser Maze") {
-      setTeamSize(1) // Default to single player
+      setTeamSize(1)
       form.setValue("teamSize", 1)
+    } else if (event?.name === "FIFA") {
+      setTeamSize(2)
+      form.setValue("teamSize", 2)
     } else if (event?.type === "single") {
       setTeamSize(1)
       form.setValue("teamSize", 1)
@@ -252,18 +255,23 @@ export default function AurumPage() {
                             form.setValue("members", currentMembers.slice(0, size))
                           }
                         }}
+                        disabled={selectedEvent.name === "FIFA"}
                       >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder={
                               selectedEvent.name === "Laser Maze" 
-                                ? "Select single or team mode" 
+                                ? "Select single or team mode"
+                                : selectedEvent.name === "FIFA"
+                                ? "Team of 2 only"
                                 : "Select team size"
                             } />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {selectedEvent.name === "Laser Maze" ? (
+                          {selectedEvent.name === "FIFA" ? (
+                            <SelectItem value="2">2 Players Team</SelectItem>
+                          ) : selectedEvent.name === "Laser Maze" ? (
                             <>
                               <SelectItem value="1">Single Player</SelectItem>
                               {[2, 3, 4, 5].map((size) => (
@@ -281,6 +289,9 @@ export default function AurumPage() {
                           )}
                         </SelectContent>
                       </Select>
+                      {selectedEvent.name === "FIFA" && (
+                        <FormDescription>FIFA registrations are restricted to teams of 2 players only.</FormDescription>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
