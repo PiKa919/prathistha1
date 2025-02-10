@@ -37,23 +37,23 @@ export default function Footer() {
               <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
-                    About Us
+                  <Link href="/aurum" className="text-gray-300 hover:text-white transition-colors">
+                    Aurum
                   </Link>
                 </li>
                 <li>
-                  <Link href="/events" className="text-gray-300 hover:text-white transition-colors">
-                    Events
+                  <Link href="/sports" className="text-gray-300 hover:text-white transition-colors">
+                    Olympus
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
-                    Contact
+                  <Link href="/verve" className="text-gray-300 hover:text-white transition-colors">
+                    Verve
                   </Link>
                 </li>
               </ul>
             </div>
-            <div>
+            {/* <div>
               <h3 className="text-lg font-semibold mb-2">Legal</h3>
               <ul className="space-y-2">
                 <li>
@@ -67,7 +67,7 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
