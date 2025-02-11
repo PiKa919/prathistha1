@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-
+const CORRECT_PASSWORD = process.env.NEXT_PUBLIC_WINNERDATA_PASSWORD;
+const MAX_ATTEMPTS = 4;
 interface Game {
   name: string;
   icon: string;
@@ -76,6 +77,9 @@ const categories = [
 export default function GameForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [attempts, setAttempts] = useState(0);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     type: "",
@@ -147,7 +151,41 @@ export default function GameForm() {
       setIsLoading(false);
     }
   };
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === CORRECT_PASSWORD) {
+      setIsAuthenticated(true);
+    } else {
+      setAttempts(attempts + 1);
+      setPassword("");
+      if (attempts + 1 >= MAX_ATTEMPTS) {
+        alert("Maximum attempts reached. Access denied.");
+      } else {
+        alert("Incorrect password. Try again.");
+      }
+    }
+  };
 
+  if (!isAuthenticated && attempts < MAX_ATTEMPTS) {
+    return (
+      <Card className="mt-6 pt-20">
+        <CardHeader>
+          <CardTitle>Enter Password</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <Input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" className="w-full">Submit</Button>
+          </form>
+        </CardContent>
+      </Card>
+    );
+  }
   return (
     <Card className="mt-6 pt-20">
       <CardHeader>
