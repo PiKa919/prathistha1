@@ -168,7 +168,9 @@ export default function GameForm() {
 
   if (!isAuthenticated && attempts < MAX_ATTEMPTS) {
     return (
-      <Card className="mt-6 pt-20">
+      <div className="min-h-screen flex items-center justify-center">
+    
+      <Card className=" w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle>Enter Password</CardTitle>
         </CardHeader>
@@ -184,10 +186,12 @@ export default function GameForm() {
           </form>
         </CardContent>
       </Card>
+      </div>
     );
   }
   return (
-    <Card className="mt-6 pt-20">
+    <div className="min-h-screen flex items-center justify-center">
+    <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Game Entry Form</CardTitle>
       </CardHeader>
@@ -277,5 +281,6 @@ export default function GameForm() {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 }
