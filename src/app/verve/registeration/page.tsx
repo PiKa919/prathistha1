@@ -167,13 +167,16 @@ export default function VervePage() {
     const event = enabledEvents.find((e) => e.name === eventName)
     setSelectedEvent(event || null)
 
-    // Special handling for FIFA and Pratishtha's Got Talent
+    // Special handling for different events
     if (event?.name === "Pratishtha's Got Talent") {
       setTeamSize(1)
       form.setValue("teamSize", 1)
+    } else if (event?.name === "IPL Auctions") {
+      setTeamSize(4)
+      form.setValue("teamSize", 4)
     } else if (event?.name === "FIFA") {
-      setTeamSize(2)
-      form.setValue("teamSize", 2)
+      setTeamSize(1)
+      form.setValue("teamSize", 1)
     } else if (event?.type === "single") {
       setTeamSize(1)
       form.setValue("teamSize", 1)
@@ -270,7 +273,7 @@ export default function VervePage() {
                     <FormItem>
                       <FormLabel>
                         <User className="inline mr-2" />
-                        {selectedEvent.name === "Pratishtha's Got Talent" ? "Select Mode" : "Number of Team Members"}
+                        {selectedEvent?.name === "Pratishtha's Got Talent" ? "Select Mode" : "Number of Team Members"}
                       </FormLabel>
                       <Select
                         onValueChange={(value) => {
@@ -288,23 +291,30 @@ export default function VervePage() {
                             form.setValue("members", currentMembers.slice(0, size))
                           }
                         }}
-                        disabled={selectedEvent.name === "FIFA"}
+                        disabled={selectedEvent?.name === "IPL Auctions"}
                       >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder={
-                              selectedEvent.name === "Pratishtha's Got Talent"
+                              selectedEvent?.name === "Pratishtha's Got Talent"
                                 ? "Select single or team mode"
-                                : selectedEvent.name === "FIFA"
-                                  ? "Team of 2 only"
-                                  : "Select team size"
+                                : selectedEvent?.name === "IPL Auctions"
+                                  ? "Team of 4 only"
+                                  : selectedEvent?.name === "FIFA"
+                                    ? "Select 1 or 2 players"
+                                    : "Select team size"
                             } />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {selectedEvent.name === "FIFA" ? (
-                            <SelectItem value="2">2 Players Team</SelectItem>
-                          ) : selectedEvent.name === "Pratishtha's Got Talent" ? (
+                          {selectedEvent?.name === "IPL Auctions" ? (
+                            <SelectItem value="4">4 Players Team</SelectItem>
+                          ) : selectedEvent?.name === "FIFA" ? (
+                            <>
+                              <SelectItem value="1">Single Player</SelectItem>
+                              <SelectItem value="2">2 Players Team</SelectItem>
+                            </>
+                          ) : selectedEvent?.name === "Pratishtha's Got Talent" ? (
                             <>
                               <SelectItem value="1">Single Player</SelectItem>
                               {[2, 3, 4, 5].map((size) => (
@@ -322,8 +332,11 @@ export default function VervePage() {
                           )}
                         </SelectContent>
                       </Select>
-                      {selectedEvent.name === "FIFA" && (
-                        <FormDescription>FIFA registrations are restricted to teams of 2 players only.</FormDescription>
+                      {selectedEvent?.name === "IPL Auctions" && (
+                        <FormDescription>IPL Auctions require exactly 4 players per team.</FormDescription>
+                      )}
+                      {selectedEvent?.name === "FIFA" && (
+                        <FormDescription>FIFA registrations can be single player or 2 players team.</FormDescription>
                       )}
                       <FormMessage />
                     </FormItem>
