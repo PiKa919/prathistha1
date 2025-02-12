@@ -26,13 +26,22 @@ interface WinnerSectionProps {
 
 export function WinnerSection({ sportsData = {} }: WinnerSectionProps) {
   const sportsArray = Object.entries(sportsData).map(([name, data]) => ({ name, ...data }))
-
+  const isLoading = sportsArray.length === 0;
+  
   return (
     <Card className="mt-12">
       <CardHeader>
         <CardTitle>🏆 Winners & Runners-Up 🧈</CardTitle>
       </CardHeader>
       <CardContent>
+      {isLoading ? (
+          <div className="flex items-center justify-center p-8">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-r-transparent" />
+              <p className="text-sm text-muted-foreground">Loading winners...</p>
+            </div>
+          </div>
+        ) : (
         <Tabs defaultValue="outdoor" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="outdoor">🌳 Outdoor Games</TabsTrigger>
@@ -57,6 +66,7 @@ export function WinnerSection({ sportsData = {} }: WinnerSectionProps) {
             </div>
           </TabsContent>
         </Tabs>
+        )}
       </CardContent>
     </Card>
   )

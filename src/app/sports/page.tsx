@@ -345,6 +345,7 @@ export default function MultistepFormPage(): JSX.Element {
   const [sportsData, setSportsData] = useState<Record<string, SportData>>({})
   const [branches, setBranches] = useState<{ name: string; year: number; points: number; }[]>([]);
   const [showAll, setShowAll] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -390,6 +391,7 @@ export default function MultistepFormPage(): JSX.Element {
 // Update the useEffect for fetching sports data
 useEffect(() => {
   const fetchSports = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch("/api/sports");
       if (!res.ok) throw new Error("Network response was not ok");
@@ -410,6 +412,7 @@ useEffect(() => {
     } catch (error) {
       console.error("Fetch error:", error);
     }
+    setIsLoading(false);
   };
 
   fetchSports();
@@ -472,6 +475,15 @@ useEffect(() => {
         <CardTitle>Branch Leaderboard</CardTitle>
       </CardHeader>
       <CardContent>
+      {isLoading ? (
+      <div className="flex items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-2">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-r-transparent" />
+          <p className="text-sm text-muted-foreground">Loading leaderboard...</p>
+        </div>
+      </div>
+    ) : (
+      <>
         <Table>
           <TableHeader>
             <TableRow>
@@ -500,11 +512,13 @@ useEffect(() => {
             {showAll ? "Show Less" : "Show More"}
           </Button>
         )}
+      </>
+    )}
       </CardContent>
     </Card>
       
       
-      <WinnerSection sportsData={sportsData} />
+      <WinnerSection sportsData={sportsData}  />
 
       <Tabs defaultValue="inter" className="mt-12">
         <TabsList className="grid w-full grid-cols-2">
