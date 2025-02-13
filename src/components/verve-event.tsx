@@ -157,6 +157,21 @@ const events = [
     eventCoHead: "Shivam Shinde",
     eventCoHeadContact: "7977535959",
   },
+  {
+    title: "Glow in the Dark Pickle Ball",
+    description: "Entry: 50pp",
+    time: "TBA",
+    place: "7th Floor ED Hall",
+    date: "2025-02-17",
+    videoUrl: "",
+    imageUrl: "/aurum/GlowInTheDark.webp",
+    price: "₹50",
+    ranking: {first: "", second: "", third: ""},
+    eventHead: "Harsh",
+    eventHeadContact: "9372829908",
+    eventCoHead: "Monarch",
+    eventCoHeadContact: "8928244779",
+  },
 ];
 
 export default function Events() {
