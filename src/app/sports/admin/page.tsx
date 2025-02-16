@@ -58,7 +58,8 @@ const branches = [
   "Electronics and Telecommunication",
   "Artificial Intelligence and Data Science",
   "Advance Communication and Technology",
-  "Very Large Scale Integration"
+  "Very Large Scale Integration",
+  "Student Council"
 ];
 
 const years = [1, 2, 3, 4];
