@@ -583,29 +583,60 @@ const processMatchResults = (game: Game): Team[] => {
   })
   return Object.entries(teams).map(([name, points]) => ({ name, points }))
 }
+const normalizeTeamName = (name: string): string => {
+  // Standardize year prefixes
+  let normalized = name.toUpperCase().trim()
+  normalized = normalized
+    .replace(/^FY|^FE/, "FE")
+    .replace(/^SY|^SE/, "SE")
+    .replace(/^TY|^TE/, "TE")
+    .replace(/^BTECH|^BE/, "BE")
+
+  return normalized
+}
 
 const aggregateBranchPoints = () => {
-  const branchPoints: Record<string, Record<number, number>> = {}
+  const teamPoints: Record<string, number> = {}
 
   Object.values(sports).forEach((category) => {
     category.forEach((game) => {
-      const winner = game.matches?.find((match) => match.stage === "Final")?.winner
-      if (winner) {
-        const [branch, year] = winner.split(" ")
-        const yearNumber = Number.parseInt(year.replace(/\D/g, ""))
-        if (!branchPoints[branch]) branchPoints[branch] = {}
-        branchPoints[branch][yearNumber] = (branchPoints[branch][yearNumber] || 0) + 1
-      }
+      game.matches?.forEach((match) => {
+        // Skip draws
+        if (match.winner === "Draw") return
+
+        // Normalize team name
+        const teamName = normalizeTeamName(match.winner)
+
+        // Initialize team if it doesn't exist
+        if (!teamPoints[teamName]) {
+          teamPoints[teamName] = 0
+        }
+
+        // Add one point for each win
+        teamPoints[teamName] += 1
+      })
     })
   })
 
-  return Object.entries(branchPoints).flatMap(([branch, years]) =>
-    Object.entries(years).map(([year, points]) => ({
-      name: branch,
-      year: Number.parseInt(year),
-      points,
-    })),
-  )
+  // Convert to array format and sort by points
+  return Object.entries(teamPoints)
+    .map(([name, points]) => {
+      // Extract year from the team name
+      const year = name.startsWith("FE") ? 1 
+                 : name.startsWith("SE") ? 2
+                 : name.startsWith("TE") ? 3
+                 : name === "COUNCIL" || name === "INFRA" ? 4
+                 : name.startsWith("BE") ? 4 : 0
+
+      return {
+        name: name.split(" ")
+          .map(part => part.charAt(0) + part.slice(1).toLowerCase())
+          .join(" "),
+        year,
+        points,
+      }
+    })
+    .sort((a, b) => b.points - a.points)
 }
 
 interface LeaderboardCardProps {
