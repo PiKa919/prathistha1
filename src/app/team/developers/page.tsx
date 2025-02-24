@@ -60,6 +60,16 @@ const teamsData = {
       linkedin: "dilipkumarteli",
       location: "Kala Ghoda"
     },
+    {
+      id: 3,
+      title: "Ms. Vidisha Birwadkar",
+      subheading: "Developer",
+      image: "/team/developers/vidisha.webp",
+      about: "Turning coffee into code and dreams into digital reality.",
+      instagram: "vidisha_birwadkar",
+      linkedin: "vidisha-birwadkar",
+      location: "LalBaug"
+    },
   ]
 }
 
