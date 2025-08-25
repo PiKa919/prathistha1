@@ -37,11 +37,11 @@ export default function Footer() {
               <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/aurum" className="text-gray-300 hover:text-white transition-colors">
-                    Aurum
+                  <Link href="/events/RasRangila" className="text-gray-300 hover:text-white transition-colors">
+                    RasRangila
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link href="/sports" className="text-gray-300 hover:text-white transition-colors">
                     Olympus
                   </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                   <Link href="/verve" className="text-gray-300 hover:text-white transition-colors">
                     Verve
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
             {/* <div>

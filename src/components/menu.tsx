@@ -5,22 +5,28 @@ import Image from 'next/image';
 import { ScrollProgress } from './ui/scroll-progress';
 
 const menuItems = [
-  { label: 'Aurum', path: '/aurum' },
-  { label: 'Olympus', path: '/sports' },
-  { label: 'Verve', path: '/verve' },
-  { label: 'Esports', path: '/esports' },
+  // { label: 'Aurum', path: '/aurum' },
+  // { label: 'Olympus', path: '/sports' },
+  // { label: 'Verve', path: '/verve' },
+  // { label: 'Esports', path: '/esports' },
   
-  {
-    label: 'Teams',
-    path: '/team',
-    submenu: [
-      { label: 'Student Council', path: '/team' },
-      { label: 'Extended Teams', path: '/team/extended' },
-      { label: "Developer's", path: '/team/developers' }
-    ]
-  },
-  { label: 'Sponsors', path: '/sponsors/2024' },
-  { label: 'Marathon', path: '/marathon' }
+  // {
+  //   label: 'Teams',
+  //   path: '/team',
+  //   submenu: [
+  //     { label: 'Student Council', path: '/team' },
+  //     { label: 'Extended Teams', path: '/team/extended' },
+  //     { label: "Developer's", path: '/team/developers' }
+  //   ]
+  // },
+  // { label: 'Sponsors', path: '/sponsors/2024' },
+  // { label: 'Marathon', path: '/marathon' }
+
+  
+  { label: "Gallery", path: "/gallery" },
+  { label: "Events", path: "/events", submenu:[
+    { label: "Pre-Graba", path: "/events/RasRangila" }
+  ]}
 ];
 
 interface MenuItem {
@@ -58,15 +64,21 @@ const NavItem = ({ item, isMobile, onItemClick }: { item: MenuItem; isMobile?: b
   // };
   const handleClick = (e: React.MouseEvent) => {
     if (isMobile) {
-      setIsHovered(!isHovered);
-  
-      // Prevent closing the menu when clicking a parent item with a submenu
+      // For mobile, if there's a submenu, toggle it
       if (item.submenu) {
-        e.stopPropagation(); // Stops event bubbling
+        setIsHovered(!isHovered);
+        e.stopPropagation();
+        return;
+      }
+    } else {
+      // For desktop, if there's a submenu and we're clicking the parent, navigate to the main path
+      if (item.submenu) {
+        // Navigate to the main path when clicking the parent item
+        window.location.href = item.path;
         return;
       }
     }
-  
+
     if (onItemClick) {
       onItemClick();
     }
@@ -83,6 +95,7 @@ const NavItem = ({ item, isMobile, onItemClick }: { item: MenuItem; isMobile?: b
         <div 
           onClick={handleClick} 
           className={`nav-link ${item.submenu ? 'has-submenu' : ''}`}
+          style={{ cursor: 'pointer' }}
         >
           {item.label}
           {item.submenu && isMobile && (
