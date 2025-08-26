@@ -90,6 +90,11 @@ const NavItem = ({ item }: { item: MenuItem }) => {
 };
 
 const Menu = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
   return (
     <>
       <nav className="nav-container">
@@ -130,13 +135,54 @@ const Menu = () => {
 
             {/* Mobile Menu Button */}
             <div className="mobile-menu">
-              <button className="mobile-menu-button">
-                <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-              </button>
-            </div>
+  <button
+    className="mobile-menu-button"
+    onClick={toggleMobileMenu}
+    aria-expanded={mobileMenuOpen}
+    aria-label="Toggle navigation menu"
+  >
+    <svg
+      className="h-6 w-6"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+</div>
+
           </div>
+
+ {/* Mobile Menu Dropdown */}
+ {mobileMenuOpen && (
+            <div className="mobile-menu-dropdown">
+              {menuItems.map((item, index) => (
+                <div key={index} className="mobile-menu-item">
+                  <Link href={item.path} className="mobile-menu-link">
+                    {item.label}
+                  </Link>
+                  {item.submenu && (
+                    <div className="mobile-submenu">
+                      {item.submenu.map((subItem, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={subItem.path}
+                          className="mobile-submenu-item"
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
         </div>
       </nav>
 
@@ -318,6 +364,56 @@ const Menu = () => {
             opacity: 1;
             transform: scaleY(1);
           }
+        }
+          nav-items {.
+          display: none;
+        }
+
+        @media (min-width: 768px) {
+          .nav-items {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+          }
+
+          .mobile-menu {
+            display: none;
+          }
+        }
+
+        .mobile-menu-dropdown {
+          display: flex;
+          flex-direction: column;
+          background-color: rgba(0, 0, 0, 0.9);
+          position: absolute;
+          top: 4rem;
+          left: 0;
+          width: 100%;
+          padding: 1rem 0;
+          z-index: 100;
+        }
+
+        .mobile-menu-item {
+          padding: 0.75rem 1rem;
+          color: white;
+        }
+
+        .mobile-menu-link {
+          color: white;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        .mobile-submenu {
+          margin-left: 1rem;
+        }
+
+        .mobile-submenu-item {
+          display: block;
+          padding: 0.5rem 1rem;
+          color: white;
+          font-size: 0.9rem;
         }
       `}</style>
     </>

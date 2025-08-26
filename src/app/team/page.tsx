@@ -557,8 +557,7 @@ interface TiltCardProps {
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 const TiltCard = ({ title, subheading, image, about, instagram, linkedin, location }: TiltCardProps) => {
-  const [isLoading, setIsLoading] = useState(true); // State to control loading animation
-  const [isFlipped, setIsFlipped] = useState(false); // Flip state
+  const [isFlipped, setIsFlipped] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -603,7 +602,7 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
 
   return (
     <div
-      className="relative h-[24rem] w-[20rem] group"
+      className="relative h-[20rem] w-[14rem] group"
       style={{ perspective: "1000px" }}
       ref={ref}
       onMouseMove={handleMouseMove}
@@ -625,77 +624,46 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
           type: "spring",
           stiffness: 400,
           damping: 50,
-          duration: 0.8,
+          duration: 0.5,
         }}
         className="w-full h-full"
       >
         {/* Front of card */}
         <motion.div
-          className="absolute w-full h-full rounded-md bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800 shadow-lg overflow-hidden"
+          className="absolute w-full h-full rounded-md bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800 shadow-lg border border-purple-900/40"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            border: "8px solid",
-            borderImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1%, transparent 1%) 1",
-            borderImageSlice: "1",
-            backgroundClip: "border-box",
-            boxShadow: "0 0 8px rgba(255,255,255,0.5)",
           }}
         >
-          {/* Small Dots Animation */}
-          {isLoading && (
-            <motion.div
-              className="absolute inset-0"
-              initial={{ opacity: 1, scale: 1 }}
-              animate={{
-                opacity: [1, 0.5, 0],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 2, // Duration of dots animation
-                ease: "easeInOut",
-              }}
-              onAnimationComplete={() => setIsLoading(false)} // End loading after dots animation
-              style={{
-                background: `radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.3) 1px, transparent 0)`,
-                backgroundSize: "16px 16px",
-              }}
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:16px_16px]" />
+          <div className="absolute inset-2 rounded-md overflow-hidden">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url('${image}')` }}
             />
-          )}
-          {/* Image */}
-          <motion.div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${image}')` }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isLoading ? 0 : 1 }} // Image fades in after dots animation
-            transition={{ duration: 0.5 }} // Quick fade-in for the image
-          />
-          <div
-            className="absolute bottom-0 left-0 right-0 flex flex-col items-start justify-end p-4 text-white"
-            style={{
-              background: "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2))",
-            }}
-          >
-            <h2 className="text-2xl font-bold truncate">{title}</h2>
-            <p className="text-xs opacity-90 truncate">{subheading}</p>
+            <div
+              className="absolute bottom-0 left-0 right-0 flex flex-col items-start justify-end p-4 text-white"
+              style={{
+                background: "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2))",
+              }}
+            >
+              <h2 className="text-2xl font-bold truncate">{title}</h2>
+              <p className="text-xs opacity-90 truncate">{subheading}</p>
+            </div>
           </div>
         </motion.div>
 
         {/* Back of card */}
         <motion.div
-          className="absolute w-full h-full rounded-md bg-gradient-to-br from-purple-700 via-purple-800 to-purple-900 shadow-lg"
+          className="absolute w-full h-full rounded-md bg-gradient-to-br from-purple-700 via-purple-800 to-purple-900 shadow-lg border border-purple-900/40"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             rotateY: "180deg",
-            border: "8px solid",
-            borderImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1%, transparent 1%) 1",
-            borderImageSlice: "1",
-            backgroundClip: "border-box",
-            boxShadow: "0 0 8px rgba(255,255,255,0.5)",
           }}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:16px_16px]" />
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:16px_16px]" />
           <div className="relative h-full p-4 flex flex-col">
             <div className="flex-1 rounded-md bg-white/10 backdrop-blur-md p-4 shadow-lg border border-white/20">
               <div className="space-y-3">
@@ -712,7 +680,6 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="space-y-3 mt-4">
               <div className="grid grid-cols-2 gap-3">
                 <motion.a
@@ -746,6 +713,4 @@ const TiltCard = ({ title, subheading, image, about, instagram, linkedin, locati
   );
 };
 
-
-export default Example;
-
+export default Example;   
